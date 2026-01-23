@@ -1,0 +1,104 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+from tools import *
+
+class Global:
+    #Labels and Graphs according o assignment instructions
+    sNC_label=0
+    sNC_color='green'
+
+    sDAT_label=1
+    sDAT_color='blue'
+
+    train_marker='o'
+    test_marker='x'
+
+    columns_names=['x1','x2']
+    label_name='Target'
+
+
+def Q2_knn():
+
+    #Importing and labeling training data
+    df_train_sNC=pd.read_csv('Data/train.sNC.csv', header=None)
+    df_train_sNC.columns=Global.columns_names
+    df_train_sNC[Global.label_name]=Global.sNC_label
+
+    df_train_sDAT=pd.read_csv('Data/train.sDAT.csv', header=None)
+    df_train_sDAT.columns=Global.columns_names
+    df_train_sDAT[Global.label_name]=Global.sDAT_label
+
+    #joining all the training data
+    df_train=pd.concat([df_train_sNC, df_train_sDAT], axis=0, ignore_index=True)
+
+    #Importing and labeling testing data
+    df_test_sNC=pd.read_csv('Data/test.sNC.csv', header=None)
+    df_test_sNC.columns=Global.columns_names
+    df_test_sNC[Global.label_name]=Global.sNC_label
+
+    df_test_sDAT=pd.read_csv('Data/test.sDAT.csv', header=None)
+    df_test_sDAT.columns=Global.columns_names
+    df_test_sDAT[Global.label_name]=Global.sDAT_label
+
+    #joining all the testing data
+    df_test=pd.concat([df_test_sNC, df_test_sDAT], axis=0, ignore_index=True)
+
+
+    skip=2
+    step=0.002
+
+    k=30
+
+    knn, scaler, err_train = train_kNN(df_train, k, metr='manhattan')
+    err_test=test_kNN(df_test, knn, scaler)
+
+    print(str(err_train)+'\t'+str(err_test))
+
+
+    plt.xlabel(r'$x_1$')
+    plt.ylabel(r'$x_2$')
+
+    x1_range=(min(df_test_sDAT.iloc[:,0].min(), df_train_sDAT.iloc[:,0].min())-0.1,
+                      max(df_test_sNC.iloc[:,0].max(), df_train_sNC.iloc[:,0].max())+0.1)
+    x2_range=(min(df_test_sDAT.iloc[:,1].min(), df_train_sDAT.iloc[:,1].min()-0.1),
+                      max(df_test_sNC.iloc[:,1].max(), df_train_sNC.iloc[:,1].max())+0.1)
+
+
+    #Conflict Region Range
+    # x1_range=(1.2, 1.6)
+    # x2_range=(1.3, 1.8)
+
+
+    plt.xlim(x1_range)
+    plt.ylim(x2_range)
+
+    plot_decision_region(knn, scaler, x1_range, x2_range, step)
+
+    df_test_sNC=df_test_sNC.iloc[::skip]
+    df_test_sDAT=df_test_sDAT.iloc[::skip]
+    df_train_sNC=df_train_sNC.iloc[::skip]
+    df_train_sDAT=df_train_sDAT.iloc[::skip]
+
+    plt.scatter(df_train_sNC.iloc[:,0], df_train_sNC.iloc[:,1],
+                        color=Global.sNC_color,marker='o', label='0/sNC train')
+    plt.scatter(df_train_sDAT.iloc[:,0], df_train_sDAT.iloc[:,1],
+                        color=Global.sDAT_color,marker='o', label='1/sDAT train')
+
+    plt.scatter(df_test_sNC.iloc[:,0], df_test_sNC.iloc[:,1],
+                        color=Global.sNC_color,marker='x', label='0/sNC test')
+    plt.scatter(df_test_sDAT.iloc[:,0], df_test_sDAT.iloc[:,1],
+                        color=Global.sDAT_color,marker='x', label='1/sDAT test')
+
+    plt.title('Decision Boundary for the kNN Classifier'+
+              '\n with Manhattan metric and k='+str(knn.n_neighbors)+
+    '\n with Train & Test Data skipping every '+str(skip)+' data points')
+    plt.legend(loc='upper left')
+    plt.savefig('Q2/knn_manhattan_nozoom_k'+str(k)+'.pdf', bbox_inches='tight')
+    plt.close('all')
+
+
+Q2_knn()

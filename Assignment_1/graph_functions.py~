@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def remake_grid():
+    df=pd.read_csv('Grids/2D_grid_points.csv', header=None)
+    df['x>y'] = df.iloc[:,0]>=df.iloc[:,1]
+
+    blue_group=df[df['x>y']==True]
+    green_group=df[df['x>y']==False]
+
+    plt.xlabel(r'$x_1$')
+    plt.ylabel(r'$x_2$')
+
+    plt.scatter(green_group.iloc[:,0], green_group.iloc[:,1], color='green')
+    plt.scatter(blue_group.iloc[:,0], blue_group.iloc[:,1], color='blue')
+
+    plt.show()
+
+def train_scatter():
+    df_sNC=pd.read_csv('Data/train.sNC.csv', header=None)
+    df_sDAT=pd.read_csv('Data/train.sDAT.csv', header=None)
+
+    plt.xlabel(r'$x_1$')
+    plt.ylabel(r'$x_2$')
+    plt.scatter(df_sNC.iloc[:,0], df_sNC.iloc[:,1], color='green',marker='o', label='0/sNC')
+    plt.scatter(df_sDAT.iloc[:,0], df_sDAT.iloc[:,1], color='blue',marker='o', label='1/sDAT')
+
+    plt.legend()
+    plt.title("Assig 1 Training Data")
+
+    plt.show()
+
+
+train_scatter()

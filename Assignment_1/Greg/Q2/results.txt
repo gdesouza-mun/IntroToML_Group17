@@ -1,0 +1,2 @@
+Training Error  Testing Error
+0.16033755274261607	0.16500000000000004
