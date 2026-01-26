@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from tools import *
 
 
-def Q3():
+def Q3_results():
     #Labeling the data Columns
 
     #Importing and labeling training data
@@ -49,14 +49,18 @@ def Q3():
 
     #rint(array_1overk, array_test_err)
 
-    extra_array=array_1overk
-    plt.plot(extra_array, array_test_err, marker='x', linestyle='-', label='Testing Error')
+    min_err = min(array_test_err)
+
+    plt.xlabel(r'Model Capacity ($log(\frac{1}{k})$)', fontsize=14)
+    plt.ylabel(r'Error on Log Scale')
+
+    plt.plot(array_1overk, array_test_err, marker='x', linestyle='-', label='Testing Error')
     plt.plot(array_1overk, array_train_err, marker='o', linestyle='-', label='Training Error')
+    plt.axhline(y=min_err, color='black', linestyle='--',
+                label='Minimum Error: ' +str(round(min_err, 3)))
     plt.xscale('log')
+    plt.title("Error vs Model Capacity for kNN with Euclidean Metric")
     plt.yscale('log')
     plt.legend(loc='lower left')
-    plt.show()
-
-
-
-Q3()
+    plt.savefig('Q3_graph.png', dpi=300)
+    #plt.show()

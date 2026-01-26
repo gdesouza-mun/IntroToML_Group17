@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+import matplotlib.patches as mpatches
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
@@ -77,8 +78,15 @@ def plot_decision_region(knn, scaler, x1_range=None, x2_range=None, step=0.02):
 
     # 4. Plotting using a Scatter Plot as a "Heatmap"
     # Since we can't use contourf (which requires 2D arrays),
+
     # we use a dense scatter plot as the background.
-    cmap_background = ListedColormap(['#b2ffa9', '#889eff']) # Light Red, Light Blue
+    bg_colors=['#b2ffa9', '#889eff']
+    cmap_background = ListedColormap(bg_colors) # Light Red, Light Blue
+    labels = ['Class 0: sNC', 'Class 1: sDAT']
+
+    legend_labels = [mpatches.Patch(color=bg_colors[i], label=labels[i], alpha=0.5)
+               for i in range(len(bg_colors))]
+
 
     plt.scatter(grid_df['x1'], grid_df['x2'],
                 c=grid_df['label'],

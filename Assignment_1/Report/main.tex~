@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Assignment Number 1}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1}
+\input{question1.tex}
+
+\section*{Question 2}
+\input{question2.tex}
+
+\section*{Question 3}
+\input{question3.tex}
+
+\section*{Question 4}
+\input{question4.tex}
+
+\end{document}

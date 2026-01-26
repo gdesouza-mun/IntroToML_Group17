@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from tools import *
 
 
-def Q1_kNN():
+def Q1_results():
 
     #Labeling the data Columns
 
@@ -41,7 +41,7 @@ def Q1_kNN():
     # x1_range=(1.2, 1.6)
     # x2_range=(1.3, 1.8)
 
-    skip=2
+    skip=3
 
     df_test_sNC=df_test_sNC.iloc[::skip]
     df_test_sDAT=df_test_sDAT.iloc[::skip]
@@ -82,32 +82,19 @@ def Q1_kNN():
         plt.scatter(df_test_sDAT.iloc[:,0], df_test_sDAT.iloc[:,1],
                         color=Global.sDAT_color,marker='x', label='1/sDAT test')
 
-        plt.title("Decision Boundary for the kNN Classifier with k="+str(knn.n_neighbors)+
-                      '\n with Train & Test Data skipping every '+str(skip)+' data points')
+        title = "kNN Decision Boydary for k=30, err_train = " + str(round(err_train, 3)) + " Err_test = " + str(round(err_test, 3)) + " \n ploted skipping every " + str(skip) + " points \n Regions labeled by color, green = 0/sNC, blue = 1s/DAT"
+        plt.title(title, fontsize=10)
+
         plt.legend(loc='upper left')
-        plt.savefig('Q1/ZoomedOut/knn_nozoom_k'+str(k)+'.pdf', bbox_inches='tight')
+
+        #plt.savefig('Q1/ZoomedOut/knn_nozoom_k'+str(k)+'.pdf', bbox_inches='tight')
+        plt.savefig('Q1_graphs/knn_k'+str(k)+'.png', dpi=300)
         plt.close('all')
 
-    # filename="Q1/Error_Table.txt"
-    # df_results=pd.DataFrame(result_list)
-    # with open(filename, 'w') as f:
-    #     print(df_results, file=f)
-
-    #plt.show()
-
-
-
-    # for k in k_values:
-    #     knn, scale, err_train = train_kNN(df_train, k)
-
-    #     err_test=test_kNN(df_test, knn, scale)
-
-    #     print(k, err_train, err_test)
+    print("Graphs saved on the Q1_graphs/ folder")
 
 
 
 
 
 
-
-Q1_kNN()

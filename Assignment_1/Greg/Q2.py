@@ -6,22 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from tools import *
 
-class Global:
-    #Labels and Graphs according o assignment instructions
-    sNC_label=0
-    sNC_color='green'
-
-    sDAT_label=1
-    sDAT_color='blue'
-
-    train_marker='o'
-    test_marker='x'
-
-    columns_names=['x1','x2']
-    label_name='Target'
-
-
-def Q2_knn():
+def Q2_results():
 
     #Importing and labeling training data
     df_train_sNC=pd.read_csv('Data/train.sNC.csv', header=None)
@@ -56,7 +41,7 @@ def Q2_knn():
     knn, scaler, err_train = train_kNN(df_train, k, metr='manhattan')
     err_test=test_kNN(df_test, knn, scaler)
 
-    print(str(err_train)+'\t'+str(err_test))
+    #print(str(err_train)+'\t'+str(err_test))
 
 
     plt.xlabel(r'$x_1$')
@@ -93,12 +78,12 @@ def Q2_knn():
     plt.scatter(df_test_sDAT.iloc[:,0], df_test_sDAT.iloc[:,1],
                         color=Global.sDAT_color,marker='x', label='1/sDAT test')
 
-    plt.title('Decision Boundary for the kNN Classifier'+
-              '\n with Manhattan metric and k='+str(knn.n_neighbors)+
-    '\n with Train & Test Data skipping every '+str(skip)+' data points')
+
+    title = "kNN Classifier Boundary, Manhattan Metric, k="+ str(knn.n_neighbors)+ " with train error = " + str(round(err_train, 3)) +', test error = ' + str(round(err_test, 3)) + '\n Regions labeled by color, green = 0/sNC, blue = 1s/DAT'
+
+    plt.title(title, fontsize=10)
     plt.legend(loc='upper left')
-    plt.savefig('Q2/knn_manhattan_nozoom_k'+str(k)+'.pdf', bbox_inches='tight')
+    plt.savefig('Q2_knn_manhattan_k'+str(k)+'.png', dpi=300)
     plt.close('all')
 
 
-Q2_knn()

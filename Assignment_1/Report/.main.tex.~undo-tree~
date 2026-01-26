@@ -1,0 +1,7 @@
+(undo-tree-save-format-version . 1)
+"223f2330f999805069d47dbd42412debde1b68f6"
+[nil nil nil nil (26999 28259 105922 506000) 0 nil]
+([nil nil ((nil rear-nonsticky nil 339 . 340) (nil fontified nil 1 . 340) (1 . 340) (t . -1)) nil (26999 28259 105921 679000) 0 nil])
+([nil nil ((340 . 341) 212) nil (26999 28259 105916 485000) 0 nil])
+([nil current ((apply -18 190 343 undo--wrap-and-run-primitive-undo 190 343 ((318 . 321) (293 . 296) (267 . 270) (242 . 245) (216 . 219) (191 . 194) 325 (t 26999 28259 106887 311000)))) nil (26999 28295 797639 890000) 0 nil])
+nil
