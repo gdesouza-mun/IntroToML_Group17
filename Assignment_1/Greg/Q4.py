@@ -95,7 +95,7 @@ def custom_metric(x, y, w2, w3, power):
     dx = abs(x[0]-y[0])
     dy = abs(x[1]-y[1])
 
-    met = pow(dx*dx, power) + pow(w2*dy*dy, power) + pow(w3*dx*dy, power)
+    met = pow(dx, power) + w2*pow(dy, power) + w3*pow(dx*dy, power/2)
     met = pow(met, 1/power)
 
     return met
