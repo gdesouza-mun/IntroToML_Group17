@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
 from tools import *
 
-def Q4_exploration():
+def Q4_exploration(k_flag=0):
     #Importing and labeling training data
     df_train_sNC=pd.read_csv('Data/train.sNC.csv', header=None)
     df_train_sNC.columns=Global.columns_names
@@ -43,7 +43,18 @@ def Q4_exploration():
     X_scaled=scaler.fit_transform(X)
     Y=df_shuffled[Global.label_name]
 
-    k_range=range(10, 100, 2)
+
+    if k_flag=1:
+        k_range=range(40, 60, 2)
+        filename="out1.txt"
+    elif k_flag=2:
+        k_range=range(60, 80, 2)
+        filename="out2.txt"
+    elif k_flag=3:
+        k_range=range(80, 100, 2)
+        filename="out3.txt"
+
+        
 
     w2_step=0.05
     w2_range=range(1, int(2/w2_step))
@@ -58,37 +69,35 @@ def Q4_exploration():
     w2_min=1
     w3_min=1
     k_min=30
+    with open(filename, 'w') as f:
+        for k in k_range:
+            print(f"in k={k} \n", file=f)
+            print(f"Minimum errror at: k={k_min} p={p_min} w2={w2_min} w3={w3_min} with avg_err={min_err}", file=f)
 
-    for k in k_range:
-        print(f"in k={k} \n")
-        for p in p_values:
-            for w2_index in w2_range:
-                w2 = w2_index*w2_step
-                for w3_index in w3_range:
-                    w3 = w3_index*w3_step
+            for p in p_values:
+                for w2_index in w2_range:
+                    w2 = w2_index*w2_step
+                    for w3_index in w3_range:
+                        w3 = w3_index*w3_step
 
-                    knn = KNeighborsClassifier(n_neighbors=5,
-                                               metric=custom_metric,
-                                               metric_params={'w2': w2, 'w3': w3, 'power': p})
+                        knn = KNeighborsClassifier(n_neighbors=5,
+                                                   metric=custom_metric,
+                                                   metric_params={'w2': w2, 'w3': w3, 'power': p})
 
-                    scores = cross_val_score(knn, X, Y, cv=5, scoring='accuracy')
+                        scores = cross_val_score(knn, X, Y, cv=5, scoring='accuracy')
 
-                    avg_score = scores.mean()
-                    avg_err= 1-avg_score
-                    score_std = scores.std()
+                        avg_score = scores.mean()
+                        avg_err= 1-avg_score
+                        score_std = scores.std()
 
-                    print(str(k) + "\t" + str(round(w2, 4)) + "\t" + str(round(w3, 4)) + "\t"+str(p) + "\t"+
-                          str(round(avg_err, 5)) + "\t" + str(round(score_std, 5)) )
-
-                    if(avg_err<min_err):
-                        min_err = avg_err
-                        p_min=p
-                        w2_min=w2
-                        w3_min=w3
-                        k_min=k
-
-    print(f"Minimum errror at: k={k_min} p={p_min} w2={w2_min} w3={w3_min} with avg_err={min_err}")
-
+                        if(avg_err<min_err):
+                            min_err = avg_err
+                            p_min=p
+                            w2_min=w2
+                            w3_min=w3
+                            k_min=k
+                    
+                            print(f"Final Minimum errror at: k={k_min} p={p_min} w2={w2_min} w3={w3_min} with avg_err={min_err}", file=f)
 
 def custom_metric(x, y, w2, w3, power):
 

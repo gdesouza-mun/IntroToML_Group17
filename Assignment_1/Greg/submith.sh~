@@ -1,0 +1,5 @@
+#!/bin/bash
+#SBATCH --job-name=IntrotoMLQ4
+#SBATCH --time=23:59:00
+#SBATCH --account=rrg-swallin
+python Q4.py > Q4out.txt

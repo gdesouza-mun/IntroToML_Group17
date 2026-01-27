@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/gdesouza/IntroToML_Group17/Assignment_1/Greg/Q4_part1.py", line 1, in <module>
+    from Q4 import *
+  File "/home/gdesouza/IntroToML_Group17/Assignment_1/Greg/Q4.py", line 47
+    if k_flag=1:
+       ^^^^^^^^
+SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?
