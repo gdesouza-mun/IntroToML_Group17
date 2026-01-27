@@ -1,0 +1,18 @@
+(undo-tree-save-format-version . 1)
+"d4c80215f068739e20c0d8e8c8bcada79f7594ec"
+[nil nil nil nil (27000 51643 901306 480000) 0 nil]
+([nil nil ((nil rear-nonsticky nil 123 . 124) (nil fontified nil 123 . 124) (nil fontified nil 104 . 123) (nil fontified nil 75 . 104) (nil fontified nil 74 . 75) (nil fontified nil 51 . 74) (nil fontified nil 50 . 51) (nil fontified nil 14 . 50) (nil fontified nil 13 . 14) (nil fontified nil 12 . 13) (nil fontified nil 8 . 12) (nil fontified nil 2 . 8) (nil fontified nil 1 . 2) (1 . 124) (t . -1)) nil (27000 51643 901305 651000) 0 nil])
+([nil nil ((#("
+" 0 1 (ws-butler-chg chg fontified nil)) . 123) (124 . 124) (#(" " 0 1 (rear-nonsticky t fontified nil ws-butler-chg chg)) . 123) (undo-tree-id0 . -1) (undo-tree-id1 . -1) (124 . 125)) nil (27000 51643 901301 904000) 0 nil])
+([nil nil ((123 . 124) 124 (t 27000 51643 902492 438000)) nil (27000 51647 378866 203000) 0 nil])
+([nil nil ((#("p" 0 1 (fontified t)) . -114) (undo-tree-id2 . -1) (#("a" 0 1 (fontified t)) . -115) (undo-tree-id3 . -1) (#("r" 0 1 (fontified t)) . -116) (undo-tree-id4 . -1) (#("t" 0 1 (fontified t)) . -117) (undo-tree-id5 . -1) (#("3" 0 1 (fontified t)) . -118) (undo-tree-id6 . -1) 119 (t 27000 51643 902492 438000)) nil (27000 51647 378865 489000) 0 nil])
+([nil nil ((114 . 118)) nil (27000 51647 378855 126000) 0 nil])
+([nil nil ((#("
+" 0 1 (ws-butler-chg chg fontified nil)) . 122) (123 . 123) (#(" " 0 1 (ws-butler-chg chg fontified nil)) . 122) (123 . 124) 118) nil (27000 51647 378850 645000) 0 nil])
+([nil nil ((121 . 126) (t 27000 51647 379762 201000)) nil (27000 51656 39395 162000) 0 nil])
+([nil nil ((126 . 127)) nil (27000 51656 39394 807000) 0 nil])
+([nil nil ((#("_" 0 1 (ws-butler-chg chg fontified t)) . -125) (undo-tree-id11 . -1) (#("4" 0 1 (ws-butler-chg chg fontified t)) . -126) (undo-tree-id12 . -1) 127) nil (27000 51656 39394 458000) 0 nil])
+([nil nil ((125 . 131)) nil (27000 51656 39393 464000) 0 nil])
+([nil nil ((#("h" 0 1 (ws-butler-chg chg fontified t)) . -127) (undo-tree-id7 . -1) (#("a" 0 1 (ws-butler-chg chg fontified t)) . -128) (undo-tree-id8 . -1) (#("s" 0 1 (ws-butler-chg chg fontified t)) . -129) (undo-tree-id9 . -1) (#("D" 0 1 (ws-butler-chg chg fontified t)) . -130) (undo-tree-id10 . -1) 131) nil (27000 51656 39392 471000) 0 nil])
+([nil current ((127 . 135)) nil (27000 51656 39377 852000) 0 nil])
+nil

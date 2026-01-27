@@ -1,0 +1,16 @@
+(undo-tree-save-format-version . 1)
+"9a54883fbcfdd7684f46d739521dc5872ac013fb"
+[nil nil nil nil (27000 50459 406000 466000) 0 nil]
+([nil nil ((#("Current best:
+
+12	1.5	0.9	1	0.17062	0.01555
+
+
+restart from k=40
+
+
+Comparison with best in Q1:
+30	1.0	0.0	2	0.18839	0.0141
+" 0 122 (fontified t)) . 1) (undo-tree-id0 . -122) 123 (t 27000 48247 978444 940000)) nil (27000 50459 405999 409000) 0 nil])
+([nil current ((nil rear-nonsticky nil 122 . 123) (nil fontified nil 1 . 123) (1 . 123)) nil (27000 50459 405983 842000) 0 nil])
+nil

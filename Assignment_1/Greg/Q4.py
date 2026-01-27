@@ -108,21 +108,3 @@ def custom_metric(x, y, w2, w3, power):
     met = pow(met, 1/power)
 
     return met
-
-def HasD(x, y):
-# Implementation of Hassanat Distance
-
-    HasD=0
-
-    for i in range(x.size()):
-        print(i)
-
-
-def Q4_hasD_loop():
-    x=[0,1]
-    y=[0,1]
-
-    HasD(x, y)
-
-
-Q4_hasD_loop()

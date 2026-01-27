@@ -1,0 +1,12 @@
+(undo-tree-save-format-version . 1)
+"129d1c946c653d6bc9fb93fbbfacfb1899ab94e8"
+[nil nil nil nil (27000 51660 965551 218000) 0 nil]
+([nil nil ((123 . 124) (t 27000 48247 998445 38000)) nil (27000 51660 965549 996000) 0 nil])
+([nil nil ((#("#!/bin/bash
+#SBATCH --job-name=IntrotoMLQ4_part3
+#SBATCH --time=47:59:00
+#SBATCH --account=rrg-swallin
+python Q4_part3.py
+ " 0 1 (face font-lock-comment-delimiter-face fontified t) 1 7 (face font-lock-comment-face fontified t) 7 11 (face font-lock-keyword-face fontified t) 11 12 (face font-lock-comment-face fontified t) 12 13 (face font-lock-comment-delimiter-face fontified t) 13 49 (face font-lock-comment-face fontified t) 49 50 (face font-lock-comment-delimiter-face fontified t) 50 73 (face font-lock-comment-face fontified t) 73 74 (face font-lock-comment-delimiter-face fontified t) 74 103 (face font-lock-comment-face fontified t) 103 122 (fontified t) 122 123 (ws-butler-chg chg fontified t)) . 1) (undo-tree-id0 . -123)) nil (27000 51660 965549 164000) 0 nil])
+([nil current ((#(" " 0 1 (rear-nonsticky t fontified nil ws-butler-chg chg)) . -123) (nil rear-nonsticky nil 123 . 124) (nil fontified nil 123 . 124) (nil fontified nil 104 . 123) (nil fontified nil 75 . 104) (nil fontified nil 74 . 75) (nil fontified nil 51 . 74) (nil fontified nil 50 . 51) (nil fontified nil 14 . 50) (nil fontified nil 13 . 14) (nil fontified nil 12 . 13) (nil fontified nil 8 . 12) (nil fontified nil 2 . 8) (nil fontified nil 1 . 2) (1 . 124)) nil (27000 51660 965525 311000) 0 nil])
+nil
