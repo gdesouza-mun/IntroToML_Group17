@@ -1,9 +1,3 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import StandardScaler
 from tools import *
 
 def create_grid(step, x1_range, x2_range):
@@ -39,6 +33,13 @@ def Q1_results():
 
     test_sNC_features = pd.read_csv(Global.sNC_test_path, header=None)
     test_sDAT_features = pd.read_csv(Global.sDAT_test_path, header=None)
+
+    # Loading Grid for Background coloring
+    grid_df = pd.read_csv("grid_df.csv")
+
+    # grid_density=0.002
+    # grid_df = create_grid(grid_density, x1_range, x2_range)
+    # grid_df.to_csv('grid_df.csv', index=False)
 
     # --- 2. Name columns and label target class ---
     train_sNC_features.columns=Global.columns_names
@@ -80,16 +81,26 @@ def Q1_results():
         print("Error: X_test  is empty! Check your CSV files for valid data.")
         return
 
+
+    err_train_array=[]
+    err_test_array=[]
+    k_array=[]
+
+
     # --- 3. Train and plot ---
     k_values = [1, 3, 5, 10, 20, 30, 50, 100, 150, 200]
 
 
     # Graphing Stuff
-    fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(15,30), constrained_layout=True)
+    fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(32,24), constrained_layout=True)
+    fig.set_constrained_layout_pads(w_pad=2./72., h_pad=2./72.,
+                                    hspace=0.02, wspace=0.02)
+    plt.rcParams['figure.dpi'] = 100
+
     axes_list = axes.flatten()
     ax_index=0
 
-    skip=3 #We plot one every <skip> points in the data setting
+    skip=2 #We plot one every <skip> points in the data setting
 
     plot_train_nSC=train_sNC_features[::skip]
     plot_train_nDAT=train_sDAT_features[::skip]
@@ -97,23 +108,21 @@ def Q1_results():
     plot_test_nDAT=test_sDAT_features[::skip]
 
     x1_range= (min(plot_train_nDAT['x1'].min(),
-                   plot_test_nDAT['x1'].min()) - 0.1,
-               max(plot_train_nDAT['x1'].max(),
-                   plot_test_nDAT['x1'].max())+0.1)
+                   plot_test_nDAT['x1'].min()),
+               max(plot_train_nSC['x1'].max(),
+                   plot_test_nSC['x1'].max()))
 
     x2_range= (min(plot_train_nDAT['x2'].min(),
-                   plot_test_nDAT['x2'].min()) - 0.1,
-               max(plot_train_nDAT['x2'].max(),
-                   plot_test_nDAT['x2'].max())+0.1)
+                   plot_test_nDAT['x2'].min()),
+               max(plot_train_nSC['x2'].max(),
+                   plot_test_nSC['x2'].max()))
 
-    grid_density=0.002
-    sqr_size=3
-    alpha_value=0.3
-    grid_df = create_grid(grid_density, x1_range, x2_range)
+
     X_grid=grid_df[Global.columns_names]
     bg_colors=['#b2ffa9', '#889eff'] #Light Blue and Light Green
     cmap_background = ListedColormap(bg_colors)
-
+    sqr_size=3
+    alpha_value=0.3
 
     for k in k_values:
 
@@ -125,6 +134,10 @@ def Q1_results():
         err_train = 1-clf.score(X_train, Y_train)
         err_test = 1-clf.score(X_test, Y_test)
 
+        err_train_array.append(err_train)
+        err_test_array.append(err_test)
+        k_array.append(k)
+
         #print(f"{k}\t{err_train}\t{err_test}")
 
 
@@ -134,7 +147,7 @@ def Q1_results():
         ax=axes_list[ax_index]
         ax_index+=1
 
-        ax.set_title(f"kNN Classifier for k={k} \n Training Error = {err_train:.3f} , Test Error={err_test:.3f}")
+        ax.set_title(f"kNN Classifier for k={k} \n Training Error = {err_train:.3f} , Test Error={err_test:.3f} \n plotting 1 in every {skip} points", fontsize='large')
 
         ax.set_xlabel(r'$x_1$')
         ax.set_ylabel(r'$x_2$')
@@ -147,26 +160,34 @@ def Q1_results():
         grid_sNC = grid_df[grid_df[Global.label_name] == Global.sNC_label]
         grid_sDAT = grid_df[grid_df[Global.label_name] == Global.sDAT_label]
 
-        # ax.scatter(grid_sNC['x1'], grid_sNC['x2'],
-        #             c=bg_colors[0], label="sNC Region",
-        #             marker='s', s=sqr_size,
-        #             edgecolor='none', alpha=alpha_value)
-        # ax.scatter(grid_sDAT['x1'], grid_sDAT['x2'],
-        #            c=bg_colors[1], label="sDAT Region",
-        #            marker='s', s=sqr_size,
-        #            edgecolor='none', alpha=alpha_value)
+        ax.scatter(grid_sNC['x1'], grid_sNC['x2'],
+                    c=bg_colors[0],
+                    marker='s', s=sqr_size,
+                    edgecolor='none', alpha=alpha_value)
+        ax.scatter(grid_sDAT['x1'], grid_sDAT['x2'],
+                   c=bg_colors[1],
+                   marker='s', s=sqr_size,
+                   edgecolor='none', alpha=alpha_value)
 
         ax.scatter(plot_train_nSC['x1'], plot_train_nSC['x2'],
                     color=Global.sNC_color,marker='o', label='0/sNC train')
         ax.scatter(plot_train_nDAT['x1'], plot_train_nDAT['x2'],
-                    color=Global.sDAT_color,marker='o', label='0/sDAT train')
+                    color=Global.sDAT_color,marker='o', label='1/sDAT train')
 
         ax.scatter(plot_test_nSC['x1'], plot_test_nSC['x2'],
-                    color=Global.sNC_color,marker='o', label='0/sNC test')
+                    color=Global.sNC_color,marker='x', label='0/sNC test')
         ax.scatter(plot_test_nDAT['x1'], plot_test_nDAT['x2'],
-                    color=Global.sDAT_color,marker='o', label='0/sDAT test')
+                    color=Global.sDAT_color,marker='x', label='1/sDAT test')
 
-        ax.legend(loc='upper left')
+        regions = {
+            1: {'pos': (0.35, 0.03), 'name': 'sDAT Region'},
+            0: {'pos': (0.85, 0.6), 'name': 'sNC \n Region'}
+        }
+
+        for val, style in regions.items():
+            ax.text(*style['pos'], style['name'], transform=ax.transAxes)
+
+        ax.legend(loc='upper left', fontsize='large')
 
         # # 2. Grab the bounding box of just this subplot
         # extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
@@ -176,9 +197,45 @@ def Q1_results():
         # fig.savefig(filename, bbox_inches=extent.expanded(1.1, 1.1))
 
 
+    ax=axes_list[ax_index]
+    ax_index+=1
+
+    ax.set_box_aspect(1)
+    ax.set_xlabel(r'log(k)')
+    ax.set_ylabel("Error")
+    ax.set_xlim(1, 200)
+    ax.set_xscale('log')
+    ax.set_ylim(0, 0.25)
+    ax.set_title("Errro vs hyperparameter K", fontsize='large')
+
+    min_error=min(err_test_array)
+    #print(err_test_array)
+    ax.plot(k_array, err_test_array, marker='x', linestyle='-', label='Testing Error')
+    ax.plot(k_array, err_train_array, marker='o', linestyle='-', label='Training Error')
+    ax.axhline(y=min_error, color='black', linestyle='--', label=f'Minimum Testing Error {min_error:.2f}')
+
+    ax.legend(fontsize='large')
+
+    ax=axes_list[ax_index]
+
+    ax.set_box_aspect(1)
+    ax.set_xlabel(r'x_1')
+    ax.set_ylabel(r'x_2')
+    ax.set_title("All Avaiable Data", fontsize='large')
+
+    ax.scatter(train_sNC_features['x1'], train_sNC_features['x2'],
+               color=Global.sNC_color,marker='o', label='0/sNC train')
+    ax.scatter(train_sDAT_features['x1'], train_sDAT_features['x2'],
+               color=Global.sDAT_color,marker='o', label='1/sDAT train')
+
+    ax.scatter(test_sNC_features['x1'], test_sNC_features['x2'],
+               color=Global.sNC_color,marker='x', label='0/sNC test')
+    ax.scatter(test_sDAT_features['x1'], test_sDAT_features['x2'],
+               color=Global.sDAT_color,marker='x', label='1/sDAT test')
+
+    ax.legend(fontsize='large')
+
+
     #plt.tight_layout()
-    plt.savefig("Q1_grid.png", dpi=300)
     #plt.show()
-
-
-    # Plot in 3x4 grid leaving 2 empty
+    plt.savefig("Q1_grid.png", dpi=300)
