@@ -1,0 +1,7 @@
+(undo-tree-save-format-version . 1)
+"4fe3f012649cbfdbcd6760c2f3f3eabe3271d8c0"
+[nil nil nil nil (27003 40825 353408 657000) 0 nil]
+([nil nil ((nil rear-nonsticky nil 128 . 129) (nil fontified nil 1 . 129) (1 . 129) (t . -1)) nil (27003 40825 353403 57000) 0 nil])
+([nil nil ((apply -4 95 133 undo--wrap-and-run-primitive-undo 95 133 ((118 . 120) (99 . 101) 95 (t 27003 40825 353650 638000)))) nil (27003 40831 53599 275000) 0 nil])
+([nil current ((apply -4 18 56 undo--wrap-and-run-primitive-undo 18 56 ((37 . 39) (18 . 20) (t 27003 40831 54745 67000)))) nil (27003 40833 571281 878000) 0 nil])
+nil

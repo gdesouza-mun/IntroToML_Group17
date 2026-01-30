@@ -31,5 +31,15 @@
 ([nil nil ((76 . 77) (t 26999 28798 9826 673000)) nil (26999 28802 354397 307000) 0 nil])
 ([nil nil ((78 . 82) 90 (t 26999 28802 354841 19000)) nil (26999 28804 518870 752000) 0 nil])
 ([nil nil ((95 . 99) 107) nil (26999 28804 518870 182000) 0 nil])
-([nil current ((112 . 116) 124) nil (26999 28804 518865 878000) 0 nil])
+([nil nil ((112 . 116) 124) nil (26999 28804 518865 878000) 0 nil])
+([nil nil ((#("from Q1 import *
+from Q2 import *
+from Q3 import *
+
+if __name__==\"__main__\":
+    Q1_results()
+    Q2_results()
+    Q3_results()
+" 0 4 (face font-lock-keyword-face fontified t) 4 8 (fontified t) 8 14 (face font-lock-keyword-face fontified t) 14 15 (fontified t) 15 16 (face font-lock-operator-face fontified t) 16 17 (fontified t) 17 21 (face font-lock-keyword-face fontified t) 21 25 (fontified t) 25 31 (face font-lock-keyword-face fontified t) 31 32 (fontified t) 32 33 (face font-lock-operator-face fontified t) 33 34 (fontified t) 34 38 (face font-lock-keyword-face fontified t) 38 42 (fontified t) 42 48 (face font-lock-keyword-face fontified t) 48 49 (fontified t) 49 50 (face font-lock-operator-face fontified t) 50 52 (fontified t) 52 54 (face font-lock-keyword-face fontified t) 54 55 (fontified t) 55 63 (face font-lock-builtin-face fontified t) 63 65 (face font-lock-operator-face fontified t) 65 75 (face font-lock-string-face fontified t) 75 128 (fontified t)) . 1) (undo-tree-id0 . -128) (undo-tree-id1 . -128) (undo-tree-id2 . -128) 129 (t 26999 28804 518848 158000)) nil (27003 40816 220743 762000) 0 nil])
+([nil current ((nil rear-nonsticky nil 128 . 129) (nil fontified nil 76 . 129) (nil fontified nil 66 . 76) (nil fontified nil 64 . 66) (nil fontified nil 56 . 64) (nil fontified nil 55 . 56) (nil fontified nil 53 . 55) (nil fontified nil 51 . 53) (nil fontified nil 50 . 51) (nil fontified nil 49 . 50) (nil fontified nil 43 . 49) (nil fontified nil 39 . 43) (nil fontified nil 35 . 39) (nil fontified nil 34 . 35) (nil fontified nil 33 . 34) (nil fontified nil 32 . 33) (nil fontified nil 26 . 32) (nil fontified nil 22 . 26) (nil fontified nil 18 . 22) (nil fontified nil 17 . 18) (nil fontified nil 16 . 17) (nil fontified nil 15 . 16) (nil fontified nil 9 . 15) (nil fontified nil 5 . 9) (nil fontified nil 1 . 5) (1 . 129)) nil (27003 40816 220718 671000) 0 nil])
 nil
