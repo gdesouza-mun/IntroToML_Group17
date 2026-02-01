@@ -1,5 +1,23 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{caption}
+\usepackage{paracol}
+\usepackage{chngcntr}
+\counterwithout{figure}{section} % If using Article
+
+\newcommand{\singleWidth}{0.6\textwidth}
+
+\captionsetup[figure]{
+    font=small,           % Makes text smaller (can use 'footnotesize' for even smaller)
+    labelfont=bf,         % Makes "Figure X" bold
+    margin=10pt,          % Indents caption from the left/right of the column
+    skip=5pt,             % Reduces space between image and caption
+    justification=centering % Keeps it neat
+}
+
 
 \title{Assignment Number 1}
 \author{Group 17: \\ Darlington Nkrumah (202492437) \\
@@ -11,16 +29,14 @@
 
 \maketitle
 
-\section*{Question 1}
+%\section*{Question 1}
 \input{question1.tex}
 
-\section*{Question 2}
 \input{question2.tex}
 
-\section*{Question 3}
 \input{question3.tex}
 
-\section*{Question 4}
-\input{question4.tex}
+%% \section*{Question 4}
+%% \input{question4.tex}
 
 \end{document}

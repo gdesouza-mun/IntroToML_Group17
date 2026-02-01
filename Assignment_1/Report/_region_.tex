@@ -1,0 +1,76 @@
+\message{ !name(question1.tex)}
+\message{ !name(question1.tex) !offset(-2) }
+% We use two main columns for the whole page layout
+%\setcolumnsep{10pt} % Space between the text and the images
+\columnratio{0.4}   % 40% of width for text, 60% for images
+
+\begin{paracol}{2}
+  %% --- LEFT COLUMN: YOUR TEXT ---
+  \section*{Introduction}
+
+  The assignment provides data on the glucose metabolism measurements
+  taken from isthmuscingulate and precuneus regions on the brain as a possible
+  measurement to diagnose dementia of Alzheimer's type (DAT), labeled sDAT/1.
+  The data on healthy individuals (NC) is labeled sNC/0 on the report.
+  The data was proved in two groups - The training data, and the test data,
+  used in their respective functions.
+
+  With this data, we implemented studied the implementation of a Nearest Neighbor classifier
+  using various number of neighbors ($k$) and metrics to evaluate the performance in the context of
+  over/underfitting, bias and variance.
+
+
+  \section*{Question 1}
+
+  The first group Nearest Neighbors classifiers (refereed from now on as kNN) uses the \textit{Euclidean}
+  for values of $k={1,3,5,10,20,30,50,100,150,200}$. The resulted boundary regions overlaid with
+  the training and testing data is presented on figures \ref{fig:Q1k1} to \ref{fig:Q1k200}, the training
+  and test error for each value of k is presented on the table \ref{tab:Q1errors}.
+
+  The \textbf{best performance} for this metric is obtained for $k=30$ neighbors, with a testing
+  error of $0.170$, beating the performance of the other kNN classifiers by at least $5\%$.
+  Other \textbf{intermediate values} of k ($k=5, 10$ and $20$) also
+  performed well when in comparison to the best performing model ($k=30$).
+
+  For the \textbf{low values} of k, the testing error was  25\% higher for $k=3$,
+  and 37.5\% higher for k=1, even thought the training error was 0. This is the result of
+  
+
+  
+  \begin{table}[]
+    \begin{tabular}{lll}
+      k   & Training Error & Testing Error \\
+      1   & 0              & 0.220         \\
+      3   & 0.143          & 0.205         \\
+      5   & 0.156          & 0.170         \\
+      10  & 0.152          & 0.170         \\
+      20  & 0.169          & 0.170         \\
+      \textbf{ 30}  & \textbf{0.169}          & \textbf{0.160}         \\
+      50  & 0.158          & 0.190         \\
+      100 & 0.196          & 0.200         \\
+      150 & 0.192          & 0.190         \\
+      200 & 0.222          & 0.205        
+    \end{tabular}
+    \caption{Training and error rate of kNN classifiers for $k = 1,3,5,10,20,30,50,100,150,200$}
+    \label{tab:Q1errors}
+  \end{table}
+
+
+
+  \vspace{2cm}
+
+  %% --- SWITCH TO RIGHT COLUMN ---
+  \switchcolumn
+  \subsection*{kNN Classifier Boundary Regions for Q1}
+
+  \centering
+  \foreach \k in {1, 3, 5, 10, 20, 30, 50, 100, 150, 200} {%
+    \vspace{10pt}
+    \includegraphics[width=\linewidth]{Graphs/Q1_k\k.png}
+    \captionof{figure}{Nearest Neighbor classifier for $k = \k$ with sDAT region in blue and sNC region colored green, with training and test data overlayed}
+    \label{fig:Q1k\k}
+    \vspace{20pt} % Space between images
+  }
+\end{paracol}
+
+\message{ !name(question1.tex) !offset(-76) }

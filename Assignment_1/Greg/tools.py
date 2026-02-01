@@ -93,4 +93,4 @@ def plot_decision_region(knn, scaler, x1_range=None, x2_range=None, step=0.02):
                 cmap=cmap_background,
                 marker='s', s=10, alpha=0.5) # 's' is a square marker
 
-    #plt.show()
+    plt.show()

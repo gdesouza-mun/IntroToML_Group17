@@ -1,0 +1,15 @@
+\includegraphics[width=0.95\linewidth]{Graphs/Q1_k20.png}
+\captionof{figure}{Nearest Neighbor classifier for k = 20 with sDAT region in blue and sNC region colored green, with training and test data overlayed}
+\label{fig:Q1k20}
+\vspace{20pt}
+
+\includegraphics[width=0.95\linewidth]{Graphs/Q1_k50.png}
+\captionof{figure}{Nearest Neighbor classifier for k = 50 with sDAT region in blue and sNC region colored green, with training and test data overlayed}
+\label{fig:Q1k50}
+\vspace{20pt}
+
+\includegraphics[width=0.95\linewidth]{Graphs/Q1_k150.png}
+\captionof{figure}{Nearest Neighbor classifier for k = 150 with sDAT region in blue and sNC region colored green, with training and test data overlayed}
+\label{fig:Q1k150}
+\vspace{20pt}
+
