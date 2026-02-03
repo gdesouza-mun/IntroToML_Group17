@@ -101,19 +101,18 @@ def diagnoseDAT(path):
     x1_range= (df_all['x1'].min(), df_all['x1'].max())
     x2_range= (df_all['x2'].min(), df_all['x2'].max())
 
-
-    plt.scatter(df_train_sNC.iloc[:,0], df_train_sNC.iloc[:,1],
-                        color=Global.sNC_color,marker='o', label='0/sNC train')
-    plt.scatter(df_train_sDAT.iloc[:,0], df_train_sDAT.iloc[:,1],
-                        color=Global.sDAT_color,marker='o', label='1/sDAT train')
-
-    plt.scatter(df_test_sNC.iloc[:,0], df_test_sNC.iloc[:,1],
-                        color=Global.sNC_color,marker='x', label='0/sNC test')
-    plt.scatter(df_test_sDAT.iloc[:,0], df_test_sDAT.iloc[:,1],
-                        color=Global.sDAT_color,marker='x', label='1/sDAT test')
-
-
     plot_decision_region(knn, scaler, x1_range, x2_range, step=0.002)
+
+    # plt.scatter(df_train_sNC.iloc[:,0], df_train_sNC.iloc[:,1],
+    #                     color=Global.sNC_color,marker='o', label='0/sNC train')
+    # plt.scatter(df_train_sDAT.iloc[:,0], df_train_sDAT.iloc[:,1],
+    #                     color=Global.sDAT_color,marker='o', label='1/sDAT train')
+
+    # plt.scatter(df_test_sNC.iloc[:,0], df_test_sNC.iloc[:,1],
+    #                     color=Global.sNC_color,marker='x', label='0/sNC test')
+    # plt.scatter(df_test_sDAT.iloc[:,0], df_test_sDAT.iloc[:,1],
+    #                     color=Global.sDAT_color,marker='x', label='1/sDAT test')
+
 
     plt.title("Decision Boundary for kNN with Hassanat Metric and k=17")
     plt.legend()

@@ -8,49 +8,27 @@ from sklearn.model_selection import cross_val_score
 from tools import *
 import math
 
-def HasD(x, y, w2=1):
-# Implementation of Hassanat Distance
-    HasD=0
+def dist2(x,y):
 
-    y[1]=w2*y[1]
-    x[1]=w2*x[1]
+    dx=x[0]-y[0]
+    dy=x[1]-y[1]
+    return math.sqrt(dx*dx + dy*dy)
 
-    for i in range(0, len(x)):
-        min_xy=min(x[i], y[i])
-        max_xy=max(x[i], y[i])
-        if min_xy >= 0:
-            HasD+= 1 - (1+min_xy)/(1+max_xy)
-        else:
-            abs_min=abs(min_xy)
-            HasD+= 1 -(1+min_xy+abs_min)/(1+max_xy+abs_min)
+def ToanMetric(x,y,w, cx, cy):
 
-    return HasD
+    center=[cx,cy]
+    d2=dist2(x,y)
+    # if x[0]+x[1] > 2 and x[0]+x[1]<3:
+    #     d2=d2*w
+    # if y[0]+y[1] > 2 and y[0]+y[1]<3:
+    #     d2=d2*w
 
-def Lorentz_dist(x, y):
+    e1=math.exp(w*dist2(x, center))
+    e2=math.exp(w*dist2(y, center))
 
-    LD=0
-    for i in range(0, len(x)):
-        LD += math.log(1+abs(x[i]-y[i]))
+    return dist2(e1*x,e2*y)
 
-    return LD
 
-def SCSD(x, y):
-    Chi=0
-
-    for i in range(0, len(x)):
-        dxy = x[i]-y[i]
-        Chi+= dxy*dxy/abs(x[i]+y[i])
-
-    return Chi
-
-def Canberra(x,y):
-    canD=0
-
-    for i in range(0, len(x)):
-        dxy = x[i]-y[i]
-        canD+=abs(dxy)/(abs(x[i])+abs(y[i]))
-
-    return canD
 
 
 
@@ -82,35 +60,39 @@ def Q4_loop():
 
     df_shuffled = df_all.sample(frac=1, random_state=42).reset_index(drop=True)
 
-    scaler=StandardScaler()
+
     X=df_shuffled[Global.columns_names]
-    X_scaled=scaler.fit_transform(X)
+    X_scaled=X
     Y=df_shuffled[Global.label_name]
+    k=24
+    w=0.04
+    min_error=0.168
+    cx_start=0
+    cy_start=0
+    c_step=0.1
+    center_range=range(0, round(2.2/c_step))
 
-    print("k\tw2\terr\tstd_dev")
-    k_range=range(15, 21, 1)
-    w2_step=0.1
-    w2_range=range(0, int(2/w2_step))
-    print(w2_range)
-    err_min=0.16
-    k_min=17
-    w2_min=1
-
-    for k in k_range:
-        for w2_index in w2_range:
-            w2=w2_index*w2_step
+    for cx_index in center_range:
+        cx=cx_start+cx_index*c_step
+        for cy_index in center_range:
+            cy=cy_start+cy_index*c_step
             knn = KNeighborsClassifier(n_neighbors=k,
-                                       metric=HasD,
-                                       metric_params={"w2":w2})
+                                   metric=ToanMetric,
+                                   metric_params={"w":w, "cx":cx, "cy":cy},
+                                   weights='distance')
 
             scores = cross_val_score(knn, X, Y, cv=5, scoring='accuracy')
             avg_score = scores.mean()
             avg_err= 1-avg_score
             score_std = scores.std()
+            if avg_err<min_error:
+                min_error=avg_err
+                print(f"{cx}\t{cy}\t{avg_err:,.4f}\t{score_std:,.4f}")
 
-            if(avg_err<err_min):
-                print(f"{k}\t{w2}\t{avg_err:,.4f}\t{score_std:,.4f}")
 
+
+        #Exp
+        #   24	0.04	0.1676	0.0189
 
 
 

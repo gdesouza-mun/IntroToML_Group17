@@ -26,9 +26,9 @@
 
   The first group Nearest Neighbors classifiers (refereed from now on as kNN) uses the \textit{Euclidean}
   for values of k=1, 3, 5, 10, 20, 30, 50, 100, 150, 200.
-  The resulted boundary regions overlaid with
-  the training and testing data is presented on figures \ref{fig:Q1k1} to \ref{fig:Q1k200}, the training
-  and test error for each value of k is presented on the table \ref{tab:Q1errors}.
+  The resulting boundary regions overlaid with
+  the training and testing data are presented in figures \ref{fig:Q1k1} to \ref{fig:Q1k200}, the training
+  and test error for each value of k is presented in the table \ref{tab:Q1errors}.
   
   
   \begin{table}[t!]
@@ -56,7 +56,7 @@
   performed well when in comparison to the best performing model ($k=30$).
 
   For the \textbf{low values} of k, the testing error was  25\% higher for $k=3$,
-  and 37.5\% higher for k=1, even thought the training error was 0. This is the result of
+  and 37.5\% higher for k=1. This is the result of
   \textbf{over fitting}, as the capacity of the kNN classifier \textbf{increases} as k \textbf{decreases}.
   This is specially notable for the k=1 case, where each point is it's own closest neighbor, as a result
   it can fit any dataset with training error of 0, even if the generalized error is high, indicating that low
@@ -64,7 +64,7 @@
   low values of k have \textbf{low bias}, as they can easily conform to any data set, while having
   \textbf{high variance}, as different datasets with generate significantly different models.
 
-  For the \textbf{high values} of k, the testing error was also over 20\% worst then the best
+  For the \textbf{high values} of k, the testing error was also over 20\% worse then the best
   performing classifier, but for different reasons than the low value case. For high values of
   k, the model capacity \textbf{decreases}. For example, in the extreme where k is equal in size to the
   dataset, a kNN classifier will classify any point was the majority class, due to it counting
@@ -79,7 +79,8 @@
   region where the sNC and sDAT data set mixes, but not too much to over fit the training data.
   And for high values k, the bias is too high, and the boundary becomes basically a straight line
   separating the regions with the majority of each class, so even a different dataset would still
-  generate a similar boundary region, as the kNN classifier is low variance for high values of k.
+  generate a similar boundary region, as the kNN classifier is low variance for high values of k. The best
+  scenario within the values of k provided is k=30, for a generalization error of $0.169$.
 
   \renewcommand{\thefigure}{6}
   \includegraphics[width=0.95\linewidth]{Graphs/Q1_k30.png}

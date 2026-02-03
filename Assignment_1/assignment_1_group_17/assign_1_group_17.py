@@ -1,9 +1,9 @@
 #  Assignment 1
 #
 #  Group 17:
-#  <Group Member 1 name> <Group Member 1 email>
-#  Greg de Souza> <gdesouza@mun.ca
-#  <Group Member 3 name> <Group Member 1 email>
+#  Darlington Nkrumah, MUN ID 202492437, dknkrumah@mun.ca
+#  Greg de Souza, MUN ID 2025225,  gdesouza@mun.ca
+#  Xuan Toan Doan, MUN ID 202583882, txdoan@mun.ca
 
 
 ####################################################################################
@@ -645,6 +645,7 @@ def diagnoseDAT(Xtest, data_dir):
 
 if __name__=="__main__":
     Q1_results()
+    print("Individual Q1 graphs have been pre generated and are in the Q1_Graphs folder")
     Q2_results()
     Q3_results()
 
