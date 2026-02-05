@@ -1,4 +1,8 @@
 *.txt
 NASA_Datasets*
-m2020_greg/NAV_Labels*
-m2020_greg/ncam*
+m2020_greg/NAV_Labels/*
+m2020_greg/ncam/*
+*.png
+*.jpg
+*.jpeg
+*.zip
