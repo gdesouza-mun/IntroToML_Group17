@@ -1,0 +1,124 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{caption}
+\usepackage{paracol}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\usepackage{biblatex}
+%\counterwithout{figure}{section} % If using Article
+
+\addbibresource{references.bib}
+
+
+\newcommand{\singleWidth}{0.6\textwidth}
+
+\captionsetup[figure]{
+    font=small,           % Makes text smaller (can use 'footnotesize' for even smaller)
+    labelfont=bf,         % Makes "Figure X" bold
+    margin=10pt,          % Indents caption from the left/right of the column
+    skip=5pt,             % Reduces space between image and caption
+    justification=centering % Keeps it neat
+}
+
+
+\title{Final Project \& Literature Review Proposal}
+\author{Group 17: \\ Darlington Nkrumah (202492437) \\
+  Greg de Souza (202582225) \\
+  Xuan Toan Doan (202583882)}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+
+\section*{Final Project Proposal: Terrain classification
+  for NASA's mars2020 (Perseverance) rover}
+
+\textbf{AI4Mars} is a collection of open dataset of images taken by the various
+rovers currently operating on mars. The images are also label by
+citizen science initiatives through the \textit{zooniverse} platform,
+with the final labels being verified by experts. The dataset we chose to
+work with is the navigation images of the Mars 2020 Perseverance rover.
+
+The dataset consists of 3827 unique labeled images taken by the navigation cameras with different
+portions of the terrain labeled into one of 5 classes, according to table
+\ref{tab:labels}. The labels are written into the rgb colors of a label image.
+A reference of representative classes is show in figure \ref{Fig:terrain},
+and an example of the label mask is shown in figure \ref{Fig:label}. This images
+are taken from a conference paper about the AI4Mars project \cite{AI4Mars_2021} and
+are from the MSL Curiosity navigational dataset. Our dataset is more recent and from
+a different rover, but the classes and classification methods are the same.
+
+
+\begin{table}[]
+  \centering
+  \begin{tabular}{l|l|l}
+    \textbf{Label} & \textbf{Type}             & \textbf{RGB Label}         \\
+    0     & soil             & {[}0,0,0{]}       \\
+    1     & bedrock          & {[}1,1,1{]}       \\
+    2     & sand             & {[}2,2,2{]}       \\
+    3     & big rock         & {[}3,3,3{]}       \\
+    255   & null / unlabeled & {[}255,255,255{]}
+  \end{tabular}
+  \caption{Labels for the Mars2020 Navigation dataset}
+  \label{tab:labels}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  % Includes the image, scaled to half the text width
+  \includegraphics[width=0.5\textwidth]{figures/TerrainTypes.png} 
+  \caption{Representative examples of each class, taken from \cite{AI4Mars_2021}}
+  \label{Fig:terrain}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/LabeledImages.png} 
+  \caption{Example of original navigational camera image vs labeled image,
+    taken from \cite{AI4Mars_2021}}}
+  \label{Fig:label}
+\end{figure}
+
+The goal of our final project is to learn how to use the images provided by the
+AI4Mars data set to generate a design matrix, apply one or more machine learning
+method to output labels for new images, and compare our results with other
+published results for martian terrain classification \cite{AI4Mars_2022}
+\cite{AI4Mars_2025}.
+
+
+\section*{Literature Review}
+
+Our literature review will entail studying two different sets of articles.
+The first are the three articles related to the AI4mars project. The first
+is a conference paper from 2021 that explains the labeling procedure and trains
+a residual network (ResNet-101) to classify new images\cite{AI4Mars_2021}. The second
+is a published article \cite{AI4Mars_2022} that applies multiple ML methods of different
+capacity to asses which of them is the best at labeling images, but it also assesses the
+efficiency and time to label of each method, important due to the hardware constraints of the
+computers on the martian rovers. The last AI4Mars related paper \cite{AI4Mars_2025}
+proposes a new ML model specific to the challenges of navigation called FASTNAV,
+including quick terrain classification and methods for choosing paths across the classified
+terrain.
+
+The other set of papers we will study will be related to other image classification methods unrelated
+to the AI4Mars project, with the goal to inform which data processing techniques and methods we
+could apply in our final project.
+\cite{Luna_Field_Kay_2025A}
+\cite{Chen_Ge_Tong_Wang_Song_Wang_Luo_2022}
+\cite{Cheng_2025}
+\cite{He_Zhang_Ren_Sun_2016}
+\cite{Lorente_Riera_Rana_2021}
+\cite{Sheykhmousa_Mahdianpari_Ghanbari_Mohammadimanesh_Ghamisi_Homayouni_2020}
+\cite{Trigka_Dritsas_2025}
+\cite{Minaee_Boykov_Porikli_Plaza_Kehtarnavaz_Terzopoulos_2020}
+\cite{Sultana_Sufian_Dutta_2020}
+
+
+\printbibliography
+
+\end{document}

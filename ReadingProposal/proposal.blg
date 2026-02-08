@@ -1,0 +1,18 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[0] Config.pm:311> INFO - Logfile is 'proposal.blg'
+[41] biber:340> INFO - === Sun Feb  8, 2026, 10:06:25
+[50] Biber.pm:420> INFO - Reading 'proposal.bcf'
+[85] Biber.pm:994> INFO - Found 10 citekeys in bib section 0
+[94] Biber.pm:4463> INFO - Processing section 0
+[100] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
+[102] bibtex.pm:1713> INFO - LaTeX decoding ...
+[110] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[181] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[181] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[181] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[181] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
+[188] bbl.pm:676> INFO - Writing 'proposal.bbl' with encoding 'UTF-8'
+[191] bbl.pm:779> INFO - Output to proposal.bbl
+[192] Biber.pm:131> WARN - BibTeX subsystem: /tmp/biber_tmp_q38i/33e59b5ca9ec342068223d604c3f8d55_11735.utf8, line 1, warning: undefined macro "june"
+[192] Biber.pm:131> WARN - BibTeX subsystem: /tmp/biber_tmp_q38i/33e59b5ca9ec342068223d604c3f8d55_11735.utf8, line 16, warning: undefined macro "july"
+[192] Biber.pm:133> INFO - WARNINGS: 2

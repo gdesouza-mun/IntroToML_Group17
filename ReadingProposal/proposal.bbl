@@ -1,0 +1,564 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{AI4Mars_2022}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=54a70dbf18e99cdde9c0d90bf280ef81}{%
+           family={Atha},
+           familyi={A\bibinitperiod},
+           given={Deegan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=4e184b3ba64290726d29877d20819763}{%
+           family={Swan},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi Michael},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=cfd1f3720cb381b238373c34d8c10770}{%
+           family={Didier},
+           familyi={D\bibinitperiod},
+           given={Annie},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b275adec4e870ac27f3eb09f2416c76f}{%
+           family={Hasnain},
+           familyi={H\bibinitperiod},
+           given={Zaki},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=599b406bddd479aabd2deb72d22b8aed}{%
+           family={Ono},
+           familyi={O\bibinitperiod},
+           given={Masahiro},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{fullhash}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{fullhashraw}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{bibnamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authorbibnamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authornamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authorfullhash}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{authorfullhashraw}{0f4fd04b7daf1169d914c528bec23c28}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2022 IEEE Aerospace Conference (AERO)}
+      \field{issn}{1095-323X}
+      \field{month}{3}
+      \field{title}{Multi-mission Terrain Classifier for Safe Rover Navigation and Automated Science}
+      \field{year}{2022}
+      \field{pages}{1\bibrangedash 13}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/AERO53065.2022.9843615
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/9843615/
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/9843615/
+      \endverb
+    \endentry
+    \entry{Atha_Swan_Didier_Hasnain_Ono_2022}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=54a70dbf18e99cdde9c0d90bf280ef81}{%
+           family={Atha},
+           familyi={A\bibinitperiod},
+           given={Deegan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=4e184b3ba64290726d29877d20819763}{%
+           family={Swan},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi Michael},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=cfd1f3720cb381b238373c34d8c10770}{%
+           family={Didier},
+           familyi={D\bibinitperiod},
+           given={Annie},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b275adec4e870ac27f3eb09f2416c76f}{%
+           family={Hasnain},
+           familyi={H\bibinitperiod},
+           given={Zaki},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=599b406bddd479aabd2deb72d22b8aed}{%
+           family={Ono},
+           familyi={O\bibinitperiod},
+           given={Masahiro},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{fullhash}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{fullhashraw}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{bibnamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authorbibnamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authornamehash}{c1eb0cfe1f8d3f66ba9ae567a440931a}
+      \strng{authorfullhash}{0f4fd04b7daf1169d914c528bec23c28}
+      \strng{authorfullhashraw}{0f4fd04b7daf1169d914c528bec23c28}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2022 IEEE Aerospace Conference (AERO)}
+      \field{issn}{1095-323X}
+      \field{month}{3}
+      \field{title}{Multi-mission Terrain Classifier for Safe Rover Navigation and Automated Science}
+      \field{year}{2022}
+      \field{pages}{1\bibrangedash 13}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/AERO53065.2022.9843615
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/9843615/
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/9843615/
+      \endverb
+    \endentry
+    \entry{Ghosh_Das_Das_Maulik_2019}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=1e168e0c0f8d607fd663c0c9d012ba0c}{%
+           family={Ghosh},
+           familyi={G\bibinitperiod},
+           given={Swarnendu},
+           giveni={S\bibinitperiod}}}%
+        {{hash=eda6df1b1322b3a7728a5d2cea12fc2a}{%
+           family={Das},
+           familyi={D\bibinitperiod},
+           given={Nibaran},
+           giveni={N\bibinitperiod}}}%
+        {{hash=f7e240111415355f368b571731edb438}{%
+           family={Das},
+           familyi={D\bibinitperiod},
+           given={Ishita},
+           giveni={I\bibinitperiod}}}%
+        {{hash=1b4a422783c9c9d52eefa8aee1234175}{%
+           family={Maulik},
+           familyi={M\bibinitperiod},
+           given={Ujjwal},
+           giveni={U\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{4cef277f28ed3d99f385fb173e4a1ddd}
+      \strng{fullhash}{b500c909348842982dfa840e9195c031}
+      \strng{fullhashraw}{b500c909348842982dfa840e9195c031}
+      \strng{bibnamehash}{4cef277f28ed3d99f385fb173e4a1ddd}
+      \strng{authorbibnamehash}{4cef277f28ed3d99f385fb173e4a1ddd}
+      \strng{authornamehash}{4cef277f28ed3d99f385fb173e4a1ddd}
+      \strng{authorfullhash}{b500c909348842982dfa840e9195c031}
+      \strng{authorfullhashraw}{b500c909348842982dfa840e9195c031}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:1907.06119 [cs]}
+      \field{number}{arXiv:1907.06119}
+      \field{title}{Understanding Deep Learning Techniques for Image Segmentation}
+      \field{year}{2019}
+      \verb{doi}
+      \verb 10.48550/arXiv.1907.06119
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1907.06119
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1907.06119
+      \endverb
+    \endentry
+    \entry{Goutham_Juneja_C_Prasad_2022}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=2658c20b900179919e128be896c429e8}{%
+           family={Goutham},
+           familyi={G\bibinitperiod},
+           given={Gagan},
+           giveni={G\bibinitperiod}}}%
+        {{hash=5074bdb4c0655423fcac5f380da3a5b4}{%
+           family={Juneja},
+           familyi={J\bibinitperiod},
+           given={Hita},
+           giveni={H\bibinitperiod}}}%
+        {{hash=ee62a9f7dc320f552f6fe874efdbab8f}{%
+           family={C},
+           familyi={C\bibinitperiod},
+           given={Ankitha},
+           giveni={A\bibinitperiod}}}%
+        {{hash=72239e1cb1f5402f1c8772dc80d17a20}{%
+           family={Prasad},
+           familyi={P\bibinitperiod},
+           given={V\bibnamedelima R\bibnamedelima Badri},
+           giveni={V\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{4a6a3cbc6161b56f144db76312e80e47}
+      \strng{fullhash}{6e332dd2c5c33ecce9828a69e1938ab7}
+      \strng{fullhashraw}{6e332dd2c5c33ecce9828a69e1938ab7}
+      \strng{bibnamehash}{4a6a3cbc6161b56f144db76312e80e47}
+      \strng{authorbibnamehash}{4a6a3cbc6161b56f144db76312e80e47}
+      \strng{authornamehash}{4a6a3cbc6161b56f144db76312e80e47}
+      \strng{authorfullhash}{6e332dd2c5c33ecce9828a69e1938ab7}
+      \strng{authorfullhashraw}{6e332dd2c5c33ecce9828a69e1938ab7}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2022 IEEE 7th International Conference on Recent Advances and Innovations in Engineering (ICRAIE)}
+      \field{month}{12}
+      \field{title}{Semantic Segmentation on Martian Terrain for Navigation using Transformers}
+      \field{volume}{7}
+      \field{year}{2022}
+      \field{pages}{276\bibrangedash 282}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1109/ICRAIE56454.2022.10054341
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/10054341
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/10054341
+      \endverb
+    \endentry
+    \entry{Kale_Thorat_2021}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=4ac4775019e8f7b68d17d39acac19100}{%
+           family={Kale},
+           familyi={K\bibinitperiod},
+           given={Raksha\bibnamedelima S.},
+           giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=e30fbaae7f1c8482e437db811c5c9d4c}{%
+           family={Thorat},
+           familyi={T\bibinitperiod},
+           given={Dr\bibnamedelima Surabhi},
+           giveni={D\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{fullhash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{fullhashraw}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{bibnamehash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{authorbibnamehash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{authornamehash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{authorfullhash}{6224019611cb9a8b66f45552d15b8d4b}
+      \strng{authorfullhashraw}{6224019611cb9a8b66f45552d15b8d4b}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2456-3307}
+      \field{journaltitle}{International Journal of Scientific Research in Computer Science, Engineering and Information Technology}
+      \field{month}{12}
+      \field{number}{6}
+      \field{title}{Image Segmentation Techniques with Machine Learning}
+      \field{volume}{7}
+      \field{year}{2021}
+      \field{pages}{232\bibrangedash 235}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.32628/CSEIT1217653
+      \endverb
+    \endentry
+    \entry{AI4Mars_2025}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=27feb61c02f92821a2477c3146ef9e09}{%
+           family={Luna},
+           familyi={L\bibinitperiod},
+           given={Cristina},
+           giveni={C\bibinitperiod}}}%
+        {{hash=1fbb18d87b9ccd1b75c65a86b98f6cfd}{%
+           family={Field},
+           familyi={F\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=a2442f94b7227abc4d665b49f90c1f0b}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={Steven},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{b809566972e9a8e9f63461398146eb20}
+      \strng{fullhash}{b809566972e9a8e9f63461398146eb20}
+      \strng{fullhashraw}{b809566972e9a8e9f63461398146eb20}
+      \strng{bibnamehash}{b809566972e9a8e9f63461398146eb20}
+      \strng{authorbibnamehash}{b809566972e9a8e9f63461398146eb20}
+      \strng{authornamehash}{b809566972e9a8e9f63461398146eb20}
+      \strng{authorfullhash}{b809566972e9a8e9f63461398146eb20}
+      \strng{authorfullhashraw}{b809566972e9a8e9f63461398146eb20}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{10}
+      \field{note}{arXiv:2510.05985 [cs]}
+      \field{number}{arXiv:2510.05985}
+      \field{title}{AI-Enabled Capabilities to Facilitate Next-Generation Rover Surface Operations}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.48550/arXiv.2510.05985
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2510.05985
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2510.05985
+      \endverb
+    \endentry
+    \entry{Minaee_Boykov_Porikli_Plaza_Kehtarnavaz_Terzopoulos_2020}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=f993317037a8a70ad4d9c6555a09d89a}{%
+           family={Minaee},
+           familyi={M\bibinitperiod},
+           given={Shervin},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a76f930a93f4c5f1e0d6b35394956814}{%
+           family={Boykov},
+           familyi={B\bibinitperiod},
+           given={Yuri},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=614198715471d146b77068d419298d26}{%
+           family={Porikli},
+           familyi={P\bibinitperiod},
+           given={Fatih},
+           giveni={F\bibinitperiod}}}%
+        {{hash=9b3ce6468cd35a018e12616afcd1f795}{%
+           family={Plaza},
+           familyi={P\bibinitperiod},
+           given={Antonio},
+           giveni={A\bibinitperiod}}}%
+        {{hash=642aac140393d4b62be0465bc9392fa6}{%
+           family={Kehtarnavaz},
+           familyi={K\bibinitperiod},
+           given={Nasser},
+           giveni={N\bibinitperiod}}}%
+        {{hash=cd9aa5de7673e375889cc32997ef97df}{%
+           family={Terzopoulos},
+           familyi={T\bibinitperiod},
+           given={Demetri},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{a3762cc0e55ae1f34a9959d542225935}
+      \strng{fullhash}{7c8333e1b41386df956f966b1b11ac70}
+      \strng{fullhashraw}{7c8333e1b41386df956f966b1b11ac70}
+      \strng{bibnamehash}{a3762cc0e55ae1f34a9959d542225935}
+      \strng{authorbibnamehash}{a3762cc0e55ae1f34a9959d542225935}
+      \strng{authornamehash}{a3762cc0e55ae1f34a9959d542225935}
+      \strng{authorfullhash}{7c8333e1b41386df956f966b1b11ac70}
+      \strng{authorfullhashraw}{7c8333e1b41386df956f966b1b11ac70}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{11}
+      \field{note}{arXiv:2001.05566 [cs]}
+      \field{number}{arXiv:2001.05566}
+      \field{title}{Image Segmentation Using Deep Learning: A Survey}
+      \field{year}{2020}
+      \verb{doi}
+      \verb 10.48550/arXiv.2001.05566
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2001.05566
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2001.05566
+      \endverb
+    \endentry
+    \entry{Sultana_Sufian_Dutta_2020}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=51f3e6f140c546aa868af27b4c211c80}{%
+           family={Sultana},
+           familyi={S\bibinitperiod},
+           given={Farhana},
+           giveni={F\bibinitperiod}}}%
+        {{hash=3a3549e88d11cdbd3be75994c21d7e7b}{%
+           family={Sufian},
+           familyi={S\bibinitperiod},
+           given={Abu},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1c9310e59f11a8eba1d0ba509e45665a}{%
+           family={Dutta},
+           familyi={D\bibinitperiod},
+           given={Paramartha},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{fullhash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{fullhashraw}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{bibnamehash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{authorbibnamehash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{authornamehash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{authorfullhash}{100864d6e744087a01dc1899f9eeb5ee}
+      \strng{authorfullhashraw}{100864d6e744087a01dc1899f9eeb5ee}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0950-7051}
+      \field{journaltitle}{Knowledge-Based Systems}
+      \field{month}{8}
+      \field{title}{Evolution of Image Segmentation using Deep Convolutional Neural Network: A Survey}
+      \field{volume}{201–202}
+      \field{year}{2020}
+      \field{pages}{106062}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.knosys.2020.106062
+      \endverb
+    \endentry
+    \entry{AI4Mars_2021}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=4e184b3ba64290726d29877d20819763}{%
+           family={Swan},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi Michael},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=54a70dbf18e99cdde9c0d90bf280ef81}{%
+           family={Atha},
+           familyi={A\bibinitperiod},
+           given={Deegan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=bdf82956513ed1fd320f29306538adf2}{%
+           family={Leopold},
+           familyi={L\bibinitperiod},
+           given={Henry\bibnamedelima A.},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=a374d40a50f4b4cd9fb0339d7bcc59a0}{%
+           family={Gildner},
+           familyi={G\bibinitperiod},
+           given={Matthew},
+           giveni={M\bibinitperiod}}}%
+        {{hash=8b22eecaa864fdb8ac61b662818b8490}{%
+           family={Oij},
+           familyi={O\bibinitperiod},
+           given={Stephanie},
+           giveni={S\bibinitperiod}}}%
+        {{hash=72120e44200ec14e8d5596282f2900cb}{%
+           family={Chiu},
+           familyi={C\bibinitperiod},
+           given={Cindy},
+           giveni={C\bibinitperiod}}}%
+        {{hash=599b406bddd479aabd2deb72d22b8aed}{%
+           family={Ono},
+           familyi={O\bibinitperiod},
+           given={Masahiro},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{e7d71923fe7d12a336fb3ebf8053a461}
+      \strng{fullhash}{418d275619293940541e75cbf518f840}
+      \strng{fullhashraw}{418d275619293940541e75cbf518f840}
+      \strng{bibnamehash}{e7d71923fe7d12a336fb3ebf8053a461}
+      \strng{authorbibnamehash}{e7d71923fe7d12a336fb3ebf8053a461}
+      \strng{authornamehash}{e7d71923fe7d12a336fb3ebf8053a461}
+      \strng{authorfullhash}{418d275619293940541e75cbf518f840}
+      \strng{authorfullhashraw}{418d275619293940541e75cbf518f840}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}
+      \field{issn}{2160-7516}
+      \field{note}{ISSN: 2160-7516}
+      \field{title}{AI4MARS: A Dataset for Terrain-Aware Autonomous Driving on Mars}
+      \field{year}{2021}
+      \field{pages}{1982\bibrangedash 1991}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/CVPRW53098.2021.00226
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/9523149
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/9523149
+      \endverb
+    \endentry
+    \entry{Zhang_Lin_Fan_Wang_Liu_2024}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=5842d3692f5b96c82b1c41ad6aea7632}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiahang},
+           giveni={J\bibinitperiod}}}%
+        {{hash=2162aa25d45e9decee8448090f734af2}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Lilang},
+           giveni={L\bibinitperiod}}}%
+        {{hash=263dab9d1f16f1d095e767fdc12db411}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Zejia},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=4e059e4116c62a64406812830b8c1f99}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Wenjing},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e97cb99f7ec95531e680d1c399e23717}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Jiaying},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{181a8cd24f67bc6b8d5bdab49f4d4baa}
+      \strng{fullhash}{d97a3f1db04a8f27480ca3278ae12065}
+      \strng{fullhashraw}{d97a3f1db04a8f27480ca3278ae12065}
+      \strng{bibnamehash}{181a8cd24f67bc6b8d5bdab49f4d4baa}
+      \strng{authorbibnamehash}{181a8cd24f67bc6b8d5bdab49f4d4baa}
+      \strng{authornamehash}{181a8cd24f67bc6b8d5bdab49f4d4baa}
+      \strng{authorfullhash}{d97a3f1db04a8f27480ca3278ae12065}
+      \strng{authorfullhashraw}{d97a3f1db04a8f27480ca3278ae12065}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{4}
+      \field{note}{arXiv:2207.01200 [cs]}
+      \field{number}{arXiv:2207.01200}
+      \field{title}{S$^{5}$Mars: Semi-Supervised Learning for Mars Semantic Segmentation}
+      \field{year}{2024}
+      \verb{doi}
+      \verb 10.48550/arXiv.2207.01200
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2207.01200
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2207.01200
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
