@@ -1,0 +1,758 @@
+
+
+*******************************************************************************
+Thu Feb 12 13:49:49 2026
+
+
+FIT:    data read from "train.csv" using ($5):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.2719478311e+05   0.00e+00  1.73e+01    1.000000e+00   1.000000e+00
+  27 2.1074454071e+05  -1.47e-01  1.73e-02    8.871258e-02   1.660459e+00
+
+After 27 iterations the fit converged.
+final sum of squares of residuals : 210745
+rel. change during last iteration : -1.47222e-06
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 16.2509
+variance of residuals (reduced chisquare) = WSSR/ndf   : 264.091
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.0887126        +/- 0.06675      (75.25%)
+b               = 1.66046          +/- 0.2539       (15.29%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.987  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 13:50:40 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 5.4170488474e+10   0.00e+00  6.73e+04    8.871258e-02   1.660459e+00
+   8 2.2884889103e+05   0.00e+00  6.73e-04    2.466887e+01  -5.568391e+00
+
+After 8 iterations the fit converged.
+final sum of squares of residuals : 228849
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 16.9345
+variance of residuals (reduced chisquare) = WSSR/ndf   : 286.778
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 24.6689          +/- 1.884e+18    (7.636e+18%)
+b               = -5.56839         +/- 1.143e+16    (2.053e+17%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -1.000  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 13:51:02 2026
+
+
+FIT:    data read from "train.csv" using ($7):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.2884889103e+05   0.00e+00  7.78e-14    2.466887e+01  -5.568391e+00
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50816e+14    
+z               = -16.5711       
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:00:06 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a*x**b
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50816e+14    
+z               = -16.5711       
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:00:23 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a*x**b
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50816e+14    
+z               = -16.5711       
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:00:43 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x**b
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50816e+14    
+z               = -16.5711       
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:00:54 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*exp(b*x)
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50816e+14    
+z               = -16.5711       
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:01:08 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9-35.58)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a+b*log(x)
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 2 out of 800
+x               = 3.50816e+14    
+z               = 12.8212        
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:04:01 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a+b*log(x)
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 2 out of 800
+x               = 3.50816e+14    
+z               = 48.4012        
+
+Current set of parameters
+=========================
+a               = 3.50816e+14    
+b               = 8.50029e+13    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:04:10 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: ax**2 + bx**4
+fitted parameters initialized with current variable values
+
+
+
+*******************************************************************************
+Thu Feb 12 14:04:17 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x**2 + b*x**4
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 1.5369965946e+49   0.00e+00  9.80e+22    3.508156e+14   8.500292e+13
+   1 6.0084614996e+42  -2.56e+11  9.80e+21    3.507964e+14   4.854684e+10
+
+The maximum lambda = 1.000000e+20 was exceeded. Fit stopped.
+final sum of squares of residuals : 6.00846e+42
+rel. change during last iteration : -2.55805e+06
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 8.67721e+19
+variance of residuals (reduced chisquare) = WSSR/ndf   : 7.5294e+39
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 3.50796e+14      +/- 2.771e+14    (78.99%)
+b               = 4.85468e+10      +/- 4.057e+09    (8.356%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.886  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:04:36 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x**b
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3.50796e+14    
+z               = 19.0089        
+
+Current set of parameters
+=========================
+a               = 3.50796e+14    
+b               = 4.85468e+10    
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:04:41 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 5.6092779906e+40   0.00e+00  5.92e+18    3.507964e+14   4.854684e+10
+BREAK: Singular matrix in Invert_RtR
+
+*******************************************************************************
+Thu Feb 12 14:05:09 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2 + c*x**3 + d*x**4
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b             c             d            
+   0 1.0764354331e+33   0.00e+00  5.80e+14    8.623009e-04   4.859539e+10   1.000000e+00   1.000000e+00
+  12 7.1904878631e+05  -5.56e-01  5.80e+02    8.623024e-04   7.013476e-03  -4.511959e-05   7.537401e-08
+
+After 12 iterations the fit converged.
+final sum of squares of residuals : 719049
+rel. change during last iteration : -5.55734e-06
+
+degrees of freedom    (FIT_NDF)                        : 796
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 30.0554
+variance of residuals (reduced chisquare) = WSSR/ndf   : 903.328
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.000862302      +/- 0.1511       (1.752e+04%)
+b               = 0.00701348       +/- 0.002396     (34.16%)
+c               = -4.51196e-05     +/- 1.204e-05    (26.68%)
+d               = 7.5374e-08       +/- 1.893e-08    (25.12%)
+
+correlation matrix of the fit parameters:
+                a      b      c      d      
+a               1.000 
+b              -0.972  1.000 
+c               0.919 -0.984  1.000 
+d              -0.862  0.951 -0.990  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:05:21 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b             c             d            
+   0 1.8170865333e+07   0.00e+00  8.37e+01    8.623024e-04   7.013476e-03  -4.511959e-05   7.537401e-08
+BREAK: Singular matrix in Invert_RtR
+
+*******************************************************************************
+Thu Feb 12 14:05:27 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 6.7307650178e+05   0.00e+00  4.66e+01    4.968840e-01  -1.404602e-03
+   1 6.7307650178e+05  -8.72e-09  4.66e+00    4.968843e-01  -1.404603e-03
+
+After 1 iterations the fit converged.
+final sum of squares of residuals : 673077
+rel. change during last iteration : -8.71718e-14
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 29.0423
+variance of residuals (reduced chisquare) = WSSR/ndf   : 843.454
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.496884         +/- 0.03012      (6.062%)
+b               = -0.0014046       +/- 0.000144     (10.25%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.954  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:09:48 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**c
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 2 out of 800
+x               = 0.496884       
+z               = 48.4012        
+
+Current set of parameters
+=========================
+a               = 0.496884       
+b               = -0.0014046     
+c               = -4.51196e-05   
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:09:56 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b             c            
+   0 6.7307650178e+05   0.00e+00  3.80e+01    4.968843e-01  -1.404603e-03  -4.511959e-05
+BREAK: Singular matrix in Invert_RtR
+
+*******************************************************************************
+Thu Feb 12 14:10:01 2026
+
+
+FIT:    data read from "train.csv" using ($2):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 6.7307650178e+05   0.00e+00  4.66e+01    4.968843e-01  -1.404603e-03
+   1 6.7307650178e+05   0.00e+00  4.66e+00    4.968843e-01  -1.404603e-03
+
+After 1 iterations the fit converged.
+final sum of squares of residuals : 673077
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 29.0423
+variance of residuals (reduced chisquare) = WSSR/ndf   : 843.454
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.496884         +/- 0.03012      (6.062%)
+b               = -0.0014046       +/- 0.000144     (10.25%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.954  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:34:55 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a + b*log(x)
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 1.2140050850e+06   0.00e+00  3.51e-01    4.968843e-01  -1.404603e-03
+   5 2.2005571687e+05  -1.84e-01  3.51e-06    3.234476e+02  -4.185276e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 220056
+rel. change during last iteration : -1.8387e-06
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 16.606
+variance of residuals (reduced chisquare) = WSSR/ndf   : 275.759
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 323.448          +/- 50.98        (15.76%)
+b               = -41.8528         +/- 7.412        (17.71%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -1.000  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:35:09 2026
+
+
+FIT:    data read from "train.csv" using ($6):(log($9))
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a + b*log(x)
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 8.3500132932e+05   0.00e+00  3.06e+02    3.234476e+02  -4.185276e+01
+   4 2.4236286973e+02  -3.19e-01  3.06e-02    1.207877e+01  -1.256385e+00
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 242.363
+rel. change during last iteration : -3.18592e-06
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.551102
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.303713
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 12.0788          +/- 1.692        (14.01%)
+b               = -1.25639         +/- 0.246        (19.58%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -1.000  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:36:03 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 1.2414285572e+06   0.00e+00  1.32e-02    1.207877e+01  -1.256385e+00
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3122.69        
+z               = 19.0089        
+
+Current set of parameters
+=========================
+a               = 3122.69        
+b               = 2386.8         
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:36:09 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: c + a*x**b
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3122.69        
+z               = 19.0089        
+
+Current set of parameters
+=========================
+a               = 3122.69        
+b               = 2386.8         
+c               = -4.51647e-05   
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:36:23 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*exp(b*x)
+fitted parameters initialized with current variable values
+
+
+Current data point
+=========================
+#               = 1 out of 800
+x               = 3122.69        
+z               = 19.0089        
+
+Current set of parameters
+=========================
+a               = 3122.69        
+b               = 2386.8         
+c               = -4.51647e-05   
+
+BREAK: Undefined value during function evaluation
+
+*******************************************************************************
+Thu Feb 12 14:36:41 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2 + c*x**3
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b             c            
+   0 4.2608087921e+21   0.00e+00  1.33e+09    3.122687e+03   2.386797e+03  -4.516471e-05
+   9 2.1680494651e+05  -5.60e-04  1.33e+00    4.958759e-01  -8.642807e-04   4.012201e-07
+
+After 9 iterations the fit converged.
+final sum of squares of residuals : 216805
+rel. change during last iteration : -5.59842e-09
+
+degrees of freedom    (FIT_NDF)                        : 797
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 16.4932
+variance of residuals (reduced chisquare) = WSSR/ndf   : 272.026
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.495876         +/- 0.08369      (16.88%)
+b               = -0.000864281     +/- 0.0001714    (19.84%)
+c               = 4.0122e-07       +/- 8.747e-08    (21.8%)
+
+correlation matrix of the fit parameters:
+                a      b      c      
+a               1.000 
+b              -0.999  1.000 
+c               0.996 -0.999  1.000 
+
+
+*******************************************************************************
+Thu Feb 12 14:36:50 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b             c            
+   0 1.2024633161e+08   0.00e+00  5.57e+02    4.958759e-01  -8.642807e-04   4.012201e-07
+BREAK: Singular matrix in Invert_RtR
+
+*******************************************************************************
+Thu Feb 12 14:36:53 2026
+
+
+FIT:    data read from "train.csv" using ($6):($9)
+        format = x:z
+        #datapoints = 800
+        residuals are weighted equally (unit weight)
+
+function used for fitting: a*x + b*x**2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.2252859883e+05   0.00e+00  9.52e+01    1.136675e-01  -7.874032e-05
+   1 2.2252859883e+05  -6.41e-10  9.52e+00    1.136675e-01  -7.874031e-05
+
+After 1 iterations the fit converged.
+final sum of squares of residuals : 222529
+rel. change during last iteration : -6.40856e-15
+
+degrees of freedom    (FIT_NDF)                        : 798
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 16.699
+variance of residuals (reduced chisquare) = WSSR/ndf   : 278.858
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.113668         +/- 0.007941     (6.986%)
+b               = -7.87403e-05     +/- 8.033e-06    (10.2%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.997  1.000 
