@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 def predictCompressiveStrength(Xtest, data_dir):
@@ -55,3 +56,15 @@ def predictCompressiveStrength(Xtest, data_dir):
     y_pred = model.predict(Xtest)
 
     return y_pred
+
+
+
+df_test = pd.read_csv('test.csv')
+Y=df_test['ConcreteCompressiveStrength_MPa_Megapascals_']
+Xtest=(df_test.drop('ConcreteCompressiveStrength_MPa_Megapascals_', axis=1)).values
+
+Ypred = predictCompressiveStrength(Xtest, '')
+
+r2 = r2_score(Y, Ypred)
+
+print(r2)

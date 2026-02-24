@@ -4,20 +4,23 @@ import math
 import statistics
 
 class glb:
-    feat_dic = {
-        0 : "Cement_component1__kgInAM_3Mixture_",
-        1 : "BlastFurnaceSlag_component2__kgInAM_3Mixture_",
-        2 : "FlyAsh_component3__kgInAM_3Mixture_",
-        3 : "Water_component4__kgInAM_3Mixture_",
-        4 : "Superplasticizer_component5__kgInAM_3Mixture_",
-        5 : "CoarseAggregate_component6__kgInAM_3Mixture_",
-        6 : "FineAggregate_component7__kgInAM_3Mixture_",
-        7 : "Age_day_"
-    }
+    feat_dic = [
+        "Cement_component1__kgInAM_3Mixture_",
+        "BlastFurnaceSlag_component2__kgInAM_3Mixture_",
+        "FlyAsh_component3__kgInAM_3Mixture_",
+        "Water_component4__kgInAM_3Mixture_",
+        "Superplasticizer_component5__kgInAM_3Mixture_",
+         "CoarseAggregate_component6__kgInAM_3Mixture_",
+         "FineAggregate_component7__kgInAM_3Mixture_",
+         "Age_day_"
+    ]
 
     target_name = "ConcreteCompressiveStrength_MPa_Megapascals_"
 
     p_features=8
+
+    train_Filepath="Data/train.csv"
+    test_Filepath="Data/test.csv"
 
     def MSEtoRSE(MSE, sample_size, p=p_features):
         RSE = math.sqrt((sample_size*MSE)/(sample_size-p-1))
@@ -65,6 +68,6 @@ def dataVisu2():
 
 
 
-dataVisu2()
+#dataVisu2()
 
 #y mean=35.57

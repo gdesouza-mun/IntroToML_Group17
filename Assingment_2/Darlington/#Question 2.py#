@@ -50,9 +50,6 @@ def calculate_rse(y_true, y_pred, p_features):
     rss = np.sum((y_true - y_pred) ** 2)
     return np.sqrt(rss / (n - p_features - 1))
 
-r2_ridge = r2_score(y_test, y_pred_ridge)
-rse_ridge = calculate_rse(y_test, y_pred_ridge, X_test.shape[1])
-
 # 6. Compare with Simple Linear Regression (OLS)
 # We must train OLS on the full training set and test on 'test.csv' for a fair comparison
 ols = LinearRegression()

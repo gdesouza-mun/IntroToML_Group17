@@ -1,0 +1,85 @@
+(undo-tree-save-format-version . 1)
+"466f95f71fae9255ea7be0aa8d93862a7206bd1f"
+[nil nil nil nil (27024 27724 892423 526000) 0 nil]
+([nil nil ((#("Final Project \\& Literature Review Proposal" 0 43 (face (font-lock-type-face) fontified t)) . 731) (undo-tree-id37 . -43) (undo-tree-id38 . -43) (undo-tree-id39 . -43) (undo-tree-id40 . -43) (undo-tree-id41 . -43) (undo-tree-id42 . -43) (undo-tree-id43 . -43) (undo-tree-id44 . -43) (t 27016 37224 91524 905000)) nil (27024 27724 892422 706000) 0 nil])
+([nil nil ((731 . 743)) nil (27024 27724 892420 129000) 0 nil])
+([nil nil ((#("T" 0 1 (face (font-lock-type-face) fontified t)) . -742) (undo-tree-id35 . -1) (undo-tree-id36 . -1) 743) nil (27024 27724 892419 763000) 0 nil])
+([nil nil ((742 . 743)) nil (27024 27724 892418 295000) 0 nil])
+([nil current ((#("
+\\maketitle
+
+
+\\section*{Final Project Proposal: Terrain classification
+  for NASA's mars2020 (Perseverance) rover}
+
+\\textbf{AI4Mars} is a collection of open dataset of images taken by the various
+rovers currently operating on mars. The images are also label by
+citizen science initiatives through the \\textit{zooniverse} platform,
+with the final labels being verified by experts. The dataset we chose to
+work with is the navigation images of the Mars 2020 Perseverance rover.
+
+The dataset consists of 3827 unique labeled images taken by the navigation cameras with different
+portions of the terrain labeled into one of 5 classes, according to table
+\\ref{tab:labels}. The labels are written into the rgb colors of a label image.
+A reference of representative classes is show in figure \\ref{Fig:terrain},
+and an example of the label mask is shown in figure \\ref{Fig:label}. This images
+are taken from a conference paper about the AI4Mars project \\cite{AI4Mars_2021} and
+are from the MSL Curiosity navigational dataset. Our dataset is more recent and from
+a different rover, but the classes and classification methods are the same.
+
+
+\\begin{table}[]
+  \\centering
+  \\begin{tabular}{l|l|l}
+    \\textbf{Label} & \\textbf{Type}             & \\textbf{RGB Label}         \\\\
+    0     & soil             & {[}0,0,0{]}       \\\\
+    1     & bedrock          & {[}1,1,1{]}       \\\\
+    2     & sand             & {[}2,2,2{]}       \\\\
+    3     & big rock         & {[}3,3,3{]}       \\\\
+    255   & null / unlabeled & {[}255,255,255{]}
+  \\end{tabular}
+  \\caption{Labels for the Mars2020 Navigation dataset}
+  \\label{tab:labels}
+\\end{table}
+
+\\begin{figure}[htbp]
+  \\centering
+  % Includes the image, scaled to half the text width
+  \\includegraphics[width=0.5\\textwidth]{figures/TerrainTypes.png} 
+  \\caption{Representative examples of each class, taken from \\cite{AI4Mars_2021}}
+  \\label{Fig:terrain}
+\\end{figure}
+
+\\begin{figure}[htbp]
+  \\centering
+  \\includegraphics[width=0.8\\textwidth]{figures/LabeledImages.png} 
+  \\caption{Example of original navigational camera image vs labeled image,
+    taken from \\cite{AI4Mars_2021}}}
+  \\label{Fig:label}
+\\end{figure}
+
+The goal of our final project is to learn how to use the images provided by the
+AI4Mars data set to generate a design matrix, apply one or more machine learning
+method to segment the images in the 4 classes, and compare our results with other
+published results for martian terrain classification \\cite{AI4Mars_2022}
+\\cite{AI4Mars_2025}.
+
+
+\\section*{Literature Review}
+
+Our literature review will entail studying two different sets of articles.
+The first are the articles related to the AI4mars project, detailed the dataset
+labeling process, as well as given an overview of the available data, and then assess
+the ability of different Machine Learning Models to do image segmentation on the images
+provided in the AI4Mars dataset or similar datasets\\cite{AI4Mars_2021}\\cite{AI4Mars_2022}\\cite{AI4Mars_2025}\\cite{Atha_Swan_Didier_Hasnain_Ono_2022}\\cite{Goutham_Juneja_C_Prasad_2022}\\cite{Zhang_Lin_Fan_Wang_Liu_2024}.
+
+The other set of papers we will study will be related to other image segmentation methods unrelated
+to the AI4Mars project, with the goal to inform which data processing techniques and methods we
+could apply in our final project
+\\cite{Ghosh_Das_Das_Maulik_2019}\\cite{Kale_Thorat_2021}\\cite{Minaee_Boykov_Porikli_Plaza_Kehtarnavaz_Terzopoulos_2020}\\cite{Sultana_Sufian_Dutta_2020}.
+
+
+
+\\printbibliography
+" 0 1 (fontified t) 1 11 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 11 14 (fontified t) 14 22 (face (font-lock-keyword-face font-latex-sedate-face) font-lock-multiline t fontified t) 22 23 (face (font-lock-keyword-face) font-lock-multiline t fontified t) 23 24 (font-lock-multiline t fontified t) 24 113 (face (font-latex-sectioning-2-face) font-lock-multiline t fontified t) 113 114 (font-lock-multiline t fontified t) 114 116 (fontified t) 116 123 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 123 124 (fontified t) 124 131 (face (font-latex-bold-face) fontified t) 131 301 (fontified t) 301 308 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 308 309 (fontified t) 309 319 (face (font-latex-italic-face) fontified t) 319 570 (fontified t) 570 575 (fontified t) 575 649 (fontified t) 649 653 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 653 654 (fontified t) 654 664 (face (font-lock-constant-face) fontified t) 664 784 (fontified t) 784 788 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 788 789 (fontified t) 789 800 (face (font-lock-constant-face) fontified t) 800 855 (fontified t) 855 859 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 859 860 (fontified t) 860 869 (face (font-lock-constant-face) fontified t) 869 944 (fontified t) 944 949 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 949 950 (fontified t) 950 962 (face (font-lock-constant-face) fontified t) 962 1131 (fontified t) 1131 1137 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1137 1138 (fontified t) 1138 1143 (face (font-lock-function-name-face) fontified t) 1143 1149 (fontified t) 1149 1159 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1159 1162 (fontified t) 1162 1168 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1168 1169 (fontified t) 1169 1176 (face (font-lock-function-name-face) fontified t) 1176 1189 (fontified t) 1189 1196 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1196 1197 (fontified t) 1197 1202 (face (font-latex-bold-face) fontified t) 1202 1204 (fontified t) 1204 1205 (face font-latex-warning-face fontified t) 1205 1206 (fontified t) 1206 1213 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1213 1214 (fontified t) 1214 1218 (face (font-latex-bold-face) fontified t) 1218 1232 (fontified t) 1232 1233 (face font-latex-warning-face fontified t) 1233 1234 (fontified t) 1234 1241 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1241 1242 (fontified t) 1242 1251 (face (font-latex-bold-face) fontified t) 1251 1261 (fontified t) 1261 1263 (face font-latex-warning-face fontified t) 1263 1274 (fontified t) 1274 1275 (face font-latex-warning-face fontified t) 1275 1293 (fontified t) 1293 1294 (face font-latex-warning-face fontified t) 1294 1313 (fontified t) 1313 1315 (face font-latex-warning-face fontified t) 1315 1326 (fontified t) 1326 1327 (face font-latex-warning-face fontified t) 1327 1345 (fontified t) 1345 1346 (fontified t face font-latex-warning-face) 1346 1365 (fontified t) 1365 1367 (fontified t face font-latex-warning-face) 1367 1368 (fontified t) 1368 1378 (fontified t) 1378 1379 (face font-latex-warning-face fontified t) 1379 1397 (fontified t) 1397 1398 (face font-latex-warning-face fontified t) 1398 1417 (fontified t) 1417 1419 (face font-latex-warning-face fontified t) 1419 1430 (fontified t) 1430 1431 (face font-latex-warning-face fontified t) 1431 1449 (fontified t) 1449 1450 (face font-latex-warning-face fontified t) 1450 1469 (fontified t) 1469 1471 (face font-latex-warning-face fontified t) 1471 1482 (fontified t) 1482 1483 (face font-latex-warning-face fontified t) 1483 1501 (fontified t) 1501 1502 (face font-latex-warning-face fontified t) 1502 1523 (fontified t) 1523 1524 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1524 1527 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1527 1528 (fontified t) 1528 1535 (face (font-lock-function-name-face) fontified t) 1535 1539 (fontified t) 1539 1547 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1547 1548 (fontified t) 1548 1590 (face (font-lock-type-face) fontified t) 1590 1594 (fontified t) 1594 1600 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1600 1601 (fontified t) 1601 1611 (face (font-lock-constant-face) fontified t) 1611 1613 (fontified t) 1613 1614 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1614 1617 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1617 1618 (fontified t) 1618 1623 (face (font-lock-function-name-face) fontified t) 1623 1626 (fontified t) 1626 1632 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1632 1633 (fontified t) 1633 1639 (face (font-lock-function-name-face) fontified t) 1639 1649 (fontified t) 1649 1659 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1659 1662 (fontified t) 1662 1714 (face font-lock-comment-face fontified t) 1714 1716 (fontified t) 1716 1732 (face (font-latex-sedate-face) fontified t) 1732 1742 (fontified t) 1742 1752 (face (font-latex-sedate-face) fontified t) 1752 1783 (fontified t) 1783 1791 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1791 1792 (fontified t) 1792 1842 (face (font-lock-type-face) fontified t) 1842 1847 (face (font-lock-keyword-face font-lock-type-face font-latex-sedate-face) fontified t) 1847 1848 (face (font-lock-type-face) fontified t) 1848 1860 (face (font-lock-constant-face font-lock-type-face) fontified t) 1860 1861 (face (font-lock-type-face) fontified t) 1861 1865 (fontified t) 1865 1871 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1871 1872 (fontified t) 1872 1883 (face (font-lock-constant-face) fontified t) 1883 1885 (fontified t) 1885 1886 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1886 1889 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1889 1890 (fontified t) 1890 1896 (face (font-lock-function-name-face) fontified t) 1896 1899 (fontified t) 1899 1905 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1905 1906 (fontified t) 1906 1912 (face (font-lock-function-name-face) fontified t) 1912 1922 (fontified t) 1922 1932 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 1932 1935 (fontified t) 1935 1951 (face (font-latex-sedate-face) fontified t) 1951 1961 (fontified t) 1961 1971 (face (font-latex-sedate-face) fontified t) 1971 2003 (fontified t) 2003 2011 (face (font-lock-keyword-face font-latex-sedate-face) font-lock-multiline t fontified t) 2011 2012 (font-lock-multiline t fontified t) 2012 2075 (face (font-lock-type-face) font-lock-multiline t fontified t) 2075 2076 (face (font-lock-type-face) font-lock-multiline t fontified t) 2076 2091 (face (font-lock-type-face) font-lock-multiline t fontified t) 2091 2096 (font-lock-multiline t face (font-lock-keyword-face font-lock-type-face font-latex-sedate-face) fontified t) 2096 2097 (face (font-lock-type-face) font-lock-multiline t fontified t) 2097 2109 (font-lock-multiline t face (font-lock-constant-face font-lock-type-face) fontified t) 2109 2110 (face (font-lock-type-face) font-lock-multiline t fontified t) 2110 2111 (font-lock-multiline t fontified t) 2111 2115 (fontified t) 2115 2121 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2121 2122 (fontified t) 2122 2131 (face (font-lock-constant-face) fontified t) 2131 2133 (fontified t) 2133 2134 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2134 2137 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2137 2138 (fontified t) 2138 2144 (face (font-lock-function-name-face) fontified t) 2144 2443 (fontified t) 2443 2448 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2448 2449 (fontified t) 2449 2461 (face (font-lock-constant-face) fontified t) 2461 2463 (fontified t) 2463 2468 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2468 2469 (fontified t) 2469 2481 (face (font-lock-constant-face) fontified t) 2481 2486 (fontified t) 2486 2494 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 2494 2495 (face (font-lock-keyword-face) fontified t) 2495 2496 (fontified t) 2496 2513 (face (font-latex-sectioning-2-face) fontified t) 2513 2868 (fontified t) 2868 2896 (fontified t) 2896 2901 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 2901 2902 (fontified t) 2902 2914 (fontified t face (font-lock-constant-face)) 2914 2915 (fontified t) 2915 2920 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 2920 2921 (fontified t) 2921 2933 (fontified t face (font-lock-constant-face)) 2933 2934 (fontified t) 2934 2939 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 2939 2940 (fontified t) 2940 2952 (fontified t face (font-lock-constant-face)) 2952 2953 (fontified t) 2953 2958 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 2958 2959 (fontified t) 2959 2992 (fontified t face (font-lock-constant-face)) 2992 2993 (fontified t) 2993 2998 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 2998 2999 (fontified t) 2999 3027 (fontified t face (font-lock-constant-face)) 3027 3028 (fontified t) 3028 3033 (fontified t face (font-lock-keyword-face font-latex-sedate-face)) 3033 3034 (fontified t) 3034 3061 (fontified t face (font-lock-constant-face)) 3061 3064 (fontified t) 3064 3294 (fontified t) 3294 3299 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 3299 3300 (fontified t) 3300 3325 (face (font-lock-constant-face) fontified t) 3325 3326 (fontified t) 3326 3331 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 3331 3332 (fontified t) 3332 3348 (face (font-lock-constant-face) fontified t) 3348 3349 (fontified t) 3349 3354 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 3354 3355 (fontified t) 3355 3411 (face (font-lock-constant-face) fontified t) 3411 3412 (fontified t) 3412 3417 (face (font-lock-keyword-face font-latex-sedate-face) fontified t) 3417 3418 (fontified t) 3418 3443 (face (font-lock-constant-face) fontified t) 3443 3449 (fontified t) 3449 3467 (face (font-lock-keyword-face font-latex-sedate-face) font-lock-multiline t fontified t) 3467 3468 (font-lock-multiline t fontified t)) . -900) (undo-tree-id0 . -3468) (undo-tree-id1 . -2463) (undo-tree-id2 . -3468) (undo-tree-id3 . -32) (undo-tree-id4 . -32) (undo-tree-id5 . -32) (undo-tree-id6 . -32) (undo-tree-id7 . -32) (undo-tree-id8 . -32) (undo-tree-id9 . -32) (undo-tree-id10 . -25) (undo-tree-id11 . -25) (undo-tree-id12 . -25) (undo-tree-id13 . -25) (undo-tree-id14 . -25) (undo-tree-id15 . -25) (undo-tree-id16 . -23) (undo-tree-id17 . -23) (undo-tree-id18 . -23) (undo-tree-id19 . -23) (undo-tree-id20 . -23) (undo-tree-id21 . -23) (undo-tree-id22 . -13) (undo-tree-id23 . -13) (undo-tree-id24 . -13) (undo-tree-id25 . -13) (undo-tree-id26 . -13) (undo-tree-id27 . -13) (undo-tree-id28 . -32) (undo-tree-id29 . -575) (undo-tree-id30 . -1316) (undo-tree-id31 . -1885) (undo-tree-id32 . -2484) (undo-tree-id33 . -3165) (undo-tree-id34 . -3468) 4368) nil (27024 27724 892410 190000) 0 nil])
+nil

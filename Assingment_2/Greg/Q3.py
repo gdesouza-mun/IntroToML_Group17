@@ -15,7 +15,7 @@ def Q3_gridsearch(X,Y, grid):
 
     # scoring = { 'mse' : 'neg_mean_squared_error',
     #             'r2' : 'r2' }
-    fold=10
+    fold=5
     grid_search = GridSearchCV(
         estimator=lasso,
         param_grid=param_grid,
@@ -69,8 +69,8 @@ def Q3_results():
 
     Y_pred=lasso.predict(X_test)
 
-    r2 = r2_score(Y_pred, Y_test)
-    MSE = mean_squared_error(Y_pred, Y_test)
+    r2 = r2_score(Y_test, Y_pred)
+    MSE = mean_squared_error(Y_test, Y_pred)
     sample_size = len(Y_test)
     RSE = glb.MSEtoRSE(MSE, sample_size)
 
@@ -84,6 +84,9 @@ def Q3_results():
     for i in range(len(coef)):
         print(f"theta_{i} \t {coef[i]:.4f}")
 
+
+
+Q3_explore()
 Q3_results()
 
 

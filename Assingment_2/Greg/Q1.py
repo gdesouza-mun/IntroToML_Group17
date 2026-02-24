@@ -34,7 +34,7 @@ def Q1_CV(X,Y):
 
     scoring = ["r2", "neg_mean_squared_error"]
     lin_model = LinearRegression()
-    folds=10
+    folds=5
     results = cross_validate(lin_model, X, Y, cv=folds, scoring=scoring)
 
     n=len(X)/folds
@@ -50,8 +50,6 @@ def Q1_CV(X,Y):
     r2_var = statistics.variance(r2_array)
     RSE = statistics.mean(RSE_array)
     RSE_var = statistics.variance(RSE_array)
-
-
 
     return r2, RSE, r2_var, RSE_var
 

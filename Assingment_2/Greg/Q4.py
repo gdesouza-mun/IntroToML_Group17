@@ -123,22 +123,38 @@ def regularized_llar(X, Y, grid):
 
 def transform(X):
     X_new=X
+    col0 = X_new[glb.feat_dic[0]]
+    col2 = X_new[glb.feat_dic[0]]
     Age = X_new[glb.feat_dic[7]]
     col4 = X_new[glb.feat_dic[4]]
+    col5 = X_new[glb.feat_dic[5]]
+    col6 = X_new[glb.feat_dic[6]]
     col1_2 = X_new[glb.feat_dic[1]]
-    drop_index=[4,5,6,7]
+    col_456 = []
+    col_log0 = []
+    col_2sqrt = []
+    drop_index=[4,5,6]
     for i in drop_index:
         X_new=X_new.drop(glb.feat_dic[i], axis=1)
 
 
     for i in range(len(Age)):
+        x0=col0[i]
+        x2=col2[i]
+        x4 = col4[i]
+        x5 = col5[i]
+        x6 = col6[i]
         Age[i] = math.log(float(Age[i]))
-        col4[i] = math.pow(col4[i], 1.66)
+        col_456.append(math.pow(x4*x5*x6, 0.5))
+        col4[i] = math.pow(x4, 1.66)
         col1_2[i] = math.pow(col1_2[i], 2)
+        col_log0.append(math.log(x0))
 
     X_new["log(Age_day_)"] = Age
     X_new["Superplasticizer_component5__kgInAM_3Mixture_**1.66"] = col4
     X_new["BlastFurnaceSlag_component2__kgInAM_3Mixture_**2"] = col1_2
+    X_new["x4*x5*x6"] = col_456
+    X_new["logx0"] = col_log0
 
     return X_new
 

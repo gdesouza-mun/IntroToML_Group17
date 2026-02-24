@@ -15,7 +15,7 @@ def Q2_gridsearch(X,Y, grid):
 
     # scoring = { 'mse' : 'neg_mean_squared_error',
     #             'r2' : 'r2' }
-    fold=10
+    fold=5
     grid_search = GridSearchCV(
         estimator=ridge,
         param_grid=param_grid,
@@ -66,8 +66,8 @@ def Q2_results():
 
     Y_pred=ridge.predict(X_test)
 
-    r2 = r2_score(Y_pred, Y_test)
-    MSE = mean_squared_error(Y_pred, Y_test)
+    r2 = r2_score(Y_test ,Y_pred)
+    MSE = mean_squared_error(Y_test, Y_pred)
     sample_size = len(Y_test)
     RSE = glb.MSEtoRSE(MSE, sample_size)
 
@@ -82,6 +82,9 @@ def Q2_results():
         print(f"theta_{i} \t {coef[i]:.4f}")
 
 
+print("Exploration")
+Q2_explore()
+print("Results")
 Q2_results()
 
 # first round grid=[0.001, 0.1, 1, 10, 100]

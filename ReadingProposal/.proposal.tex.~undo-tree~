@@ -1021,6 +1021,8 @@ terrain.
 " 0 1 (fontified t)) . 3960)) nil (27016 37205 715662 113000) 0 nil])
 ([nil nil ((#("
 " 0 1 (fontified t)) . 3884) (t 27016 37205 720024 169000)) nil (27016 37224 86507 38000) 0 nil])
-([nil current ((#("
+([nil nil ((#("
 " 0 1 (fontified t)) . 4343)) nil (27016 37224 86501 279000) 0 nil])
+([nil nil ((#("\\includegraphics[width=0.5\\textwidth]{figures/TerrainTypes.png} " 0 16 (face (font-latex-sedate-face) fontified t) 16 26 (fontified t) 26 36 (face (font-latex-sedate-face) fontified t) 36 64 (fontified t)) . 2647) (undo-tree-id0 . -48) (undo-tree-id1 . -48) (undo-tree-id2 . -48) (undo-tree-id3 . -48) (undo-tree-id4 . -48) (undo-tree-id5 . -48) (undo-tree-id6 . -43) (undo-tree-id7 . -43) (undo-tree-id8 . -43) (undo-tree-id9 . -43) (undo-tree-id10 . -43) (undo-tree-id11 . -43) (undo-tree-id12 . -64) (t 27016 37224 91524 905000)) nil (27024 31039 117274 576000) 0 nil])
+([nil current ((nil rear-nonsticky nil 2710 . 2711) (nil fontified nil 2683 . 2711) (nil fontified nil 2673 . 2683) (nil fontified nil 2663 . 2673) (nil fontified nil 2647 . 2663) (2647 . 2711)) nil (27024 31039 117239 731000) 0 nil])
 nil

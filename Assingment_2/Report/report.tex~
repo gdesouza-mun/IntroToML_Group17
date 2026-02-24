@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{caption}
+\usepackage{paracol}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\usepackage{biblatex}
+
+
+\addbibresource{references.bib}
+
+\renewcommand{\b}[1]{\mathbf{#1}}
+\newcommand{\singleWidth}{0.6\textwidth}
+
+\captionsetup[figure]{
+    font=small,           % Makes text smaller (can use 'footnotesize' for even smaller)
+    labelfont=bf,         % Makes "Figure X" bold
+    margin=10pt,          % Indents caption from the left/right of the column
+    skip=5pt,             % Reduces space between image and caption
+    justification=centering % Keeps it neat
+}
+
+
+\title{Assignment 2 Report}
+\author{Group 17: \\ Darlington Nkrumah (202492437) \\
+  Greg de Souza (202582225) \\
+  Xuan Toan Doan (202583882)}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+For assignment 2 we were provided a two data sets, labeled ``train.csv''
+and ``test.csv'' containing 8 features measuring some property of concrete,
+and the value of the concrete compressive strength. For the sake of readability,
+the 8 features will be labeled as $x_i$ according to the table \ref{tab:featvar},
+and the target variable (Compressive Strength) will be $y$. Vectors
+will be written with bold uppercase letters $\b{X}$ for a feature vector,
+and $\b{\theta}$ for a set of parameters, with $\theta_0$ reserved for the intercept.
+The collection of feature vectors from a
+data set will be labeled $\mathcal{D}$.
+
+In all questions the quality of fit was accessed with the $R^2$ metric, and the Err with the RSE metric
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{lc}
+    \textbf{Feature Name}                              & \textbf{Variable} \\ \hline
+   \textit{ Cement\_component1\_\_kgInAM\_3Mixture\_}           & $x_1$             \\
+    \textit{BlastFurnaceSlag\_component2\_\_kgInAM\_3Mixture\_} & $x_2$             \\
+    \textit{FlyAsh\_component3\_\_kgInAM\_3Mixture\_ }          & $x_3$             \\
+    \textit{Water\_component4\_\_kgInAM\_3Mixture\_}            & $x_4$             \\
+    \textit{Superplasticizer\_component5\_\_kgInAM\_3Mixture\_} & $x_5$             \\
+    \textit{CoarseAggregate\_component6\_\_kgInAM\_3Mixture\_}  & $x_6$             \\
+    \textit{FineAggregate\_component7\_\_kgInAM\_3Mixture\_}   & $x_7$             \\
+    \textit{Age\_day\_}                                         & $x_8$             \\ \hline
+    \textit{ConcreteCompressiveStrength\_MPa\_Megapascals\_}    & $y$                
+  \end{tabular}
+  \caption{Feature names with their symbolic variables}
+  \label{tab:featvar}
+\end{table}
+
+  \section*{Question 1: Simple Linear Regression}
+
+  The first question tasks us to train a predictor for $y$ using an ordinary least squares with a traditional
+  linear regression model, such as in equation \ref{eq:lin_model}.
+  The model was assessed for generalized error \textit{Err} in two different ways. First the training
+  data set was split in training/validation/test, with 20\% of the data being randomly selected to be the
+  test data set. Since there are no hyperparameters involved, the model was trained on the remaining
+  ``Train + Validation'' dataset, consisting of 640 data points, and assessed for Generalized Error (Err)
+  against the remaining 160 data points of the test set. The results are $R^2 = 0.6045$ and RSE = $11.5$,
+  no variance is available since it's a single test dataset. The parameters fitted by this models are:
+  intercept $=\theta_0 = - 44.19$ and
+  $\b{theta} = {0.1291, 0.1158, 0.1035, -0.1328, 0.2056, 0.0245, 0.0296, 0.1253  }$.
+
+  \begin{equation}
+    \label{eq:lin_model}
+    \hat{y} = \theta_0 + \b{X}^T \b{\theta}
+  \end{equation}
+
+  The same model was also assessed with a cross validation approach with 5 folds
+  over the ``train.csv'' dataset, meaning each folds had
+  160 data points, similar to the test dataset from the previous approach. The choice of the number of folds
+  seems adequate due to the fact that the number of remaining training data points  (640) still being
+  way larger than the number of features (8). As an objective measure to validate this choice
+  of number of folds, we have also evaluated the variance of the estimated Err in the cross validation.
+  The results were $R^2 = 0.6270 \pm 0.0002$ and RSE $=11.6 \pm 0.3$, the low variance suggests that
+  the 5 fold split results in representative values for the Err metrics.
+
+  The results for both the split and cross validation approaches is presented in table \ref{tab:Q1r2err},
+  while the results suggests neither method found an adequate fit, the cross validation approach
+  accesses the model as worse than the split approach. This makes sense, as the with the cross validation we
+  access the model multiple times with different folds, making this result are more trustworthy estimation
+  of the generalization error, specially because we can also estimate the variance of the model.
+
+  In general, the bad performance is also expected in this ``naive'' approach, as the data features
+  don't ``well behaved'' in a linear sense, as can be seen in figure \ref{fig:dataset}
+  
+  \begin{table}
+    \centering
+    \begin{tabular}{l|c|c}
+          & \textbf{Split} & \textbf{CV} \\ \hline
+      $R^2$ & $0.6045$ & $0.6270 \pm 0.0002 $ \\
+      RSE & $11.5$ & $11.6 \pm 0.3 $
+    \end{tabular}
+    \caption{Results for the estimated quality of fit and Err using $R^2$ and $RSE$ in the Train/Test split and in the Cross Validation Aprroach}
+    \label{tab:Q1r2err}
+  \end{table}
+
+  \section*{Question 2: Ridge Regression}
+
+  The second task involves fitting the same data using Ridge Regressions (equation \ref{eq:ridge}) using
+  the training dataset ``train.csv''.
+  For this task we employed Grid Search using cross validation with 5 folds, the search determined
+  that the best value for the
+  hyperparameter is $\alpha=8913$, notably the data wasn't regularized. The \textbf{cross validation}
+  assessment estimated the Err parameters as $R^2 = 0.6271$ and RSE$=10.63$.  
+  
+  \begin{equation}
+    \label{eq:ridge}
+    \hat{y} = \theta_0 + \b{X}^T \b{\theta} + \alpha \cdot {||\b{\theta}||{^2_2}}
+  \end{equation}
+
+  The model was then retrained using $\alpha=8913$ on the total 800 data points of the training dataset,
+  and accessed against the independent test dataset ``test.csv'', resulting in $R^2 = 0.5952$ and
+  RSE$=10.0$. As expected the performance against unseen data was worse than evaluated by the the
+  cross validation grid search.
+
+  In comparison with the first approach of ordinary least squares, the Err assessment gave similar
+  results in both cases, this suggests that both models are finding similar best fits in performance,
+  and that given this feature data, ordinary linear models don't seem adequate to represent this data
+  (something that Q4 will make more clear).
+
+  Notably, while the performance is similar, the actual parameters found by Ridge Regression are
+  significantly smaller than those found by ordinary regression, which makes sense, since the job
+  of the parameter $\alpha$ is two limit the growth of the L2 metric of the parameter set.
+  the best set of parameters obtained by Ridge Regressions is. The values of the final parameters
+  are presented in table \ref{tab:params}.
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{l|c|c|c}
+      \textbf{Parameter} & \textbf{Ordinary Least Squares} & \textbf{Ridge Regression} & \textbf{Lasso Regression} \\ \hline
+      Intercept & -44.19                 & 6.542            & 24.23            \\
+      $\theta_1 $ & 0.1291                 & 0.1171           & 0.1124           \\
+      $\theta_2 $ & 0.1158                 & 0.0996           & 0.0942           \\
+      $\theta_3 $ & 0.1035                 & 0.0861           & 0.0799           \\
+      $\theta_4 $ & -0.1328                & -0.2154          & -0.2425          \\
+      $\theta_5 $ & 0.2056                 & 0.1068           & 0.0856           \\
+      $\theta_6 $ & 0.0245                 & 0.0076           & 0.0020           \\
+      $\theta_7 $ & 0.0296                 & 0.0129           & 0.0063           \\
+      $\theta_8$  & 0.1253                 & 0.1172           & 0.1173          
+    \end{tabular}
+    \caption{Final parameters fitted in Q1, Q2 and Q3 for Ordinary, Ridge and Lasso regression respectively}
+    \label{tab:params}
+  \end{table}
+
+  \section*{Question 3: Lasso Regression}
+  The second task involves fitting the same data using Lasso Regressions (equation \ref{eq:ridge}) using
+  the training dataset ``train.csv''.
+  For this task we employed Grid Search using cross validation with 5 folds, the search determined
+  that the best value for the
+  hyperparameter is $\alpha=1$, notably the data wasn't regularized. The \textbf{cross validation}
+  assessment estimated the Err parameters as $R^2 = 0.6268$ and RSE$=10.63$.  
+  
+  \begin{equation}
+    \label{eq:ridge}
+    \hat{y} = \theta_0 + \b{X}^T \b{\theta} + \alpha \cdot {||\b{\theta}||{^2_2}}
+  \end{equation}
+
+  The model was then retrained using $\alpha=1$ on the total 800 data points of the training dataset,
+  and accessed against the independent test dataset ``test.csv'', resulting in $R^2 = 0.5942$ and
+  RSE$=10.02$. As expected the performance against unseen data was worse than evaluated by the the
+  cross validation grid search.
+
+  Again, the performance is similar to the last two regression approaches, suggesting that the best
+  performance is indeed around 0.6 for $R^2$. But the Lasso regression also resulted in some
+  values of the parameters being very close to 0,  notably for $theta_6$ and $theta_7$, suggesting
+  that the respective features $x_6$ and $x_7$ don't have meaningful linear relation with our target
+  $y$.
+
+  And this fact motivated our approach for a better performing model for question 4.
+
+
+  \section*{Question 4: Best Regression we can do}
+
+
+  
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{dataset.png} 
+    \caption{Features plotted against target}
+    \label{fig:dataset}
+  \end{figure}
+
+  
+\end{document}
