@@ -1,0 +1,13 @@
+(undo-tree-save-format-version . 1)
+"2c82926313869a9570d0a4aa17fdbe984dc1c313"
+[nil nil nil nil (27050 60826 967746 721000) 0 nil]
+([nil nil ((#("grid_search.fit(X_train, y_train)
+
+best_C = grid_search.best_params_['C']
+best_degree = grid_search.best_params_['degree']
+print(f\"\\nOptimal 'C' value found: {best_C}\")
+print(f\"Optimal 'degree' (d) found: {best_degree}\")
+" 0 35 (fontified t) 35 41 (face font-lock-variable-name-face fontified t) 41 42 (fontified t) 42 43 (face font-lock-operator-face fontified t) 43 69 (fontified t) 69 72 (face font-lock-string-face fontified t) 72 74 (fontified t) 74 85 (face font-lock-variable-name-face fontified t) 85 86 (fontified t) 86 87 (face font-lock-operator-face fontified t) 87 113 (fontified t) 113 121 (face font-lock-string-face fontified t) 121 123 (fontified t) 123 128 (face font-lock-builtin-face fontified t) 128 130 (fontified t) 130 131 (face font-lock-string-face fontified t) 131 133 (face font-lock-constant-face fontified t) 133 158 (face font-lock-string-face fontified t) 158 166 (face nil fontified t) 166 167 (face font-lock-string-face fontified t) 167 169 (fontified t) 169 174 (face font-lock-builtin-face fontified t) 174 176 (fontified t) 176 205 (face font-lock-string-face fontified t) 205 218 (face nil fontified t) 218 219 (face font-lock-string-face fontified t) 219 221 (fontified t)) . 1782) (undo-tree-id0 . -221) (t 27049 50999 846891 845000)) nil (27050 60826 967745 896000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 2002 . 2003) (nil fontified nil 2001 . 2003) (nil fontified nil 2000 . 2001) (nil fontified nil 1987 . 2000) (nil fontified nil 1958 . 1987) (nil fontified nil 1956 . 1958) (nil fontified nil 1951 . 1956) (nil fontified nil 1949 . 1951) (nil fontified nil 1948 . 1949) (nil fontified nil 1940 . 1948) (nil fontified nil 1915 . 1940) (nil fontified nil 1913 . 1915) (nil fontified nil 1912 . 1913) (nil fontified nil 1910 . 1912) (nil fontified nil 1905 . 1910) (nil fontified nil 1903 . 1905) (nil fontified nil 1895 . 1903) (nil fontified nil 1869 . 1895) (nil fontified nil 1868 . 1869) (nil fontified nil 1867 . 1868) (nil fontified nil 1856 . 1867) (nil fontified nil 1854 . 1856) (nil fontified nil 1851 . 1854) (nil fontified nil 1825 . 1851) (nil fontified nil 1824 . 1825) (nil fontified nil 1823 . 1824) (nil fontified nil 1817 . 1823) (nil fontified nil 1782 . 1817) (1782 . 2003)) nil (27050 60826 967734 833000) 0 nil])
+([nil current ((2821 . 2822)) nil (27050 60826 967731 450000) 0 nil])
+nil
