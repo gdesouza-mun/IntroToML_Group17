@@ -1,0 +1,20 @@
+(undo-tree-save-format-version . 1)
+"066e35aac914db1d49608c61352c36fc795d2488"
+[nil nil nil nil (27049 51580 106454 412000) 0 nil]
+([nil nil ((#("import pandas as pd
+import numpy as np" 0 6 (face font-lock-keyword-face fontified t) 6 14 (fontified t) 14 16 (face font-lock-keyword-face fontified t) 16 20 (fontified t) 20 26 (face font-lock-keyword-face fontified t) 26 33 (fontified t) 33 35 (face font-lock-keyword-face fontified t) 35 38 (fontified t)) . 1) (undo-tree-id1 . -38) (t 27049 50999 846891 845000)) nil (27049 51580 106453 617000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 38 . 39) (nil fontified nil 36 . 39) (nil fontified nil 34 . 36) (nil fontified nil 27 . 34) (nil fontified nil 21 . 27) (nil fontified nil 17 . 21) (nil fontified nil 15 . 17) (nil fontified nil 7 . 15) (nil fontified nil 1 . 7) (1 . 39)) nil (27049 51580 106452 982000) 0 nil])
+([nil nil ((#("from sklearn.svm import SVC
+" 0 4 (face font-lock-keyword-face fontified t) 4 17 (fontified t) 17 23 (face font-lock-keyword-face fontified t) 23 28 (fontified t)) . 72)) nil (27049 51580 106452 553000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 99 . 100) (nil fontified nil 95 . 100) (nil fontified nil 89 . 95) (nil fontified nil 76 . 89) (nil fontified nil 72 . 76) (72 . 100)) nil (27049 51580 106452 359000) 0 nil])
+([nil nil ((#("from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, balanced_accuracy_score
+from sklearn.impute import SimpleImputer  # <-- Added import for handling NaNs
+" 0 1 (face font-lock-keyword-face ws-butler-chg delete fontified t) 1 4 (face font-lock-keyword-face fontified t) 4 29 (fontified t) 29 35 (face font-lock-keyword-face fontified t) 35 49 (fontified t) 49 53 (face font-lock-keyword-face fontified t) 53 70 (fontified t) 70 76 (face font-lock-keyword-face fontified t) 76 166 (fontified t) 166 170 (face font-lock-keyword-face fontified t) 170 186 (fontified t) 186 192 (face font-lock-keyword-face fontified t) 192 208 (fontified t) 208 210 (face font-lock-comment-delimiter-face fontified t) 210 245 (face font-lock-comment-face fontified t)) . 100) (undo-tree-id0 . -245) 345) nil (27049 51580 106451 538000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 344 . 345) (nil fontified nil 310 . 345) (nil fontified nil 308 . 310) (nil fontified nil 292 . 308) (nil fontified nil 286 . 292) (nil fontified nil 270 . 286) (nil fontified nil 266 . 270) (nil fontified nil 176 . 266) (nil fontified nil 170 . 176) (nil fontified nil 153 . 170) (nil fontified nil 149 . 153) (nil fontified nil 135 . 149) (nil fontified nil 129 . 135) (nil fontified nil 104 . 129) (nil fontified nil 101 . 104) (nil fontified nil 100 . 101) (100 . 345)) nil (27049 51580 106439 650000) 0 nil])
+([nil nil ((4052 . 4053) 1305) nil (27049 51580 106436 381000) 0 nil])
+([nil nil ((#("train.fdg_pet.sNC.csv" 0 21 (face font-lock-string-face fontified t)) . 578) (undo-tree-id3 . -21) (t 27049 51580 106912 947000)) nil (27049 52998 799842 218000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 598 . 599) (nil fontified nil 578 . 599) (578 . 599)) nil (27049 52998 799841 796000) 0 nil])
+([nil nil ((#("'train.fdg_pet.sDAT.csv'" 0 24 (face font-lock-string-face fontified t)) . 640) (undo-tree-id2 . -24)) nil (27049 52998 799841 209000) 0 nil])
+([nil current ((nil rear-nonsticky nil 663 . 664) (nil fontified nil 640 . 664) (640 . 664)) nil (27049 52998 799830 662000) 0 nil])
+nil

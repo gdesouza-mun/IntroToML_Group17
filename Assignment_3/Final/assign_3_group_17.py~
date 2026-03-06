@@ -1,0 +1,49 @@
+#  Assignment 3
+#
+#  Group 17:
+#  Darlington Nkrumah, MUN ID 202492437, dknkrumah@mun.ca
+#  Greg de Souza, MUN ID 2025225,  gdesouza@mun.ca
+#  Xuan Toan Doan, MUN ID 202583882, txdoan@mun.ca
+
+
+####################################################################################
+# Imports
+####################################################################################
+import sys
+import os
+
+import pandas as pd
+import numpy as np
+
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, balanced_accuracy_score
+from sklearn.impute import SimpleImputer  # <-- Added import for handling NaNs
+
+# Global Utilities
+
+class Global:
+    train_snc_path="Data/train.fdg_pet.sNC.csv"
+    train_sdat_path="Data/train.fdg_pet.sDAT.csv"
+
+    test_snc_path="Data/test.fdg_pet.sNC.csv"
+    test_sdat_path="Data/test.fdg_pet.sDAT.csv"
+
+    feature_names=["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9",
+                   "x10", "x11", "x12", "x13", "x14"]
+
+
+####################################################################################
+# Question 1
+####################################################################################
+def Q1_results():
+    train_snc = pd.read_csv(Global.train_snc_path, header=None)
+    train_sdat = pd.read_csv(Global.train_sdat_path, header=None)
+
+    train_snc = pd.read_csv(Global.train_snc_path, header=None)
+    train_sdat = pd.read_csv(Global.train_sdat_path, header=None)
+
+    print(train_snc.shape[1])
+
+
+Q1_results()
