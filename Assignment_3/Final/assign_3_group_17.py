@@ -172,7 +172,7 @@ def Q2_results():
     svm_poly=SVC(kernel='poly', random_state=Global.random_seed)
     grid_search=GridSearchCV(svm_poly, param_grid,
                              cv=Global.cv_folds,scoring=Global.main_score,
-                             verbose=1)
+                             verbose=1, n_jobs=-1)
 
     print("Starting Grid Search for Polynomial Kernel, this might take a minute")
     print("We explored other values for C and d, but here we'll make a shorter search to save you time")
@@ -196,7 +196,7 @@ def Q2_results():
 def Q3_results():
     X_train, y_train, X_test, y_test = load_data()
 
-    C_logspace = generate_logspace(-1, 3 , 20)
+    C_logspace = generate_logspace(-2, 2 , 20)
     gamma_logspace=generate_logspace(-2, 2, 20)
     param_grid = {
         'C': C_logspace,
