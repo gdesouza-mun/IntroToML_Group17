@@ -18,12 +18,30 @@ Final Project TODO Soon:
 - Clean the Data of other AI4Mars Nav dataset for additional datarun
 - Find Some Open Models that share their strategies
 
-Final project TODO later:
-- Implement simple basic CNN for Segmentation (even if bad)
+TASKS BATCH
+
+BUNCH 1 - Data Handling (Greg):
+- Clean AI4Mars data on all Navigational Datasets
+- Load it all up on NIBI
+- Get a bulk of the Lit Review done and put it all together for the others
+
+BUNCH 2 - PyTorch Studies
+- Learn how to use pytorch
+(Suggestions:)
+-- Do Pytorch tutorial https://docs.pytorch.org/tutorials/beginner/basics/intro.html
+-- Do Pytorch Vision tutorial on image segmentation https://docs.pytorch.org/tutorials/intermediate/torchvision_tutorial.html
+- Figure how to ReTrain a model in PyTorch (Main problem is: How do we convert 
+another model to fit a different image size and label numbers?)
+(Feel free to do theses tasks with "toy models")
+
+BUNCH 3 - PyTorch (Bad) implementation
+- Learn how to use pytorch
+(Suggestions:)
+-- Do Pytorch tutorial https://docs.pytorch.org/tutorials/beginner/basics/intro.html
+-- Do Pytorch Vision tutorial on image segmentation https://docs.pytorch.org/tutorials/intermediate/torchvision_tutorial.html
+- Implement simple Deep Network for Segmentation (even if bad) for the m2020 nav data
+- Make a choice of Loss function based on the AI4mars papers
 - Implement basic alternative models for segmentation (based on AI4Mars and Lit Review)
 
 
-Greg TODO (NIBI):
-- Learn to run stuff in more than 1 GPU?
-- Move data to NIBI
  
