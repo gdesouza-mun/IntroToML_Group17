@@ -709,5 +709,11 @@ from Q4 import *
 ([nil nil ((nil rear-nonsticky nil 372 . 373) (nil fontified nil 289 . 373) (nil fontified nil 281 . 289) (nil fontified nil 279 . 281) (nil fontified nil 278 . 279) (nil fontified nil 194 . 278) (nil fontified nil 193 . 194) (193 . 373)) nil (27049 51511 456161 717000) 0 nil])
 ([nil nil ((#("import sys
 import os" 0 6 (face font-lock-keyword-face fontified t) 6 11 (fontified t) 11 17 (face font-lock-keyword-face fontified t) 17 20 (fontified t)) . 374) (undo-tree-id0 . -20)) nil (27049 51511 456160 946000) 0 nil])
-([nil current ((nil rear-nonsticky nil 393 . 394) (nil fontified nil 391 . 394) (nil fontified nil 385 . 391) (nil fontified nil 380 . 385) (nil fontified nil 374 . 380) (374 . 394)) nil (27049 51511 456148 455000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 393 . 394) (nil fontified nil 391 . 394) (nil fontified nil 385 . 391) (nil fontified nil 380 . 385) (nil fontified nil 374 . 380) (374 . 394)) nil (27049 51511 456148 455000) 0 nil])
+([nil nil ((#("    try:
+        print(\"Starting diagnoseDat(Xtest, data_dir)\")
+        ytest=diagnoseDAT(Xtest, data_dir)
+    except:
+        print(\"Exception: diagnoseDat arguments not well defined\")" 0 4 (fontified t) 4 7 (face font-lock-keyword-face fontified t) 7 17 (fontified t) 17 22 (face font-lock-builtin-face fontified t) 22 23 (fontified t) 23 62 (face font-lock-string-face fontified t) 62 72 (fontified t) 72 77 (face font-lock-variable-name-face fontified t) 77 78 (face font-lock-operator-face fontified t) 78 111 (fontified t) 111 117 (face font-lock-keyword-face fontified t) 117 127 (fontified t) 127 132 (face font-lock-builtin-face fontified t) 132 133 (fontified t) 133 184 (face font-lock-string-face fontified t) 184 185 (fontified t)) . 22633) (undo-tree-id0 . -185) (t 27049 51511 457563 128000)) nil (27050 64095 849284 377000) 0 nil])
+([nil current ((nil rear-nonsticky nil 22817 . 22818) (nil fontified nil 22817 . 22818) (nil fontified nil 22766 . 22817) (nil fontified nil 22765 . 22766) (nil fontified nil 22760 . 22765) (nil fontified nil 22750 . 22760) (nil fontified nil 22744 . 22750) (nil fontified nil 22711 . 22744) (nil fontified nil 22710 . 22711) (nil fontified nil 22705 . 22710) (nil fontified nil 22695 . 22705) (nil fontified nil 22656 . 22695) (nil fontified nil 22655 . 22656) (nil fontified nil 22650 . 22655) (nil fontified nil 22640 . 22650) (nil fontified nil 22637 . 22640) (nil fontified nil 22633 . 22637) (22633 . 22818)) nil (27050 64095 849271 916000) 0 nil])
 nil

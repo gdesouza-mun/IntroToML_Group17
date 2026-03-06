@@ -18,7 +18,8 @@ import pandas as pd
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, balanced_accuracy_score
-from sklearn.impute import SimpleImputer  # <-- Added import for handling NaNs
+from sklearn.impute import SimpleImputer  # <-- Added import fr handling NaNs
+from sklearn.preprocessing import StandardScaler
 
 # Global Utilities
 
@@ -225,10 +226,21 @@ def Q3_results():
     print_assessement(y_test, y_pred, "RBF Kernel SVM")
 
 
+####################################################################################
+# Question 4
+####################################################################################
+# Load Data without numpy
+
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-if __name__=="__main__":
-    Q1_results()
-    Q2_results()
-    Q3_results()
+# if __name__=="__main__":
+#     Q1_results()
+#     Q2_results()
+#     Q3_results()
+
+#     try:
+#         print("Starting diagnoseDat(Xtest, data_dir)")
+#         ytest=diagnoseDAT(Xtest, data_dir)
+#     except:
+#         print("Exception: diagnoseDat arguments not well defined")
