@@ -1,8 +1,13 @@
 *.txt
 NASA_Datasets*
 m2020_greg/NAV_Labels/*
-m2020_greg/ncam/*
+m2020_greg/ncam/*\
+AI4MArs_Data/*
 *.png
 *.jpg
 *.jpeg
 *.zip
+*~
+*.py#
+*.py~
+*undo-tree*
