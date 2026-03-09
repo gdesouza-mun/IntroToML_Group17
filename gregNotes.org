@@ -1,0 +1,11 @@
+
+
+* Ideias
+
+- Find an open weight model taht does texture or
+  geology segmentation and retrain it
+- Data augmentation approaches
+- I don't think anyone used coder/decoder approach for the mars set
+- Maybe an energy/correlation term
+  
+  
