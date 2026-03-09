@@ -229,18 +229,78 @@ def Q3_results():
 ####################################################################################
 # Question 4
 ####################################################################################
-# Load Data without numpy
+def ytest_diagnoseDAT(Xtest, data_dir):
+    """
+    Returns a vector of predictions with elements "0" for sNC and "1" for sDAT,
+    corresponding to each of the N_test features vectors in Xtest.
+    """
+
+    train_snc_path = os.path.join(data_dir, 'train.fdg_pet.sNC.csv')
+    train_sdat_path = os.path.join(data_dir, 'train.fdg_pet.sDAT.csv')
+    test_snc_path = os.path.join(data_dir, 'test.fdg_pet.sNC.csv')
+    test_sdat_path = os.path.join(data_dir, 'test.fdg_pet.sDAT.csv')
+
+    train_snc = pd.read_csv(train_snc_path, header=None)
+    train_snc.columns=Global.feature_names
+    train_snc["y"]=Global.snc_label
+
+    train_sdat = pd.read_csv(train_sdat_path, header=None)
+    train_sdat.columns=Global.feature_names
+    train_sdat["y"]=Global.sdat_label
+
+    train_df=pd.concat([train_snc, train_sdat], ignore_index=True)
+
+    test_snc = pd.read_csv(test_snc_path, header=None)
+    test_snc.columns=Global.feature_names
+    test_snc["y"]=Global.snc_label
+
+    test_sdat = pd.read_csv(test_sdat_path, header=None)
+    test_sdat.columns=Global.feature_names
+    test_sdat["y"]=Global.sdat_label
+
+    test_df=pd.concat([test_snc, test_sdat], ignore_index=True)
+
+    df_all_train=pd.concat([train_df, test_df], ignore_index=True)
+
+    y_all_train=df_all_train["y"]
+    X_all_train = df_all_train.drop(columns=["y"])
+
+    # 4. Handle Missing Data (NaNs)
+    imputer = SimpleImputer(strategy='mean')
+    X_all_train_imputed = imputer.fit_transform(X_all_train)
+
+    # Ensure the Xtest passed into the function is also imputed
+    Xtest_imputed = imputer.transform(Xtest)
+
+    # 5. Scale the features (Crucial for the Polynomial kernel's performance)
+    scaler = StandardScaler()
+    X_all_train_scaled = scaler.fit_transform(X_all_train_imputed)
+
+    # Scale the Xtest data using the same scaler
+    Xtest_scaled = scaler.transform(Xtest_imputed)
+
+    # 6. Initialize your BEST model (Polynomial: C=10, degree=3)
+    best_model = SVC(kernel='poly', C=0.0033598, degree=4, random_state=17)
+
+    # 7. Train the model on the fully combined, imputed, and scaled dataset
+    best_model.fit(X_all_train_scaled, y_all_train)
+
+    # 8. Predict on the provided Xtest
+    predictions = best_model.predict(Xtest_scaled)
+
+    return predictions
+
 
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-# if __name__=="__main__":
-#     Q1_results()
-#     Q2_results()
-#     Q3_results()
+if __name__=="__main__":
+    Q1_results()
+    Q2_results()
+    Q3_results()
 
-#     try:
-#         print("Starting diagnoseDat(Xtest, data_dir)")
-#         ytest=diagnoseDAT(Xtest, data_dir)
-#     except:
-#         print("Exception: diagnoseDat arguments not well defined")
+    try:
+        print("Starting diagnoseDat(Xtest, data_dir)")
+        ytest=diagnoseDAT(Xtest, data_dir)
+    except:
+        print("Exception: diagnoseDat arguments not well defined")
