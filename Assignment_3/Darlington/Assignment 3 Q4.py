@@ -34,28 +34,3 @@ def ytest_diagnoseDAT(Xtest, data_dir):
         np.zeros(len(test_snc)),
         np.ones(len(test_sdat))
     ])
-
-    # 4. Handle Missing Data (NaNs)
-    imputer = SimpleImputer(strategy='mean')
-    X_all_train_imputed = imputer.fit_transform(X_all_train)
-
-    # Ensure the Xtest passed into the function is also imputed
-    Xtest_imputed = imputer.transform(Xtest)
-
-    # 5. Scale the features (Crucial for the Polynomial kernel's performance)
-    scaler = StandardScaler()
-    X_all_train_scaled = scaler.fit_transform(X_all_train_imputed)
-
-    # Scale the Xtest data using the same scaler
-    Xtest_scaled = scaler.transform(Xtest_imputed)
-
-    # 6. Initialize your BEST model (Polynomial: C=10, degree=3)
-    best_model = SVC(kernel='poly', C=10, degree=3, random_state=42)
-
-    # 7. Train the model on the fully combined, imputed, and scaled dataset
-    best_model.fit(X_all_train_scaled, y_all_train)
-
-    # 8. Predict on the provided Xtest
-    predictions = best_model.predict(Xtest_scaled)
-
-    return predictions

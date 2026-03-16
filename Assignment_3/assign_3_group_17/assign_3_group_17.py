@@ -76,11 +76,12 @@ def print_assessement(y_test, y_pred, model_name=""):
 
     print(f"\n--- Performance Metrics on Test Set for {model_name}---")
     print(f"Accuracy:          {accuracy:.4f}")
+    print(f"Balanced Accuracy: {balanced_acc:.4f}")
     print(f"Sensitivity:       {sensitivity:.4f}")
     print(f"Specificity:       {specificity:.4f}")
     print(f"Precision:         {precision:.4f}")
     print(f"Recall:            {sensitivity:.4f}")
-    print(f"Balanced Accuracy: {balanced_acc:.4f}")
+
 
 def load_data():
 
@@ -151,9 +152,9 @@ def Q1_results():
     plt.title('Linear SVM: CV Performance vs. C')
     plt.grid(True, which="both", ls="--", alpha=0.6)
     plt.tight_layout()
-    # plt.savefig("Q1_results.png", dpi=300)
-    # print("Plot Saved to Q1_results.png")
-    plt.show()
+    plt.savefig("Q1_results.png", dpi=300)
+    print("Plot Saved to Q1_results.png")
+
 
 
 ####################################################################################
@@ -229,7 +230,7 @@ def Q3_results():
 ####################################################################################
 # Question 4
 ####################################################################################
-def ytest_diagnoseDAT(Xtest, data_dir):
+def diagnoseDAT(Xtest, data_dir):
     """
     Returns a vector of predictions with elements "0" for sNC and "1" for sDAT,
     corresponding to each of the N_test features vectors in Xtest.
@@ -265,12 +266,17 @@ def ytest_diagnoseDAT(Xtest, data_dir):
     y_all_train=df_all_train["y"]
     X_all_train = df_all_train.drop(columns=["y"])
 
+    X = pd.DataFrame(Xtest)
+    X.columns=Global.feature_names
+    X_all_train = df_all_train.drop(columns=["x4", "x8", "x9", "x13", "y"])
+
+    X = X.drop(columns=["x4", "x8", "x9", "x13"])
     # 4. Handle Missing Data (NaNs)
     imputer = SimpleImputer(strategy='mean')
     X_all_train_imputed = imputer.fit_transform(X_all_train)
 
     # Ensure the Xtest passed into the function is also imputed
-    Xtest_imputed = imputer.transform(Xtest)
+    Xtest_imputed = imputer.transform(X)
 
     # 5. Scale the features (Crucial for the Polynomial kernel's performance)
     scaler = StandardScaler()
@@ -280,7 +286,7 @@ def ytest_diagnoseDAT(Xtest, data_dir):
     Xtest_scaled = scaler.transform(Xtest_imputed)
 
     # 6. Initialize your BEST model (Polynomial: C=10, degree=3)
-    best_model = SVC(kernel='poly', C=0.0033598, degree=4, random_state=17)
+    best_model = SVC(kernel='poly', C=0.003792, degree=4, random_state=17)
 
     # 7. Train the model on the fully combined, imputed, and scaled dataset
     best_model.fit(X_all_train_scaled, y_all_train)
@@ -302,5 +308,6 @@ if __name__=="__main__":
     try:
         print("Starting diagnoseDat(Xtest, data_dir)")
         ytest=diagnoseDAT(Xtest, data_dir)
+        print(ytest)
     except:
         print("Exception: diagnoseDat arguments not well defined")
