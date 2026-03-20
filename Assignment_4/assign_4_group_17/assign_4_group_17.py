@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, balanced_accuracy_score
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 
 #So we access each model identically
@@ -51,6 +52,7 @@ class Global:
     neg_label=0
     pos_label=1
 
+    #Started couting from 0 as I should always do
     feature_names=["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8",
                    "x9", "x10", "x11", "x12", "x13"]
 
@@ -97,14 +99,69 @@ def load_data(data_dir="Data"):
 ####################################################################################
 
 def Q1_results():
+
+    #Load Data
+    X_train, y_train, X_test, y_test = load_data()
+
+    #There are three possible tree criterion to be evaluated
+    crit_dic = {"criterion": Global.crit_list}
+
+    #Define classifier and initiate grid search on those 3 criterions
+    tree_class = DecisionTreeClassifier()
+    grid_search = GridSearchCV(tree_class, crit_dic,
+                             cv=Global.cv_folds, scoring=Global.main_score,
+                             refit=True)
+
+    grid_search.fit(X_train, y_train)
+
+
+    best_crit=grid_search.best_params_["criterion"]
+    mean_cv_scores = grid_search.cv_results_['mean_test_score']
+
+    #Print CV results and pick the best to assess
+    print("Mean Balanced Accuracy During cross validation:")
+    for i in range(len(Global.crit_list)):
+        print(Global.crit_list[i], f" : {mean_cv_scores[i]:.4f}")
+
+
+    print("Best Criterion for the tree is: ", best_crit)
+    best_model = grid_search.best_estimator_
+    y_pred = best_model.predict(X_test)
+
+    #Print assessment
+    print_assessement(y_test, y_pred, "Decision Tree Classifier")
+
+
+
+####################################################################################
+# Question 2
+####################################################################################
+def Q2_results():
+    X_train, y_train, X_test, y_test = load_data()
+
+
+    tree_class = DecisionTreeClassifier(criterion='gini')
+    tree_class.fit(X_train, y_train)
+
+    plot_tree(tree_class)
+    print("Tree Saved to Q2_tree.pdf")
+    plt.savefig("Q2_tree.pdf")
+
+
+
+####################################################################################
+# Question 3
+####################################################################################
+
+def Q3_results():
     # Train decision tree based on gini or log loss CV
     # Retrain on best
     X_train, y_train, X_test, y_test = load_data()
 
     crit_dic = {"criterion": Global.crit_list}
 
-    tree_class = DecisionTreeClassifier()
-    grid_search = GridSearchCV(tree_class, crit_dic,
+    rf_class = RandomForestClassifier(n_estimators=100)
+    grid_search = GridSearchCV(rf_class, crit_dic,
                              cv=Global.cv_folds, scoring=Global.main_score,
                              refit=True)
 
@@ -120,7 +177,68 @@ def Q1_results():
     best_model = grid_search.best_estimator_
     y_pred = best_model.predict(X_test)
 
-    print_assessement(y_test, y_pred, "Decision Tree Classifier")
+    print_assessement(y_test, y_pred, "Random Forest Classifier")
 
 
-Q1_results()
+
+####################################################################################
+# Question 4
+####################################################################################
+
+def predictMCIconverters(Xtest, data_dir):
+
+    x1,y1,x2,y2=load_data(data_dir)
+    X=x1
+    Y=y1
+
+    #Uncomment before Final Version
+    # X = pd.concat([x1,x2], ignore_index=True)
+    # Y = pd.concat([y1,y2], ignore_index=True)
+
+    best_class=RandomForestClassifier(n_estimators=100, criterion='log_loss',
+                                      max_depth=3, min_samples_leaf=10,
+                                      max_features=2, random_state=42)
+
+    # best_class= GradientBoostingClassifier(learning_rate=0.01,
+    #                                       n_estimators=100,
+    #                                       max_depth=3, min_samples_leaf=5,
+    #                                       max_features=5, random_state=42)
+
+
+    best_class.fit(X,Y)
+
+    y_pred = best_class.predict(Xtest)
+
+    return y_pred
+
+
+
+#########################################################################################
+# Calls to generate the results
+#########################################################################################
+if __name__=="__main__":
+    print( "\n \n QUESTION 1 \n \n")
+    Q1_results()
+    print( "\n \n QUESTION 2 \n \n")
+    Q2_results()
+    print( "\n \n QUESTION 3 \n \n")
+    Q3_results()
+
+    try:
+        print(" \n \n Starting predictMCIconverters(Xtest, data_dir)")
+        ytest=predictMCIconverters(Xtest, data_dir)
+    except:
+        print("Exception: predictMCIconverters arguments not well defined")
+
+
+
+
+def Q4_tester():
+    x1,y1,x2,y2=load_data()
+
+    y_pred = predictMCIconverters(x2, "Data")
+
+    print_assessement(y2, y_pred)
+
+
+#Q4_tester()
