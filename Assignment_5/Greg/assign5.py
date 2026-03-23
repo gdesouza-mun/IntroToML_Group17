@@ -30,7 +30,7 @@ def error_rate(y_pred, y_true, model_name=""):
 
 #Load data... loads the data, and Q1_results proves that we loaded according to instructions
 
-def load_data(data_dir="data"):
+def load_data(data_dir="data", train_samples=4860):
     data_path = os.path.join(data_dir, Global.data_name)
     label_path= os.path.join(data_dir, Global.label_name)
 
@@ -40,7 +40,7 @@ def load_data(data_dir="data"):
     all_indices = np.arange(len(label_np))
     train_indices = []
 
-    num_samples=4860
+    num_samples=train_samples
     for label_value in np.unique(label_np):
         label_indices = np.where(label_np == label_value)[0]
         chosen = np.random.choice(label_indices, num_samples, replace=False)
