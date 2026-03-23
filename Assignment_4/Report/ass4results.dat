@@ -1,0 +1,46 @@
+
+ 
+ QUESTION 1 
+ 
+
+Mean Balanced Accuracy During cross validation:
+gini  : 0.5296
+entropy  : 0.5345
+log_loss  : 0.5345
+Best Criterion for the tree is:  entropy
+
+--- Performance Metrics on Test Set for Decision Tree Classifier---
+Accuracy:          0.5856
+Balanced Accuracy: 0.5920
+Sensitivity:       0.6134
+Specificity:       0.5706
+Precision:         0.4343
+Recall:            0.6134
+
+ 
+ QUESTION 2 
+ 
+
+Tree Saved to Q2_tree.pdf
+
+ 
+ QUESTION 3 
+ 
+
+Mean Balanced Accuracy During cross validation:
+gini  : 0.6826
+entropy  : 0.6782
+log_loss  : 0.6782
+Best Criterion for the tree is:  gini
+
+--- Performance Metrics on Test Set for Random Forest Classifier---
+Accuracy:          0.6450
+Balanced Accuracy: 0.6771
+Sensitivity:       0.7835
+Specificity:       0.5706
+Precision:         0.4951
+Recall:            0.7835
+ 
+ 
+ Starting predictMCIconverters(Xtest, data_dir)
+Exception: predictMCIconverters arguments not well defined

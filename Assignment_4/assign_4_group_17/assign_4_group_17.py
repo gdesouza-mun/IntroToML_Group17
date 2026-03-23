@@ -141,12 +141,13 @@ def Q2_results():
     X_train, y_train, X_test, y_test = load_data()
 
 
-    tree_class = DecisionTreeClassifier(criterion='gini')
+    tree_class = DecisionTreeClassifier(criterion='entropy', random_state=42)
     tree_class.fit(X_train, y_train)
 
     plot_tree(tree_class)
     print("Tree Saved to Q2_tree.pdf")
     plt.savefig("Q2_tree.pdf")
+    #plt.savefig("Q2_tree.png", dpi=300)
 
 
 
@@ -185,57 +186,19 @@ def Q3_results():
 ####################################################################################
 # Question 4
 ####################################################################################
-def Q4_Test():
-   # Train decision tree based on gini or log loss CV
-    # Retrain on best
-    X_train, y_train, X_test, y_test = load_data()
-    # drop some features
-    X_train = X_train.drop(columns=[5,12])
-    X_test = X_test.drop(columns=[5,12])
-
-    crit_dic = {"criterion": Global.crit_list}
-    # Add class_weight='balanced_subsample' to handle class imbalance
-    rf_class = RandomForestClassifier(n_estimators=100,class_weight='balanced_subsample', random_state=42)
-    grid_search = GridSearchCV(rf_class, crit_dic,
-                             cv=Global.cv_folds, scoring=Global.main_score,
-                             refit=True)
-
-    grid_search.fit(X_train, y_train)
-    best_crit=grid_search.best_params_["criterion"]
-    mean_cv_scores = grid_search.cv_results_['mean_test_score']
-    print("Mean Balanced Accuracy During cross validation:")
-    for i in range(len(Global.crit_list)):
-        print(Global.crit_list[i], f" : {mean_cv_scores[i]:.4f}")
-
-
-    print("Best Criterion for the tree is: ", best_crit)
-    best_model = grid_search.best_estimator_
-    #y_pred = best_model.predict(X_test)
-    # Using predict_proba to get probabilities and then applying a threshold of 0.55 for classification
-    y_probs = best_model.predict_proba(X_test)[:, 1]
-    y_pred = (y_probs >= 0.55).astype(int)
-
-    print_assessement(y_test, y_pred, "Random Forest Classifier")
-
 def predictMCIconverters(Xtest, data_dir):
 
     x1,y1,x2,y2=load_data(data_dir)
     X=x1
     Y=y1
 
-    #Uncomment before Final Version
-    # X = pd.concat([x1,x2], ignore_index=True)
-    # Y = pd.concat([y1,y2], ignore_index=True)
+    X = pd.concat([x1,x2], ignore_index=True)
+    Y = pd.concat([y1,y2], ignore_index=True)
 
-    best_class=RandomForestClassifier(n_estimators=100, criterion='log_loss',
+
+    best_class=RandomForestClassifier(n_estimators=100, criterion='entropy',
                                       max_depth=3, min_samples_leaf=10,
                                       max_features=2, random_state=42)
-
-    # best_class= GradientBoostingClassifier(learning_rate=0.01,
-    #                                       n_estimators=100,
-    #                                       max_depth=3, min_samples_leaf=5,
-    #                                       max_features=5, random_state=42)
-
 
     best_class.fit(X,Y)
 
@@ -248,28 +211,28 @@ def predictMCIconverters(Xtest, data_dir):
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-# if __name__=="__main__":
-#     print( "\n \n QUESTION 1 \n \n")
-#     Q1_results()
-#     print( "\n \n QUESTION 2 \n \n")
-#     Q2_results()
-#     print( "\n \n QUESTION 3 \n \n")
-#     Q3_results()
-#     try:
-#         print(" \n \n Starting predictMCIconverters(Xtest, data_dir)")
-#         ytest=predictMCIconverters(Xtest, data_dir)
-#     except:
-#         print("Exception: predictMCIconverters arguments not well defined")
+if __name__=="__main__":
+    print( "\n \n QUESTION 1 \n \n")
+    Q1_results()
+    print( "\n \n QUESTION 2 \n \n")
+    Q2_results()
+    print( "\n \n QUESTION 3 \n \n")
+    Q3_results()
+    try:
+        print(" \n \n Starting predictMCIconverters(Xtest, data_dir)")
+        ytest=predictMCIconverters(Xtest, data_dir)
+    except:
+        print("Exception: predictMCIconverters arguments not well defined")
 
 
 
 
-def Q4_tester():
-    x1,y1,x2,y2=load_data("Data")
+# def Q4_tester():
+#     x1,y1,x2,y2=load_data("Data")
 
-    y_pred = predictMCIconverters(x2, "Data")
+#     y_pred = predictMCIconverters(x2, "Data")
 
-    print_assessement(y2, y_pred)
+#     print_assessement(y2, y_pred)
 
 
-Q4_tester()
+# Q4_tester()
