@@ -56,10 +56,9 @@ class Global:
     feature_names=["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8",
                    "x9", "x10", "x11", "x12", "x13"]
 
-    random_seed=42
-    cv_folds=5
-    #main_score='balanced_accuracy'
-    main_score='recall'
+    random_seed=17
+    cv_folds=10
+    main_score='balanced_accuracy'
     crit_list=["gini", "entropy", "log_loss"]
 
 
@@ -108,9 +107,9 @@ def Q1_results():
     crit_dic = {"criterion": Global.crit_list}
 
     #Define classifier and initiate grid search on those 3 criterions
-    tree_class = DecisionTreeClassifier(random_state=42)
+    tree_class = DecisionTreeClassifier()
     grid_search = GridSearchCV(tree_class, crit_dic,
-                             cv=5, scoring=Global.main_score,
+                             cv=Global.cv_folds, scoring=Global.main_score,
                              refit=True)
 
     grid_search.fit(X_train, y_train)
@@ -161,7 +160,7 @@ def Q3_results():
 
     crit_dic = {"criterion": Global.crit_list}
 
-    rf_class = RandomForestClassifier(n_estimators=100, random_state=42)
+    rf_class = RandomForestClassifier(n_estimators=100)
     grid_search = GridSearchCV(rf_class, crit_dic,
                              cv=Global.cv_folds, scoring=Global.main_score,
                              refit=True)
@@ -185,37 +184,6 @@ def Q3_results():
 ####################################################################################
 # Question 4
 ####################################################################################
-def Q4_Test():
-   # Train decision tree based on gini or log loss CV
-    # Retrain on best
-    X_train, y_train, X_test, y_test = load_data()
-    # drop some features
-    X_train = X_train.drop(columns=[5,12])
-    X_test = X_test.drop(columns=[5,12])
-
-    crit_dic = {"criterion": Global.crit_list}
-    # Add class_weight='balanced_subsample' to handle class imbalance
-    rf_class = RandomForestClassifier(n_estimators=100,class_weight='balanced_subsample', random_state=42)
-    grid_search = GridSearchCV(rf_class, crit_dic,
-                             cv=Global.cv_folds, scoring=Global.main_score,
-                             refit=True)
-
-    grid_search.fit(X_train, y_train)
-    best_crit=grid_search.best_params_["criterion"]
-    mean_cv_scores = grid_search.cv_results_['mean_test_score']
-    print("Mean Balanced Accuracy During cross validation:")
-    for i in range(len(Global.crit_list)):
-        print(Global.crit_list[i], f" : {mean_cv_scores[i]:.4f}")
-
-
-    print("Best Criterion for the tree is: ", best_crit)
-    best_model = grid_search.best_estimator_
-    #y_pred = best_model.predict(X_test)
-    # Using predict_proba to get probabilities and then applying a threshold of 0.55 for classification
-    y_probs = best_model.predict_proba(X_test)[:, 1]
-    y_pred = (y_probs >= 0.55).astype(int)
-
-    print_assessement(y_test, y_pred, "Random Forest Classifier")
 
 def predictMCIconverters(Xtest, data_dir):
 
@@ -248,28 +216,29 @@ def predictMCIconverters(Xtest, data_dir):
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-# if __name__=="__main__":
-#     print( "\n \n QUESTION 1 \n \n")
-#     Q1_results()
-#     print( "\n \n QUESTION 2 \n \n")
-#     Q2_results()
-#     print( "\n \n QUESTION 3 \n \n")
-#     Q3_results()
-#     try:
-#         print(" \n \n Starting predictMCIconverters(Xtest, data_dir)")
-#         ytest=predictMCIconverters(Xtest, data_dir)
-#     except:
-#         print("Exception: predictMCIconverters arguments not well defined")
+if __name__=="__main__":
+    print( "\n \n QUESTION 1 \n \n")
+    Q1_results()
+    print( "\n \n QUESTION 2 \n \n")
+    Q2_results()
+    print( "\n \n QUESTION 3 \n \n")
+    Q3_results()
+
+    try:
+        print(" \n \n Starting predictMCIconverters(Xtest, data_dir)")
+        ytest=predictMCIconverters(Xtest, data_dir)
+    except:
+        print("Exception: predictMCIconverters arguments not well defined")
 
 
 
 
 def Q4_tester():
-    x1,y1,x2,y2=load_data("Data")
+    x1,y1,x2,y2=load_data()
 
     y_pred = predictMCIconverters(x2, "Data")
 
     print_assessement(y2, y_pred)
 
 
-Q4_tester()
+#Q4_tester()
