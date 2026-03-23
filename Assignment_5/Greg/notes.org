@@ -1,0 +1,17 @@
+# Number of Represetants of each class:
+
+5894 	 0
+6764 	 1
+5978 	 2
+6096 	 3
+5858 	 4
+5400 	 5
+5929 	 6
+6302 	 7
+5829 	 8
+5950 	 9
+
+
+So to guarantee balance, the least represented class is 5, 10% of five
+
+reSo our sample size must be 5400-540 = 4860 
