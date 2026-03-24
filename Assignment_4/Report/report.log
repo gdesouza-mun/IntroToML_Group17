@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2025.11.17)  23 MAR 2026 09:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2025.11.17)  24 MAR 2026 09:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -662,10 +662,6 @@ LaTeX Warning: No positions in optional float specifier.
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package logreq Info: Writing requests to 'report.run.xml'.
 \openout1 = `report.run.xml'.
 
@@ -673,7 +669,7 @@ Package logreq Info: Writing requests to 'report.run.xml'.
 Here is how much of TeX's memory you used:
  17705 strings out of 473197
  340496 string characters out of 5718604
- 1142194 words of memory out of 5000000
+ 1142191 words of memory out of 5000000
  40783 multiletter control sequences out of 15000+600000
  564866 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -689,7 +685,7 @@ ublic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti1
 0.pfb>
-Output written on report.pdf (3 pages, 182421 bytes).
+Output written on report.pdf (3 pages, 182220 bytes).
 PDF statistics:
  111 PDF objects out of 1000 (max. 8388607)
  47 compressed objects within 1 object stream
