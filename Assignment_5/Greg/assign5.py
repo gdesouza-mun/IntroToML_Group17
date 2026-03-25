@@ -181,20 +181,21 @@ def Q2_results():
 #SVM same thing
 
 def Q3_explore():
-    x_train, y_train, _, _ = load_data("data", 1000, 15000)
+    x_train, y_train, _, _ = load_data("data", 2500)
 
     #vectorizing be columns (Fortran order 'F')
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
 
-    C_list = np.logspace(-3,3, 10)
+    C_list = np.logspace(-1,1, 25)
+    #C_list = np.linspace(5.3,6,25)
     d_list = [2,3,4]
     param_dic = {"C": C_list,
                  "degree": d_list}
 
-    SVM = SVC(kernel='poly', cache_size=400, random_state=42)
+    SVM = SVC(kernel='poly', cache_size=200, random_state=42)
     grid_search = GridSearchCV(SVM, param_grid = param_dic,
                                scoring='accuracy', refit=True,
-                               verbose=2, cv=5)
+                               verbose=0, cv=5, n_jobs=8)
 
     grid_search.fit(x_train_vec, y_train)
 

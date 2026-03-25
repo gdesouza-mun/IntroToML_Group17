@@ -1,3 +1,4 @@
+
 # Number of Represetants of each class:
 
 5894 	 0
@@ -48,3 +49,16 @@ train scores
 #Results
 Err Rate
 0.02517543859649123
+
+
+# Question 3
+
+#Exploration 1 25 Log Space -3 to 3 2,3,4 poly 1000 samples
+C 	 degree 	 score
+5.6234 	 2 	 0.9579
+
+#Exploration 2 100 Lin Space between 2 and 3 1000 Samples
+C 	 degree 	 score
+5.8586 	 2 	 0.9591
+
+
