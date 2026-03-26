@@ -1,3 +1,16 @@
+#  Assignment 5
+#
+#  Group 17:
+#  Darlington Nkrumah, MUN ID 202492437, dknkrumah@mun.ca
+#  Greg de Souza, MUN ID 2025225,  gdesouza@mun.ca
+#  Xuan Toan Doan, MUN ID 202583882, txdoan@mun.ca
+
+
+####################################################################################
+# Imports
+####################################################################################
+
+
 import numpy as np
 import pandas as pd
 
@@ -18,14 +31,16 @@ import torch.nn as nn
 import os
 import sys
 
+# Globa Utilities
+
 class Global:
+    #Just saving data file names
     data_name="mnist_train_data.npy"
     label_name="mnist_train_labels.npy"
 
-    k_folds=5
 
 def error_rate(y_pred, y_true, model_name=""):
-
+    #To evaluate every model similary
     y_pred = np.array(y_pred)
     y_true = np.array(y_true)
 
@@ -35,36 +50,41 @@ def error_rate(y_pred, y_true, model_name=""):
     print(error_rate)
 
 
-#Question 1
+####################################################################################
+# Question 1
+####################################################################################
 
-
-#Load data... loads the data, and Q1_results proves that we loaded according to instructions
-
-def load_data(data_dir="data", train_per_sample=4860, subset_size=0):
+def load_data(data_dir="data", train_per_sample=4860):
+    '''
+    load_data(
+    data_dir -> Path to data (assuming names saved in Global)
+    train_per_sample -> How many samples of each class to take for the
+    training data? 4860 is the number that maximally satisfies the condition
+    for Q1 (Label 5 has only 5400 elements, so 90% of that is 4860)
+    '''
     data_path = os.path.join(data_dir, Global.data_name)
     label_path= os.path.join(data_dir, Global.label_name)
 
+    #Load data to numpy array
     data_np = np.load(data_path)
     label_np = np.load(label_path)
-
-    if subset_size:
-        indices = np.arange(label_np.shape[0])
-        np.random.shuffle(indices)
-        subset_indices = indices[:subset_size]
-        data_np = data_np[subset_indices]
-        label_np = label_np[subset_indices]
 
     all_indices = np.arange(len(label_np))
     train_indices = []
 
-    num_samples=train_per_sample
-    for label_value in np.unique(label_np):
+    for label_value in np.unique(label_np): #For every class
+
+        #Get indices that are of that class
         label_indices = np.where(label_np == label_value)[0]
-        chosen = np.random.choice(label_indices, num_samples, replace=False)
+
+        #Get a random choice of train_per_sample of that class for training
+        chosen = np.random.choice(label_indices,
+                                  train_per_sample, replace=False)
         train_indices.extend(chosen)
 
 
     train_indices = np.array(train_indices)
+    #The testing data is the complement of the training data
     test_indices = np.delete(all_indices, train_indices)
 
     x_train = data_np[train_indices]
@@ -73,9 +93,14 @@ def load_data(data_dir="data", train_per_sample=4860, subset_size=0):
     x_test = data_np[test_indices]
     y_test = label_np[test_indices]
 
+    #return the data in 4 arrays
     return x_train, y_train, x_test, y_test
 
 def Q1_results():
+    '''
+    Q1_results : Proves that calling load_data() satysfies the conditions
+    of Q1.
+    '''
     x_train, y_train, x_test, y_test = load_data()
 
     print("Condition 1: 60 000 total entries between train/test split")
@@ -93,9 +118,16 @@ def Q1_results():
 
 
 
-def Q2_explore():
-    x_train, y_train, _, _ = load_data("data")
 
+####################################################################################
+# Question 2
+####################################################################################
+def Q2_explore():
+    '''
+    Q2 explore is the grid search for the k of the kNN, the details
+    on how I proceeded are on the report
+    '''
+    x_train, y_train, _, _ = load_data("data")
 
     #vectorizing be columns (Fortran order 'F')
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
@@ -105,8 +137,10 @@ def Q2_explore():
 
     param_dic={ "n_neighbors":k_list}
 
+    #Notably I'm pre computing the distances
     dist_matrix = pairwise_distances(x_train_vec, metric='euclidean')
-    kNN = KNeighborsClassifier(metric="precomputed", random_state=42)
+
+    kNN = KNeighborsClassifier(metric="precomputed")
     grid_search=GridSearchCV(kNN,
                                param_grid=param_dic, scoring='accuracy',
                                refit=False, return_train_score=True,
@@ -125,8 +159,11 @@ def Q2_explore():
     print(k_train_scores)
 
 def Q2_graph():
-
-    #Results for round one, samples=1000/class
+    '''
+    Makes the graph of the results for the grid search based on the manually
+    inserted data. Details on the report
+    '''
+    #Results for round one, samples=1000/Class
     k1 = np.array([1, 3, 5, 10, 25, 50, 100, 150, 200])
     acc_test1 = np.array([0.9445, 0.9454, 0.9448, 0.9377, 0.9221, 0.9036, 0.8778, 0.8591, 0.8422])
     err_test1 = 1 - acc_test1
@@ -157,20 +194,24 @@ def Q2_graph():
     plt.axhline(y=min_err, color='black', linestyle = ':', label=f'Minimum Test Error: {min_err:.4f}')
 
     plt.legend(loc="upper left")
-    plt.show()
+    #plt.show()
+    print("Saving image as Q2_results.png")
+    plt.savefig("Q2_results.png", dpi=300)
 
 
     # Results for round three, samples = 4860/class
 
 def Q2_results():
     #From Q2_explore, k=3 is the best model
+
     x_train, y_train, x_test, y_test = load_data("data")
 
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
     x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
 
+    #I just refit the best k on all data and asses it with Err
     dist_matrix = pairwise_distances(x_train_vec, metric='euclidean')
-    kNN=KNeighborsClassifier(3, metric="precomputed", random_state=42)
+    kNN=KNeighborsClassifier(3, metric="precomputed")
 
     kNN.fit(dist_matrix, y_train)
 
@@ -180,12 +221,12 @@ def Q2_results():
     error_rate(y_pred, y_test, "kNN for k=3")
 
 
-
+####################################################################################
 # Question 3
-
-#SVM same thing
+####################################################################################
 
 def Q3_explore():
+    #Same logic as Q2_explore, a function to do the grid search
     x_train, y_train, _, _ = load_data("data")
 
     #vectorizing be columns (Fortran order 'F')
@@ -193,6 +234,7 @@ def Q3_explore():
 
     C_list = np.logspace(-1,1, 25)
     #C_list = np.linspace(6.7,7,10)
+    #d_list = [2,3,4]
     d_list = [2]
     param_dic = {"C": C_list,
                  "degree": d_list}
@@ -228,27 +270,48 @@ def Q3_results():
 
     error_rate(y_pred, y_test, "SVM poly for C=6.8129 degree=2")
 
-#Q4 ====
+
+####################################################################################
+# Question 4
+####################################################################################
+
+#Q4 is a bit more elaborate, there maybe a better way to do it
+#But given the time limit I just did something I know it works
+
+
 class DynamicMLP(nn.Module):
+    '''
+    This is just a Torch Neural Network for a feedforward NN
+    that takes L and K as arguments during initialization
+    '''
     def __init__(self, L, K, input_dim=784, output_dim=10):
         super().__init__()
         layers=[]
         current_dim = input_dim
 
-        for _ in range(L):
+        #Creates L hidden layers with ReLU activation
+        for l in range(L):
             layers.append(nn.Linear(current_dim, K))
             layers.append(nn.ReLU())
             current_dim = K
 
 
+        #Plus the output layer
         layers.append(nn.Linear(current_dim, output_dim))
         self.network = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.network(x)
 
+
 class TorchClassifier(BaseEstimator, ClassifierMixin):
+    '''
+    I then wrap the torch NN with a scikit estimator framework
+    so I can use Grid Search CV with L an K
+    '''
+
     def __init__(self, L=1, K=128, lr=0.001, epochs=5):
+        #Set the hyperparameters
         self.L=L
         self.K=L
         self.lr = lr
@@ -256,9 +319,12 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
         self.model = None
 
     def toTensor_data(self, X):
+        #The tensors will be normalized for regularity
         X_tensor = torch.tensor(X, dtype=torch.float32)/255.0
         return X_tensor
+
     def fit(self, X, y):
+        #The fit method is required for the Grid Search
         X_tensor = self.toTensor_data(X)
         y_tensor = torch.tensor(y, dtype=torch.long)
 
@@ -266,6 +332,7 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         criterion = nn.CrossEntropyLoss()
 
+        #A basic training loop
         self.model.train()
         for epochs in range(self.epochs):
             optimizer.zero_grad()
@@ -277,6 +344,7 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
+        #The predict is the other necessary method for GridSeachCV
         self.model.eval()
         with torch.no_grad():
             X_tensor = self.toTensor_data(X)
@@ -285,10 +353,13 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
 
 
 def Q4_explore():
+    #With those two classes I can just repeat the code for the previous
+    #explorations
+
     x_train, y_train, x_test, y_test = load_data("data")
 
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
-    x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
+    #x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
 
     x_train_vec, y_train = shuffle(x_train_vec, y_train, random_state=42)
 
@@ -297,28 +368,25 @@ def Q4_explore():
     #     'K': [64, 128, 256, 512,784]
     # }
 
-
     param_grid = {
-        'L': [1,2,3,4,8, 16],
-        'K': [64, 128, 256, 512, 784]
+        'L': [1,2,3],
+        'K': [256, 512, 784]
     }
 
     clf = TorchClassifier(epochs=15, lr=0.01)
     grid = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy',
-                        n_jobs=16, refit=True, verbose=2)
+                        n_jobs=1, refit=True, verbose=2)
 
     grid.fit(x_train_vec, y_train)
 
     best_estimator = grid.best_estimator_
     L_best = best_estimator.L
     K_best = best_estimator.K
-    print(f"Best Params: {L_best}")
-    print(f"Best Score: {K_best} \n")
+    print(f"Best L: {L_best}")
+    print(f"Best K: {K_best} \n")
+    print(f"Best score: {grid.best_score_}")
 
-
-    y_pred = best_estimator.predict(x_test_vec)
-    error_rate(y_pred, y_test, "Best MLP Model")
-
+    #One difference here, I'm just saving the best model as is
     save_name = f"best_Q4_L{L_best}_K{K_best}.pth"
     print("\n Saving the best perceptron as:", save_name)
 
@@ -330,5 +398,37 @@ def Q4_explore():
 
     torch.save(full_state, save_name)
 
+def Q4_results():
 
-Q4_explore()
+    _, _, x_test, y_test = load_data("data")
+
+    x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
+    X_test_tensor = torch.tensor(x_test_vec, dtype=torch.float32)/255.0
+
+    #And I load the best model to get the predictions for the assessment
+    saved_parameters = torch.load('Q4_results.pth')
+    saved_model = DynamicMLP(L=saved_parameters['L'],
+                             K=saved_parameters['K'])
+    saved_model.load_state_dict(saved_parameters['state_dict'])
+    saved_model.eval()
+
+    with torch.no_grad():
+        logits = saved_model(X_test_tensor)
+        y_pred_tensor = torch.argmax(logits, dim=1)
+
+    y_pred = y_pred_tensor.numpy()
+    error_rate(y_pred, y_test, "Best MLP Model")
+
+
+#########################################################################################
+# Calls to generate the results
+#########################################################################################
+if __name__=="__main__":
+    print("====== Q1_results() =========")
+    Q1_results()
+    print("====== Q2_results() =========")
+    Q2_results()
+    print("====== Q3_results() =========")
+    Q3_results()
+    print("====== Q4_results() =========")
+    Q4_results()

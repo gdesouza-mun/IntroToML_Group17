@@ -1,0 +1,10 @@
+Fitting 5 folds for each of 30 candidates, totalling 150 fits
+Best Params: 1
+Best Score: 784 
+
+Best L: 1
+Best K: 784 
+
+Best score: 0.9047119341563787
+
+ Saving the best perceptron as: best_Q4_L1_K784.pth

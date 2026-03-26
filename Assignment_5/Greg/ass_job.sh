@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=Q4_explore
 #SBATCH --account=rrg-swallin
-#SBATCH --time=5:00:00
+#SBATCH --time=23:59:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
