@@ -7,6 +7,7 @@ from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.svm import SVC
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
 
 
@@ -289,22 +290,45 @@ def Q4_explore():
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
     x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
 
+    x_train_vec, y_train = shuffle(x_train_vec, y_train, random_state=42)
+
+    # param_grid = {
+    #     'L': [1,2,3,4,8,16],
+    #     'K': [64, 128, 256, 512,784]
+    # }
+
+
     param_grid = {
-        'L': [2,4,8,16],
-        'K': [64, 128, 256,512]
+        'L': [1,2,3,4,8, 16],
+        'K': [64, 128, 256, 512, 784]
     }
 
-    clf = TorchClassifier(epochs=15)
-    grid = GridSearchCV(clf, param_grid, cv=3, scoring='accuracy',
-                        n_jobs=8, refit=True, verbose=2)
+    clf = TorchClassifier(epochs=15, lr=0.01)
+    grid = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy',
+                        n_jobs=16, refit=True, verbose=2)
 
     grid.fit(x_train_vec, y_train)
 
-    print(f"Best Params: {grid.best_params_}")
-    print(f"Best Score: {grid.best_score_} \n")
-
     best_estimator = grid.best_estimator_
-    y_pred = best_estimator(x_test_vec)
+    L_best = best_estimator.L
+    K_best = best_estimator.K
+    print(f"Best Params: {L_best}")
+    print(f"Best Score: {K_best} \n")
+
+
+    y_pred = best_estimator.predict(x_test_vec)
     error_rate(y_pred, y_test, "Best MLP Model")
+
+    save_name = f"best_Q4_L{L_best}_K{K_best}.pth"
+    print("\n Saving the best perceptron as:", save_name)
+
+    full_state = {
+        "L": L_best,
+        "K": K_best,
+        'state_dict': best_estimator.model.state_dict()
+    }
+
+    torch.save(full_state, save_name)
+
 
 Q4_explore()
