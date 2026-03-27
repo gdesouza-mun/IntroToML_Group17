@@ -1,0 +1,69 @@
+Loop 1 - 1000 Samples
+
+L 1,2,3
+K 128, 256
+lr 1e-2 1e-3 5e-4
+bs 32 64
+
+Results lr bs
+
+
+
+
+Loop 2 - 2000 Samples
+
+
+    param_grid = {
+        'L': [1,2,3,4,8],
+        'K': [128, 256, 512
+        'batch_size': [32],
+        'lr': [1e-3]
+    }
+
+
+Best L: 3
+Best K: 512
+Best batch size: 32
+Best lr: 0.001 
+
+Best score: 0.962000204820242
+Err assessment for model:  Best MLP
+0.029125
+
+
+Loop 3 3000 Samples -> All data with 7 and 15 same result
+    param_grid = {
+        'L': [3,4,8],
+        'K': [512, 784, 1024],
+        'batch_size': [32],
+        'lr': [1e-3]
+    }
+Best L: 3
+Best K: 512
+Best batch size: 32
+Best lr: 0.001 
+
+Best score: 0.9699666666666666
+Err assessment for model:  Best MLP
+0.025833333333333333
+
+Loop 4 Second Exploration of Batch and lr 2 epochs
+Best L: 3
+Best K: 512
+Best batch size: 64
+Best lr: 0.0005 
+
+Best score: 0.9781069958847737
+Err assessment for model:  Best MLP
+0.019210526315789473
+
+Best L: 7
+Best K: 784
+Best batch size: 64
+Best lr: 0.0005 
+
+Best score: 0.9779423868312757
+Err assessment for model:  Best MLP
+0.017982456140350878
+
+

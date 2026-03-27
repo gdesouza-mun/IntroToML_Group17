@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
 
 
 import os
@@ -278,6 +279,8 @@ def Q3_results():
 #Q4 is a bit more elaborate, there maybe a better way to do it
 #But given the time limit I just did something I know it works
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 class DynamicMLP(nn.Module):
     '''
@@ -293,6 +296,7 @@ class DynamicMLP(nn.Module):
         for l in range(L):
             layers.append(nn.Linear(current_dim, K))
             layers.append(nn.ReLU())
+            layers.append(nn.Dropout(0.2))
             current_dim = K
 
 
@@ -310,13 +314,14 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
     so I can use Grid Search CV with L an K
     '''
 
-    def __init__(self, L=1, K=128, lr=0.001, epochs=5):
+    def __init__(self, L=1, K=128, lr=0.001, epochs=5, batch_size=64):
         #Set the hyperparameters
         self.L=L
         self.K=L
         self.lr = lr
         self.epochs = epochs
         self.model = None
+        self.batch_size = batch_size
 
     def toTensor_data(self, X):
         #The tensors will be normalized for regularity
@@ -325,21 +330,28 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, y):
         #The fit method is required for the Grid Search
+
+        self.model = DynamicMLP(L=self.L, K=self.K).to(device)
+
         X_tensor = self.toTensor_data(X)
         y_tensor = torch.tensor(y, dtype=torch.long)
 
-        self.model = DynamicMLP(L=self.L, K=self.K)
+        dataset = TensorDataset(X_tensor, y_tensor)
+        loader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         criterion = nn.CrossEntropyLoss()
 
         #A basic training loop
         self.model.train()
         for epochs in range(self.epochs):
-            optimizer.zero_grad()
-            outputs = self.model(X_tensor)
-            loss = criterion(outputs, y_tensor)
-            loss.backward()
-            optimizer.step()
+            for batch_X, batch_y in loader:
+                batch_X = batch_X.to(device)
+                batch_y = batch_y.to(device)
+                optimizer.zero_grad()
+                outputs = self.model(batch_X)
+                loss = criterion(outputs, batch_y)
+                loss.backward()
+                optimizer.step()
 
         return self
 
@@ -347,19 +359,19 @@ class TorchClassifier(BaseEstimator, ClassifierMixin):
         #The predict is the other necessary method for GridSeachCV
         self.model.eval()
         with torch.no_grad():
-            X_tensor = self.toTensor_data(X)
+            X_tensor = self.toTensor_data(X).to(device)
             outputs = self.model(X_tensor)
-            return torch.argmax(outputs, dim=1).numpy()
+            return torch.argmax(outputs, dim=1).cpu().numpy()
 
 
-def Q4_explore():
+def Q4_explore(save=False, assess=False):
     #With those two classes I can just repeat the code for the previous
     #explorations
 
     x_train, y_train, x_test, y_test = load_data("data")
 
     x_train_vec = x_train.reshape(x_train.shape[0], -1, order='F')
-    #x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
+
 
     x_train_vec, y_train = shuffle(x_train_vec, y_train, random_state=42)
 
@@ -369,34 +381,55 @@ def Q4_explore():
     # }
 
     param_grid = {
-        'L': [1,2,3],
-        'K': [256, 512, 784]
+        'L': [7, 15],
+        'K': [512, 784, 1024],
+        'batch_size': [64],
+        'lr': [5e-4]
     }
 
-    clf = TorchClassifier(epochs=15, lr=0.01)
-    grid = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy',
-                        n_jobs=1, refit=True, verbose=2)
+
+    n_jobs=1
+
+    # print(device)
+    # print(n_jobs)
+
+    clf = TorchClassifier(epochs=30)
+    grid = GridSearchCV(clf, param_grid, cv=3, scoring='accuracy',
+                        n_jobs=n_jobs, refit=True, verbose=2)
 
     grid.fit(x_train_vec, y_train)
 
     best_estimator = grid.best_estimator_
     L_best = best_estimator.L
     K_best = best_estimator.K
+    bs_best = best_estimator.batch_size
+    lr_best = best_estimator.lr
+
     print(f"Best L: {L_best}")
-    print(f"Best K: {K_best} \n")
+    print(f"Best K: {K_best}")
+    print(f"Best batch size: {bs_best}")
+    print(f"Best lr: {lr_best} \n")
     print(f"Best score: {grid.best_score_}")
 
+    if assess:
+        x_test_vec = x_test.reshape(x_test.shape[0], -1, order='F')
+        y_pred = best_estimator.predict(x_test_vec)
+        error_rate(y_pred, y_test, "Best MLP")
+
     #One difference here, I'm just saving the best model as is
-    save_name = f"best_Q4_L{L_best}_K{K_best}.pth"
-    print("\n Saving the best perceptron as:", save_name)
+    if save:
+        save_name = f"best_Q4_L{L_best}_K{K_best}.pth"
+        print("\n Saving the best perceptron as:", save_name)
 
-    full_state = {
-        "L": L_best,
-        "K": K_best,
-        'state_dict': best_estimator.model.state_dict()
-    }
+        full_state = {
+            "L": L_best,
+            "K": K_best,
+            'state_dict': best_estimator.model.state_dict()
+        }
 
-    torch.save(full_state, save_name)
+        torch.save(full_state, save_name)
+
+Q4_explore(save=True, assess=True)
 
 def Q4_results():
 
@@ -423,12 +456,12 @@ def Q4_results():
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-if __name__=="__main__":
-    print("====== Q1_results() =========")
-    Q1_results()
-    print("====== Q2_results() =========")
-    Q2_results()
-    print("====== Q3_results() =========")
-    Q3_results()
-    print("====== Q4_results() =========")
-    Q4_results()
+#if __name__=="__main__":
+#     print("====== Q1_results() =========")
+#     Q1_results()
+#     print("====== Q2_results() =========")
+#     Q2_results()
+#     print("====== Q3_results() =========")
+#     Q3_results()
+#     print("====== Q4_results() =========")
+#     Q4_results()

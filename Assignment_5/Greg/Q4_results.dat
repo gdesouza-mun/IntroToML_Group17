@@ -1,10 +1,30 @@
-Fitting 5 folds for each of 30 candidates, totalling 150 fits
-Best Params: 1
-Best Score: 784 
+Using device: cuda
+Fitting 3 folds for each of 6 candidates, totalling 18 fits
+[CV] END ...............K=512, L=7, batch_size=64, lr=0.0005; total time=  27.0s
+[CV] END ...............K=512, L=7, batch_size=64, lr=0.0005; total time=  22.7s
+[CV] END ...............K=512, L=7, batch_size=64, lr=0.0005; total time=  22.7s
+[CV] END ..............K=512, L=15, batch_size=64, lr=0.0005; total time=  39.5s
+[CV] END ..............K=512, L=15, batch_size=64, lr=0.0005; total time=  39.6s
+[CV] END ..............K=512, L=15, batch_size=64, lr=0.0005; total time=  39.6s
+[CV] END ...............K=784, L=7, batch_size=64, lr=0.0005; total time=  29.8s
+[CV] END ...............K=784, L=7, batch_size=64, lr=0.0005; total time=  29.8s
+[CV] END ...............K=784, L=7, batch_size=64, lr=0.0005; total time=  29.9s
+[CV] END ..............K=784, L=15, batch_size=64, lr=0.0005; total time=  57.2s
+[CV] END ..............K=784, L=15, batch_size=64, lr=0.0005; total time=  57.3s
+[CV] END ..............K=784, L=15, batch_size=64, lr=0.0005; total time=  57.2s
+[CV] END ..............K=1024, L=7, batch_size=64, lr=0.0005; total time=  38.8s
+[CV] END ..............K=1024, L=7, batch_size=64, lr=0.0005; total time=  38.7s
+[CV] END ..............K=1024, L=7, batch_size=64, lr=0.0005; total time=  38.7s
+[CV] END .............K=1024, L=15, batch_size=64, lr=0.0005; total time= 1.3min
+[CV] END .............K=1024, L=15, batch_size=64, lr=0.0005; total time= 1.3min
+[CV] END .............K=1024, L=15, batch_size=64, lr=0.0005; total time= 1.3min
+Best L: 7
+Best K: 1024
+Best batch size: 64
+Best lr: 0.0005 
 
-Best L: 1
-Best K: 784 
+Best score: 0.979485596707819
+Err assessment for model:  Best MLP
+0.019210526315789473
 
-Best score: 0.9047119341563787
-
- Saving the best perceptron as: best_Q4_L1_K784.pth
+ Saving the best perceptron as: best_Q4_L7_K1024.pth

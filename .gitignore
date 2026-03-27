@@ -11,3 +11,5 @@ AI4MArs_Data/*
 *.py#
 *.py~
 *undo-tree*
+*slurm*
+ass_job.sh
