@@ -279,8 +279,8 @@ def Q3_results():
 #Q4 is a bit more elaborate, there maybe a better way to do it
 #But given the time limit I just did something I know it works
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Using device: {device}")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# print(f"Using device: {device}")
 
 class DynamicMLP(nn.Module):
     '''
@@ -429,7 +429,7 @@ def Q4_explore(save=False, assess=False):
 
         torch.save(full_state, save_name)
 
-Q4_explore(save=True, assess=True)
+#Q4_explore(save=True, assess=True)
 
 def Q4_results():
 
