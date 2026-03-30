@@ -4,7 +4,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 import torch.nn as nn
 import torch
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
-
+import time
 
 
 #Here I'm training a deeplabv3 model
@@ -52,7 +52,8 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
 
     return model, params_to_optimize
 
-def train_model(model, params, train_loader, val_loader, device, epochs=5):
+def train_model(model, params, train_loader, val_loader, device, epochs=5,
+                save=False, save_start=10, save_name="best_model.pth"):
     #Executes the training loop
 
     model.to(device)
@@ -61,11 +62,16 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5):
 
     #miou_metric = MeanIoU(num_classes=5, per_class=True).to(device)
 
+    best_miou=0.0
     print(f"Starting train on {device} for {epochs} epochs")
     for epoch in range(epochs):
+        start_time = time.perf_counter()
         model.train()
         train_loss = train_one_epoch(model, train_loader, optimizer,
                                      criterion, device)
+        end_time = time.perf_counter()
+        duration = end_time - start_time
+
         # Validation
         model.eval()
 
@@ -73,16 +79,32 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5):
         class_names = ["Soil", "Bedrock", "Sand", "Big Rock", "Null"]
 
         print(f"\n" + "="*40)
+        print(f"Training duration: {duration:.0f} seconds:")
         print(f"Train Loss in {epoch} epoch: {train_loss}")
         print(f"Validation Loss in {epoch} epoch: {val_loss}")
 
         for name, score in zip(class_names, iou_per_class):
             print(f"{name} IoU: {score.item():.4f}")
 
-        print(f"Mean IoU: {iou_per_class[:4].mean().item():.4f}")
+        current_miou=iou_per_class[:4].mean().item()
+        print(f"Mean IoU: {current_miou:.4f}")
 
+        # Checkpoint
+        if current_miou >= best_miou:
+            best_miou=current_miou
+            if save and epoch >= save_start and current_miou >= best_miou:
+                checkpoint = {
+                    'epoch': epoch+1,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'miou': current_miou
+                }
 
-    print("Training Complete!")
+                torch.save(checkpoint, save_name)
+                print(f"  *** New Best Model Saved! (mIoU: {best_miou:.4f}) ***")
+
+    print(f"Training finished. Best mIoU achieved: {best_miou:.4f}")
+
 
 
 #HYPERPARAMETERS
@@ -96,7 +118,7 @@ mean=[0.485, 0.456, 0.406]
 std=[0.229, 0.224, 0.225]
 
 classifier_lr = 1e-3
-backbone_lr=0.0
+backbone_lr=1e-5
 
 #Usual transforms for every image
 base_transform = A.Compose([
@@ -126,7 +148,7 @@ aug_transform = A.Compose([
 
 
 #We now get the model
-model, params = get_deeplabv3()
+model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
 
 #Load and split the data, notice I'm not passing any transform here
