@@ -7,16 +7,40 @@ from albumentations.pytorch import ToTensorV2
 
 from torch.utils.data import Dataset
 import torch
+import torchvision.transforms.functional as TF
+from torchmetrics.segmentation import MeanIoU
+from torchmetrics.classification import JaccardIndex
+
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+from tqdm import tqdm # Recommended for a nice progress bar
+
 
 import random
 
+
+# ==================================================================
+# PATHS, LABEL DEFINITIONS AND VISUZALITION
+# ==================================================================
 class glb:
+    '''
+    This class is just a place to leave the path to the datasets
+    and a stanard way to set the coloring for the display of the masks
+    as well as classe names
+    '''
+
+    #We have two datasets, msl and m2020
+
+    #Here is m2020 path
     m2020_nav_img_path="AI4Mars_Data/m2020_nav/img"
     m2020_nav_mask_path="AI4Mars_Data/m2020_nav/labels"
 
+    #and here isn't msl path - I'll evetually add it
+    #My plan is to pre train our models on the msl dataset
+    #and see if that helps
+
+    #Standard pallete for the mask used in articles from the lit review
     pallet_nav={
         0 : [21, 171, 234],
         1 : [191, 21, 234],
@@ -25,41 +49,40 @@ class glb:
         255 :  [255,255, 255]
     }
 
+    #Dic of Dic with labels and names
     labels_nav = {
         0:{
             "mask_rgb": [0,0,0],
-            "display_rgb": [21, 171, 234], #Light Blue
+            "display_rgb": pallet_nav[0], #Light Blue
             "name": "soil"
         },
         1:{
             "mask_rgb": [1,1,1],
-            "display_rgb": [191, 21, 234], #Purple
+            "display_rgb": pallet_nav[1], #Purple
             "name": "bedrock"
         },
         2:{
             "mask_rgb": [2,2,2],
-            "display_rgb": [234, 84, 21], #Light Orange
+            "display_rgb": pallet_nav[2], #Light Orange
             "name": "sand"
         },
         3:{
             "mask_rgb": [3,3,3],
-            "display_rgb": [64, 234, 21], #Green
+            "display_rgb": pallet_nav[3], #Green
             "name": "big rock"
         },
         255:{
             "mask_rgb": [255,255, 255],
-            "display_rgb": [255,255, 255], #White
+            "display_rgb": pallet_nav[255], #White
             "name": "unlabeled"
         },
     }
 
-    norm_mean=0.5
-    norm_std=0.5
 
-#Visualizer
-
-
-def tensor_to_numpy(tensor, denormalize=True, mean=glb.norm_mean, std=glb.norm_std):
+def tensor_to_numpy(tensor, denormalize=True, mean=0.5, std=0.5):
+    #Converts a tensor to NP array, useful sometimes for visualization
+    #Might not work with mean defined per channel
+    #used this mostly to test other stuff
     img = tensor.detach().cpu().numpy()
 
     img = img.transpose(1,2,0)
@@ -76,7 +99,7 @@ def tensor_to_numpy(tensor, denormalize=True, mean=glb.norm_mean, std=glb.norm_s
 
 
 def mask_to_rgb(mask, pallete=glb.pallet_nav):
-
+    #Given a mask in grayscale, turns it into an rgb mask according to our pallete
     h, w = mask.shape
     rgb_mask = np.zeros((h,w,3))
 
@@ -87,14 +110,10 @@ def mask_to_rgb(mask, pallete=glb.pallet_nav):
 
 
 def plot_overlay_side(image, gray_mask, pallete=glb.pallet_nav):
-
+    #Plots an image an a mask side by side
     rgb_mask = mask_to_rgb(gray_mask, pallete)
-    # 3. Superimpose the Mask
-    # Create a copy and work with floats to prevent overflow during blending
-    overlay = image.copy()
 
-    # Identify non-background pixels (where the mask is active)
-    #active_mask = gray_mask > 0
+    overlay = image.copy()
 
     overlay = rgb_mask
 
@@ -113,7 +132,16 @@ def plot_overlay_side(image, gray_mask, pallete=glb.pallet_nav):
     plt.show()
 
 
+# ==================================================================
+# PATHS, LABEL DEFINITIONS AND VISUZALITION
+# ==================================================================
 class AI4Mars_DataSet(Dataset):
+    '''
+    This is our 'global' dataset, it takes the directory files
+    image_dir -> Path to images
+    mask_dir -> Path to masks
+    transforms -> Transforms to apply for images
+    '''
     def __init__(self, image_dir, mask_dir, transform=None):
         self.image_dir = image_dir
         self.mask_dir = mask_dir
@@ -124,80 +152,150 @@ class AI4Mars_DataSet(Dataset):
         return len(self.images)
 
     def __getitem__(self, index):
+
+        #Figures image path, and gets mask of same name but .png extension
         img_path = os.path.join(self.image_dir, self.images[index])
         mask_path = os.path.join(self.mask_dir,
                                  self.images[index].replace(".jpeg", ".png"))
 
-        print(mask_path)
+        #loads image using PIL
+        image_pil = Image.open(img_path).convert("RGB")
+        mask_pil = Image.open(mask_path)
 
-        image = np.array(Image.open(img_path).convert("RGB"))
-        mask = np.array(Image.open(mask_path).convert("L"))
+        #Some masks aren't the right size
+        #AI4Mars says to center crop the masks if that's the case
+        #so we do that
+        if image_pil.size != mask_pil.size:
+            target_size = (image_pil.size[1], image_pil.size[0])
+            mask_pil = TF.center_crop(mask_pil, target_size)
 
+        #Conver images to numpy
+        image = np.array(image_pil)
+        #with masks in a single grayscale channel
+        mask = np.array(mask_pil.convert("L"))
+
+        #If transfroms apply them
         if self.transform is not None:
             augmentations = self.transform(image=image, mask=mask)
             image = augmentations["image"]
             mask = augmentations["mask"]
 
+        #Returns final image & Mask
+        return image, mask
+
+class AI4Mars_SubSet(Dataset):
+    '''
+    Since the m2020 dataset is all in a single folder, we can't pass transforms
+    when loading the data with AI4Mars_DataSet
+    So this dataset serves to split a dataset with different transforms for different splits
+    You can find this implemented in the train_resnet.py
+
+    subset-> Takes a subset from random_split method or similar
+    transforms -> Transforms to apply from image
+    '''
+    def __init__(self, subset, transform=None):
+        self.subset = subset
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.subset)
+
+    def __getitem__(self, index):
+        image, mask = self.subset.dataset[self.subset.indices[index]]
+        #Since we get our image and mask through AI4Mars_DataSet
+        #We don't have to scale the image again
+
+        if self.transform:
+            augmented = self.transform(image=image, mask=mask)
+            image, mask = augmented['image'], augmented['mask']
+
         return image, mask
 
 
+# ==================================================================
+# ASSESSMENT AND TRAINING
+# ==================================================================
+def train_one_epoch(model, dataloader, optimizer, criterion, device):
+    '''
+    Runs one epoch of training given a dataloader and a model, returning
+    the training loss for one epoch
+    '''
+    model.train()
+    running_loss = 0.0
+
+    for images, masks in dataloader:
+        images = images.to(device)
+        masks = masks.to(device).long() # Masks must be Long integers
+
+        optimizer.zero_grad()
+
+        outputs = model(images)
+
+        # Loss from main classifier
+        loss_main = criterion(outputs['out'], masks)
+        # Loss from auxiliary classifier (weighted 40% usually)
+        loss_aux = criterion(outputs['aux'], masks)
+
+        total_loss = loss_main + 0.4 * loss_aux
+
+        total_loss.backward()
+        optimizer.step()
+
+        running_loss += total_loss.item()
+
+    return running_loss / len(dataloader)
+
+def validation_metrics(model, dataloader, criterion, device, num_classes=5):
+    '''
+    Since we might try more than one model, this is returns consistent validations
+    This returns the IoU per classe, plus validation loss for the criterion of choice
+    '''
+    jaccard = JaccardIndex(task="multiclass", num_classes=num_classes-1,
+                           ignore_index=255, average='none').to(device)
+    val_loss = 0.0
+    model.eval()
+    with torch.no_grad():
+        for images, masks in dataloader:
+            images = images.to(device)
+            masks = masks.to(device).long()
+
+            outputs = model(images)['out'] # Shape: [B, 5, H, W]
+            preds = torch.argmax(outputs, dim=1) # Shape: [B, H, W]
+
+            # Update the metric state (accumulates intersection/union)
+            val_loss += criterion(outputs, masks).item()
+            jaccard.update(preds, masks)
+
+
+    # Compute final results
+    # iou_per_class will be a tensor of 5 values
+    iou_per_class = jaccard.compute()
+    jaccard.reset()
+    # Reset for next time
+
+    return iou_per_class, val_loss/len(dataloader)
 
 
 
-# m2020_train_ds = AI4Mars_DataSet(glb.m2020_nav_img_path,
-#                                  glb.m2020_nav_mask_path)
+# ==================================================================
+# TEST FUNCTIONS
+# ==================================================================
+def verify_dataset_integrity(dataset, minus_shape=-1):
+    #USED to check if the center cropping was working
+    print(f"Checking {len(dataset)} samples in the dataset...")
 
+    mismatch_found = False
 
-# idx = random.randint(0, len(m2020_train_ds)-1)
-# img, msk = m2020_train_ds[idx]
+    # Iterate through the entire dataset
+    for i in range(len(dataset)):
+        image, label = dataset[i]
 
-# #print(np.unique(msk))
-# plot_overlay_side(img, msk, alpha=0.3)
+        if image.shape[:minus_shape] != label.shape:
+            print(f"\n❌ Size Mismatch at index {i}!")
+            print(f"Image size: {image.shape} | Label size: {label.shape}")
+            mismatch_found = True
 
-# width = 1024
-# height = 1024
-
-# base_transform = A.Compose([
-#     A.Resize(height=height, width=width),
-#     A.ToGray(p=1.0),
-#     A.Normalize(mean=(0.5,), std=(0.5,)),
-#     ToTensorV2()
-# ])
-
-# aug_transform = A.Compose([
-#     A.Resize(height=height, width=width),
-#     A.ToGray(p=1.0),
-#     A.HorizontalFlip(p=0.5),
-#     A.CoarseDropout(
-#         min_holes=4,
-#         max_holes=12,
-#         max_height=20,
-#         max_width=20,
-#         min_height=10,
-#         min_width=10,
-#         fill_value=0,
-#         fill_mask=255,
-#         p=0.5
-
-#     ),
-#     A.RandomBrightnessContrast(p=0.2),
-#     A.Normalize(mean=(0.5,), std=(0.5,)),
-#     ToTensorV2()
-# ])
-
-# m2020_train_ds = AI4Mars_DataSet(glb.m2020_nav_img_path,
-#                                  glb.m2020_nav_mask_path, transform=aug_transform)
-
-# idx = random.randint(0, len(m2020_train_ds)-1)
-# img, msk = m2020_train_ds[10]
-
-# print(type(img))
-# print(type(msk))
-
-#print(np.unique(msk))
-#plot_overlay_side(img, msk, alpha=0.3)
-
-#img = tensor_to_numpy(img)
-#print(np.unique(msk))
-
-#plot_overlay_side(img, msk)
+    if not mismatch_found:
+        print("\n✅ Sanity Check Passed! All images and masks match perfectly.")
+    else:
+        print("\n⚠️ Sanity Check Failed. Review the errors above.")

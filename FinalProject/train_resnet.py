@@ -1,0 +1,151 @@
+from fp_data import *
+
+from torch.utils.data import Dataset, DataLoader, random_split
+import torch.nn as nn
+import torch
+from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
+
+
+
+#Here I'm training a deeplabv3 model
+
+
+
+def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
+    '''
+    This gets the model given some conditions
+    num_classes = 5 (4 classes + background)
+    classifier_lr -> Learning rate for the last layer of the NN
+    backbone_lr -> lr for the rest of the NN
+    If backbone_lr=0, we freeze the backbone
+
+    Returns the model + parameters that weren't frozen with their learning rates
+    '''
+
+    weights = DeepLabV3_ResNet50_Weights.DEFAULT
+    model = deeplabv3_resnet50(weights=weights)
+
+    model.classifier[4] = nn.Conv2d(256, num_classes, kernel_size=(1, 1))
+    if model.aux_classifier:
+        in_channels_aux = model.aux_classifier[4].in_channels
+        model.aux_classifier[4] = nn.Conv2d(in_channels_aux, num_classes, kernel_size=(1, 1))
+
+    params_to_optimize = []
+
+    if backbone_lr==0:
+        for param in model.backbone.parameters():
+            param.requires_grad = False
+    else:
+        for param in model.backbone.parameters():
+            param.requires_grad=True
+        params_to_optimize.append({"params":model.backbone.parameters(), "lr": backbone_lr})
+
+    for param in model.classifier.parameters():
+        param.requires_grad = True
+    params_to_optimize.append({"params": model.classifier.parameters(), "lr": classifier_lr})
+
+    if model.aux_classifier:
+        for param in model.aux_classifier.parameters():
+            param.requires_grad = True
+        params_to_optimize.append({"params": model.aux_classifier.parameters(),
+                                       "lr": classifier_lr})
+
+    return model, params_to_optimize
+
+def train_model(model, params, train_loader, val_loader, device, epochs=5):
+    #Executes the training loop
+
+    model.to(device)
+    optimizer = torch.optim.Adam(params)
+    criterion = nn.CrossEntropyLoss(ignore_index=255)
+
+    #miou_metric = MeanIoU(num_classes=5, per_class=True).to(device)
+
+    print(f"Starting train on {device} for {epochs} epochs")
+    for epoch in range(epochs):
+        model.train()
+        train_loss = train_one_epoch(model, train_loader, optimizer,
+                                     criterion, device)
+        # Validation
+        model.eval()
+
+        iou_per_class, val_loss = validation_metrics(model, val_loader, criterion, device)
+        class_names = ["Soil", "Bedrock", "Sand", "Big Rock", "Null"]
+
+        print(f"\n" + "="*40)
+        print(f"Train Loss in {epoch} epoch: {train_loss}")
+        print(f"Validation Loss in {epoch} epoch: {val_loss}")
+
+        for name, score in zip(class_names, iou_per_class):
+            print(f"{name} IoU: {score.item():.4f}")
+
+        print(f"Mean IoU: {iou_per_class[:4].mean().item():.4f}")
+
+
+    print("Training Complete!")
+
+
+#HYPERPARAMETERS
+width = 64
+height = 64
+train_split = 0.9
+batch_size = 16
+
+#Set Normalizization According to pretrained model
+mean=[0.485, 0.456, 0.406]
+std=[0.229, 0.224, 0.225]
+
+classifier_lr = 1e-3
+backbone_lr=0.0
+
+#Usual transforms for every image
+base_transform = A.Compose([
+    A.Resize(height=height, width=width),
+    A.ToGray(p=1.0),
+    A.Normalize(mean=mean, std=std),
+    ToTensorV2()
+])
+
+#usual Transforms + some agumentation options
+aug_transform = A.Compose([
+    A.Resize(height=height, width=width),
+    A.ToGray(p=1.0),
+    A.HorizontalFlip(p=0.5),
+    A.RandomBrightnessContrast(p=0.2),
+    A.CoarseDropout(
+        num_holes_range=(8,16),
+        hole_height_range=(10,20),
+        hole_width_range=(10,20),
+        fill=0,
+        fill_mask=255,
+        p=0.5
+    ),
+    A.Normalize(mean=mean, std=std),
+    ToTensorV2()
+])
+
+
+#We now get the model
+model, params = get_deeplabv3()
+
+
+#Load and split the data, notice I'm not passing any transform here
+dataset_m2020 = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path)
+
+train_size = int(train_split*len(dataset_m2020))
+val_size = len(dataset_m2020) - train_size
+
+train_subset, val_subset = random_split(dataset_m2020, [train_size, val_size],
+                                        generator = torch.Generator().manual_seed(17))
+
+#Given the subsets, that are just an index split, and then redefine
+#then as the subset datasets, with the appropriate transforms
+train_m2020 = AI4Mars_SubSet(train_subset, transform = aug_transform)
+val_m2020 = AI4Mars_SubSet(val_subset, transform = base_transform)
+
+train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, shuffle=True)
+val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False)
+
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=5)
