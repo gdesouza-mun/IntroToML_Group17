@@ -6,8 +6,10 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 from torch.utils.data import Dataset
+import torch.nn as nn
 import torch
 import torchvision.transforms.functional as TF
+import torch.nn.functional as F
 from torchmetrics.segmentation import MeanIoU
 from torchmetrics.classification import JaccardIndex
 
@@ -150,7 +152,7 @@ def plot_overlay_side(image, gray_mask, pallete=glb.pallet_nav):
 
 
 # ==================================================================
-# PATHS, LABEL DEFINITIONS AND VISUZALITION
+# DATASETS
 # ==================================================================
 class AI4Mars_DataSet(Dataset):
     '''
@@ -232,7 +234,8 @@ class AI4Mars_SubSet(Dataset):
 # ==================================================================
 # ASSESSMENT AND TRAINING
 # ==================================================================
-def train_one_epoch(model, dataloader, optimizer, criterion, device):
+def train_one_epoch(model, dataloader, optimizer, criterion, device,
+                    accumulation_steps=1):
     '''
     Runs one epoch of training given a dataloader and a model, returning
     the training loss for one epoch
@@ -240,16 +243,14 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device):
     model.train()
     running_loss = 0.0
     block=(device == torch.device("cuda"))
-    for images, masks in dataloader:
+    optimizer.zero_grad()
+    for i, (images, masks) in enumerate(dataloader):
 
         images = images.to(device, non_blocking=block)
         masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
 
-        optimizer.zero_grad()
-
         outputs = model(images)
 
-        # Loss from main classifier
         loss_main = criterion(outputs['out'], masks)
         # Loss from auxiliary classifier (weighted 40% usually)
         loss_aux = criterion(outputs['aux'], masks)
@@ -257,7 +258,10 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device):
         total_loss = loss_main + 0.4 * loss_aux
 
         total_loss.backward()
-        optimizer.step()
+
+        if (i+1)%accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad
 
         running_loss += total_loss.item()
 
@@ -268,7 +272,7 @@ def validation_metrics(model, dataloader, criterion, device, num_classes=5):
     Since we might try more than one model, this is returns consistent validations
     This returns the IoU per classe, plus validation loss for the criterion of choice
     '''
-    jaccard = JaccardIndex(task="multiclass", num_classes=num_classes-1,
+    jaccard = JaccardIndex(task="multiclass", num_classes=num_classes,
                            ignore_index=255, average='none').to(device)
     val_loss = 0.0
     model.eval()
@@ -281,8 +285,8 @@ def validation_metrics(model, dataloader, criterion, device, num_classes=5):
             preds = torch.argmax(outputs, dim=1) # Shape: [B, H, W]
 
             # Update the metric state (accumulates intersection/union)
-            val_loss += criterion(outputs, masks).item()
             jaccard.update(preds, masks)
+            val_loss+=criterion(outputs, masks)
 
 
     # Compute final results
@@ -292,7 +296,6 @@ def validation_metrics(model, dataloader, criterion, device, num_classes=5):
     # Reset for next time
 
     return iou_per_class, val_loss/len(dataloader)
-
 
 
 # ==================================================================

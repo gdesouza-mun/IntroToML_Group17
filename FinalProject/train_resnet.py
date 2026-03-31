@@ -4,6 +4,9 @@ from torch.utils.data import Dataset, DataLoader, random_split
 import torch.nn as nn
 import torch
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
+from torchmetrics.segmentation import DiceScore
+import torch.nn.functional as F
+
 import time
 
 import argparse
@@ -56,14 +59,34 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
 
     return model, params_to_optimize
 
+
+def loss_criterion(outputs, masks):
+
+    dice_crit = DiceScore(num_classes=4, include_background=True)
+
+    ce_crit = nn.CrossEntropyLoss()
+
+    clean_mask = masks.clone()
+    clean_mask[masks==255] = 4
+    mask_one_hot = F.one_hot(clean_mask, num_classes=5)
+
+    mask_one_hot = mask_one_hot[..., :4].permute(0,3,1,2).float()
+    clean_outputs = outputs[:,:4,:,:]
+
+    dice_loss = dice_crit(clean_outputs, mask_one_hot)
+    ce_loss = ce_crit(clean_outputs, mask_one_hot)
+
+    return dice_loss + ce_loss
+
 def train_model(model, params, train_loader, val_loader, device, epochs=5,
                 save=False, save_start=10, save_name="best_model.pth"):
     #Executes the training loop
 
     model.to(device)
     optimizer = torch.optim.Adam(params)
-    criterion = nn.CrossEntropyLoss(ignore_index=255)
-
+    #criterion = nn.CrossEntropyLoss(ignore_index=255)
+    #criterion = DiceScore(num_classes=5, include_background=True)
+    criterion = loss_criterion
     #miou_metric = MeanIoU(num_classes=5, per_class=True).to(device)
 
     best_miou=0.0
@@ -72,14 +95,14 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
         start_time = time.perf_counter()
         model.train()
         train_loss = train_one_epoch(model, train_loader, optimizer,
-                                     criterion, device)
+                                     criterion, device, accumulation_steps=accumulation_steps)
         end_time = time.perf_counter()
         duration = end_time - start_time
 
         # Validation
         model.eval()
 
-        iou_per_class, val_loss = validation_metrics(model, val_loader, criterion, device)
+        iou_per_class, val_loss = validation_metrics(model, val_loader,criterion,device)
         class_names = ["Soil", "Bedrock", "Sand", "Big Rock", "Null"]
 
         print(f"\n" + "="*40)
@@ -112,10 +135,11 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
 
 
 #HYPERPARAMETERS
-width = 512
-height = 512
+width = 128
+height = 128
 train_split = 0.9
-batch_size = 16
+batch_size = 8
+accumulation_steps = 8
 
 #Set Normalizization According to pretrained model
 mean=[0.485, 0.456, 0.406]
@@ -153,8 +177,8 @@ aug_transform = A.Compose([
 
 if __name__ == "__main__":
 
-    os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
-    os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
+    # os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
+    # os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
     parser = argparse.ArgumentParser(description="Is Slurm")
 
     parser.add_argument("--SLURM", action="store_true", help="Use SLURM Temporary Folder")
