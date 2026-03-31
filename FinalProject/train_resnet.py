@@ -6,9 +6,13 @@ import torch
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 import time
 
+import argparse
+
 
 #Here I'm training a deeplabv3 model
 
+#Add Grad Carry over for smaller batches in practice
+#Pre Train logic
 
 
 def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
@@ -92,7 +96,7 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
         # Checkpoint
         if current_miou >= best_miou:
             best_miou=current_miou
-            if save and epoch >= save_start and current_miou >= best_miou:
+            if save and epoch >= save_start:
                 checkpoint = {
                     'epoch': epoch+1,
                     'model_state_dict': model.state_dict(),
@@ -108,8 +112,8 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
 
 
 #HYPERPARAMETERS
-width = 64
-height = 64
+width = 512
+height = 512
 train_split = 0.9
 batch_size = 16
 
@@ -147,27 +151,44 @@ aug_transform = A.Compose([
 ])
 
 
-#We now get the model
-model, params = get_deeplabv3(backbone_lr=backbone_lr)
+if __name__ == "__main__":
+
+    os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
+    os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
+    parser = argparse.ArgumentParser(description="Is Slurm")
+
+    parser.add_argument("--SLURM", action="store_true", help="Use SLURM Temporary Folder")
+
+    args = parser.parse_args()
+
+    img_path, mask_path = get_m2020(IS_SLURM=args.SLURM)
+
+    #Load and split the data, notice I'm not passing any transform here
+    dataset_m2020 = AI4Mars_DataSet(img_path, mask_path)
+
+    #We now get the model
+    model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
 
-#Load and split the data, notice I'm not passing any transform here
-dataset_m2020 = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path)
 
-train_size = int(train_split*len(dataset_m2020))
-val_size = len(dataset_m2020) - train_size
+    train_size = int(train_split*len(dataset_m2020))
+    val_size = len(dataset_m2020) - train_size
 
-train_subset, val_subset = random_split(dataset_m2020, [train_size, val_size],
+    train_subset, val_subset = random_split(dataset_m2020, [train_size, val_size],
                                         generator = torch.Generator().manual_seed(17))
 
-#Given the subsets, that are just an index split, and then redefine
-#then as the subset datasets, with the appropriate transforms
-train_m2020 = AI4Mars_SubSet(train_subset, transform = aug_transform)
-val_m2020 = AI4Mars_SubSet(val_subset, transform = base_transform)
+    #Given the subsets, that are just an index split, and then redefine
+    #then as the subset datasets, with the appropriate transforms
+    train_m2020 = AI4Mars_SubSet(train_subset, transform = aug_transform)
+    val_m2020 = AI4Mars_SubSet(val_subset, transform = base_transform)
 
-train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, shuffle=True)
-val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False)
+    train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, shuffle=True,
+                                    pin_memory=True)
+    val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False,
+                                  pin_memory=True)
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=5)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=5,
+                save=True, save_start=2, save_name="best_modelv1_512.pth")

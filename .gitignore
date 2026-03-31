@@ -13,3 +13,4 @@ AI4MArs_Data/*
 *undo-tree*
 *slurm*
 ass_job.sh
+*.pth

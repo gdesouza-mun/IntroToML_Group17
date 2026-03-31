@@ -78,6 +78,23 @@ class glb:
         },
     }
 
+def get_m2020(IS_SLURM=False):
+    """
+    Adjusts M2020 navigation and mask paths based on SLURM environment.
+    """
+    # Define your base paths (assuming glb is accessible)
+    nav_path = glb.m2020_nav_img_path
+    mask_path = glb.m2020_nav_mask_path
+
+    if IS_SLURM:
+        # Get the temporary directory from environment variables
+        slurm_tmp = os.environ.get('SLURM_TMPDIR', '')
+
+        # Join the temp directory with the existing paths
+        nav_path = os.path.join(slurm_tmp, nav_path)
+        mask_path = os.path.join(slurm_tmp, mask_path)
+
+    return nav_path, mask_path
 
 def tensor_to_numpy(tensor, denormalize=True, mean=0.5, std=0.5):
     #Converts a tensor to NP array, useful sometimes for visualization
@@ -222,10 +239,11 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device):
     '''
     model.train()
     running_loss = 0.0
-
+    block=(device == torch.device("cuda"))
     for images, masks in dataloader:
-        images = images.to(device)
-        masks = masks.to(device).long() # Masks must be Long integers
+
+        images = images.to(device, non_blocking=block)
+        masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
 
         optimizer.zero_grad()
 
