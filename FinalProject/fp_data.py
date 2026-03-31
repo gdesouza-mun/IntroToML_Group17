@@ -38,6 +38,13 @@ class glb:
     m2020_nav_img_path="AI4Mars_Data/m2020_nav/img"
     m2020_nav_mask_path="AI4Mars_Data/m2020_nav/labels"
 
+    msl_nav_img_path_train="AI4Mars_Data/msl_nav/img_train"
+    msl_nav_mask_path_train="AI4Mars_Data/msl_nav/labels_train"
+
+    msl_nav_img_path_test="AI4Mars_Data/msl_nav/img_test"
+    msl_nav_mask_path_test="AI4Mars_Data/msl_nav/labels_test"
+
+
     #and here isn't msl path - I'll evetually add it
     #My plan is to pre train our models on the msl dataset
     #and see if that helps
@@ -82,11 +89,48 @@ class glb:
 
 def get_m2020(IS_SLURM=False):
     """
-    Adjusts M2020 navigation and mask paths based on SLURM environment.
+    Adjusts M2020 navigation and mask paths based on SLURM environment
+    that I use to run the training jobs
     """
     # Define your base paths (assuming glb is accessible)
     nav_path = glb.m2020_nav_img_path
     mask_path = glb.m2020_nav_mask_path
+
+    if IS_SLURM:
+        # Get the temporary directory from environment variables
+        slurm_tmp = os.environ.get('SLURM_TMPDIR', '')
+
+        # Join the temp directory with the existing paths
+        nav_path = os.path.join(slurm_tmp, nav_path)
+        mask_path = os.path.join(slurm_tmp, mask_path)
+
+    return nav_path, mask_path
+
+def get_msl_train(IS_SLURM=False):
+    """
+    Adjusts M2020 navigation and mask paths based on SLURM environment.
+    """
+    # Define your base paths (assuming glb is accessible)
+    nav_path = glb.msl_nav_img_path_train
+    mask_path = glb.msl_nav_mask_path_train
+
+    if IS_SLURM:
+        # Get the temporary directory from environment variables
+        slurm_tmp = os.environ.get('SLURM_TMPDIR', '')
+
+        # Join the temp directory with the existing paths
+        nav_path = os.path.join(slurm_tmp, nav_path)
+        mask_path = os.path.join(slurm_tmp, mask_path)
+
+    return nav_path, mask_path
+
+def get_msl_test(IS_SLURM=False):
+    """
+    Adjusts M2020 navigation and mask paths based on SLURM environment.
+    """
+    # Define your base paths (assuming glb is accessible)
+    nav_path = glb.msl_nav_img_path_test
+    mask_path = glb.msl_nav_mask_path_test
 
     if IS_SLURM:
         # Get the temporary directory from environment variables

@@ -145,7 +145,7 @@ accumulation_steps = 8
 mean=[0.485, 0.456, 0.406]
 std=[0.229, 0.224, 0.225]
 
-classifier_lr = 1e-3
+classifier_lr = 5e-4
 backbone_lr=1e-5
 
 #Usual transforms for every image
