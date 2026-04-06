@@ -225,7 +225,7 @@ def train_model(epochs=30, save=False, final=True):
     scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=1e-2,
                                           steps_per_epoch=len(train_loader),
                                           epochs=epochs)
-
+    best_acc=0
     for epoch in range(epochs):
         train_loss, train_acc = train_one_epoch(model, train_loader,
                                                 optimizer, criterion,
@@ -241,7 +241,17 @@ def train_model(epochs=30, save=False, final=True):
                 _, predicted = outputs.max(1)
                 val_correct += predicted.eq(target).sum().item()
         val_acc = val_correct/len(test_dataset)
+        if val_acc > best_acc:
+            best_acc=val_acc
+            if save and epoch>10:
+                save_state={
+                    'state_dict' : model.state_dict(),
+                    'epoch' : epoch
+                }
+                torch.save(save_state, "Q5_best.pth")
+                print(F"New best model with accuracy = {val_acc:.4f} at epoch {epoch}")
 
-        print(f"Epoch {epoch}: Train Acc: {train_acc:.4f}% | Val Acc: {val_acc:.4f}%")
 
-train_model(epochs=50, final=False)
+        print(f"Epoch {epoch}: Train Acc: {train_acc:.4f}% | Val Acc: {val_acc:.4f}")
+
+train_model(epochs=50, save=True , final=False)

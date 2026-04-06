@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 
@@ -439,9 +440,10 @@ def Q4_results():
     X_test_tensor = torch.tensor(x_test_vec, dtype=torch.float32)/255.0
 
     #And I load the best model to get the predictions for the assessment
-    saved_parameters = torch.load('Q4_results.pth')
+    saved_parameters = torch.load('Models/Q4_results.pth')
     saved_model = DynamicMLP(L=saved_parameters['L'],
                              K=saved_parameters['K'])
+    print(f"Loading trained model with L={saved_parameters['L']} and K={saved_parameters['K']}")
     saved_model.load_state_dict(saved_parameters['state_dict'])
     saved_model.eval()
 
@@ -453,15 +455,91 @@ def Q4_results():
     error_rate(y_pred, y_test, "Best MLP Model")
 
 
+
+
+####################################################################################
+# Question 5
+####################################################################################
+
+class SmallCNN(nn.Module):
+    '''
+    This is a small convolutional neural network, that will
+    make predictions based on 28x28 images as input.
+    '''
+    def __init__(self, num_classes=10):
+        super(SmallCNN, self).__init__()
+        #First layer - Apply a 3x3 convolution going from 1 to 32 channels
+        #So now, instead of 1,28x28 our data becomes 32x28,28
+
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        #Batch norm just makes sure the parameters don't explode
+        self.bn1 = nn.BatchNorm2d(32)
+
+        #Same thing, but going from 32 to 64 channels
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+
+        #Max pools(2,2) for each 4 pixel, it picks the max pixel, reducing the size
+        #Now our image is 64 channels and 7x7
+        self.pool = nn.MaxPool2d(2, 2)
+
+        #Randomly sets 0.3 parameters to 0, so the network learns alternate paths
+        self.dropout1 = nn.Dropout2d(0.3)
+
+        #We pass through two linear layes to reduce from 64x7x7 to 10 labels
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.dropout2 = nn.Dropout(0.5)
+        self.fc2 = nn.Linear(128, num_classes)
+
+    def forward(self, x):
+        #We just call the network in order relu-ing where necessary
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = self.dropout1(x)
+        x = x.view(-1, 64 * 7 * 7)
+        x = F.relu(self.fc1(x))
+        x = self.dropout2(x)
+        x = self.fc2(x)
+        return x
+
+
+def classifyHandwrittenDigits(Xtest, data_dir, model_path="Models/Q5_best.pth"):
+    mean=0.1307
+    std=0.3081
+
+    Xtest_tensor = torch.from_numpy(Xtest.astype(np.float32)/255.0).unsqueeze(1)
+
+    x_normalized = (Xtest_tensor - mean)/std
+
+    saved_parameters=torch.load(model_path)
+    model=SmallCNN()
+    model.load_state_dict(saved_parameters['state_dict'])
+
+    output = model(Xtest_tensor)
+
+    y = torch.argmax(output, dim=1)
+
+    return y
+
+
+
+
+
+
 #########################################################################################
 # Calls to generate the results
 #########################################################################################
-#if __name__=="__main__":
-#     print("====== Q1_results() =========")
-#     Q1_results()
-#     print("====== Q2_results() =========")
-#     Q2_results()
-#     print("====== Q3_results() =========")
-#     Q3_results()
-#     print("====== Q4_results() =========")
-#     Q4_results()
+if __name__=="__main__":
+    print("====== Q1_results() =========")
+    Q1_results()
+    print("====== Q2_results() =========")
+    Q2_results()
+    print("====== Q3_results() =========")
+    Q3_results()
+    print("====== Q4_results() =========")
+    Q4_results()
+    try:
+        print("Trying to call classifyHandwrittenDigits")
+        ytest = classifyHandwrittenDigits(Xtest, data_dir)
+    except:
+        print("Arguments for classifyHandwrittenDigits undefined")
