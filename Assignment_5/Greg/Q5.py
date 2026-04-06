@@ -1,4 +1,4 @@
-from assign5 import load_data, error_rate
+from assign_5_group_17 import load_data, error_rate, SmallCNN, ResNetSmall
 import numpy as np
 import matplotlib.pyplot as plt
 import random
@@ -116,50 +116,6 @@ class AugmentedMNIST(Dataset):
 
         return img_tensor, label_tensor
 
-
-
-class SmallCNN(nn.Module):
-    '''
-    This is a small convolutional neural network, that will
-    make predictions based on 28x28 images as input.
-    '''
-    def __init__(self, num_classes=10):
-        super(SmallCNN, self).__init__()
-        #First layer - Apply a 3x3 convolution going from 1 to 32 channels
-        #So now, instead of 1,28x28 our data becomes 32x28,28
-
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
-        #Batch norm just makes sure the parameters don't explode
-        self.bn1 = nn.BatchNorm2d(32)
-
-        #Same thing, but going from 32 to 64 channels
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2d(64)
-
-        #Max pools(2,2) for each 4 pixel, it picks the max pixel, reducing the size
-        #Now our image is 64 channels and 7x7
-        self.pool = nn.MaxPool2d(2, 2)
-
-        #Randomly sets 0.3 parameters to 0, so the network learns alternate paths
-        self.dropout1 = nn.Dropout2d(0.3)
-
-        #We pass through two linear layes to reduce from 64x7x7 to 10 labels
-        self.fc1 = nn.Linear(64 * 7 * 7, 128)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc2 = nn.Linear(128, num_classes)
-
-    def forward(self, x):
-        #We just call the network in order relu-ing where necessary
-        x = self.pool(F.relu(self.bn1(self.conv1(x))))
-        x = self.pool(F.relu(self.bn2(self.conv2(x))))
-        x = self.dropout1(x)
-        x = x.view(-1, 64 * 7 * 7)
-        x = F.relu(self.fc1(x))
-        x = self.dropout2(x)
-        x = self.fc2(x)
-        return x
-
-
 def train_one_epoch(model, loader, optimizer, criterion, scheduler, device):
     #For one epoc
 
@@ -203,6 +159,7 @@ def train_model(epochs=30, save=False, final=True):
     X_train, y_train, X_test, y_test = load_data("data")
 
     model = SmallCNN()
+    #model = ResNetSmall()
     model = model.to(device)
 
     if final:
@@ -213,7 +170,7 @@ def train_model(epochs=30, save=False, final=True):
     train_dataset = AugmentedMNIST(X, y_train, True)
     test_dataset = AugmentedMNIST(X_test, y_test, False)
 
-    batch_size=64
+    batch_size=128
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size,
                               shuffle=True)

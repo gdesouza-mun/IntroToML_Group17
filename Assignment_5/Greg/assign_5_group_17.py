@@ -382,10 +382,10 @@ def Q4_explore(save=False, assess=False):
     # }
 
     param_grid = {
-        'L': [7, 15],
+        'L': [6,7,15,16],
         'K': [512, 784, 1024],
-        'batch_size': [64],
-        'lr': [5e-4]
+        'batch_size': [32,64],
+        'lr': [1e-3, 5e-4, 1e-4]
     }
 
 
@@ -460,7 +460,6 @@ def Q4_results():
 ####################################################################################
 # Question 5
 ####################################################################################
-
 class SmallCNN(nn.Module):
     '''
     This is a small convolutional neural network, that will
@@ -468,40 +467,46 @@ class SmallCNN(nn.Module):
     '''
     def __init__(self, num_classes=10):
         super(SmallCNN, self).__init__()
-        #First layer - Apply a 3x3 convolution going from 1 to 32 channels
-        #So now, instead of 1,28x28 our data becomes 32x28,28
 
+        # Layer 1: 1 -> 32 (Input: 28x28)
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
-        #Batch norm just makes sure the parameters don't explode
         self.bn1 = nn.BatchNorm2d(32)
 
-        #Same thing, but going from 32 to 64 channels
+        # Layer 2: 32 -> 64
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(64)
 
-        #Max pools(2,2) for each 4 pixel, it picks the max pixel, reducing the size
-        #Now our image is 64 channels and 7x7
-        self.pool = nn.MaxPool2d(2, 2)
+        # Layer 3: 64 -> 128
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
 
-        #Randomly sets 0.3 parameters to 0, so the network learns alternate paths
+        # Layer 4: 128 -> 128 (New)
+        self.conv4 = nn.Conv2d(128, 128, kernel_size=3, padding=1)
+        self.bn4 = nn.BatchNorm2d(128)
+
+        self.pool = nn.MaxPool2d(2, 2)
         self.dropout1 = nn.Dropout2d(0.3)
 
-        #We pass through two linear layes to reduce from 64x7x7 to 10 labels
-        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        # Dimension Math:
+        # Start: 28x28
+        # Pool 1 (after conv2): 14x14
+        # Pool 2 (after conv4): 7x7
+        # Final shape: 128 channels * 7 * 7
+        self.fc1 = nn.Linear(128 * 7 * 7, 256)
         self.dropout2 = nn.Dropout(0.5)
-        self.fc2 = nn.Linear(128, num_classes)
+        self.fc2 = nn.Linear(256, num_classes)
 
     def forward(self, x):
-        #We just call the network in order relu-ing where necessary
-        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = F.relu(self.bn1(self.conv1(x)))
         x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = F.relu(self.bn3(self.conv3(x)))
+        x = self.pool(F.relu(self.bn4(self.conv4(x))))
         x = self.dropout1(x)
-        x = x.view(-1, 64 * 7 * 7)
+        x = x.view(-1, 128 * 7 * 7)
         x = F.relu(self.fc1(x))
         x = self.dropout2(x)
         x = self.fc2(x)
         return x
-
 
 def classifyHandwrittenDigits(Xtest, data_dir, model_path="Models/Q5_best.pth"):
     mean=0.1307
