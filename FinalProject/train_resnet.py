@@ -84,9 +84,9 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
     #Executes the training loop
 
     model.to(device)
-    optimizer = torch.optim.Adam(params)
-    #criterion = nn.CrossEntropyLoss(ignore_index=255)
-    #criterion = DiceScore(num_classes=5, include_background=True)
+    #optimizer = torch.optim.Adam(params)
+    optimizer = torch.optim.SGD(params, momentum=0.9, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.PolynomialLR(optimizer, total_iters=epochs, power=0.9)
     criterion = loss_criterion
     #miou_metric = MeanIoU(num_classes=5, per_class=True).to(device)
 
@@ -97,6 +97,7 @@ def train_model(model, params, train_loader, val_loader, device, epochs=5,
         model.train()
         train_loss = train_one_epoch(model, train_loader, optimizer,
                                      criterion, device, accumulation_steps=accumulation_steps)
+        scheduler.step()
         end_time = time.perf_counter()
         duration = end_time - start_time
 
