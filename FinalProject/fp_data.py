@@ -5,7 +5,7 @@ import numpy as np
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, WeightedRandomSampler
 import torch.nn as nn
 import torch
 import torchvision.transforms.functional as TF
@@ -16,7 +16,6 @@ from torchmetrics.classification import JaccardIndex
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
-from tqdm import tqdm # Recommended for a nice progress bar
 
 
 import random
@@ -274,6 +273,23 @@ class AI4Mars_SubSet(Dataset):
 
         return image, mask
 
+def get_sampler(subset, weight=5.0):
+    minority_class = 3
+    sample_weights = []
+
+    for idx in range(len(subset)):
+        _, mask = subset[idx]
+
+        if (mask == minority_class).any():
+            sample_weights.append(weight)
+        else:
+            sample_weights.append(1.0)
+
+    sampler = WeightedRandomSampler(weights=sample_weights,
+                                    num_samples = len(sample_weights),
+                                    replacement=True)
+    return sampler
+
 
 # ==================================================================
 # ASSESSMENT AND TRAINING
@@ -292,7 +308,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
 
         images = images.to(device, non_blocking=block)
         masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
-
+        #print(images.shape)
         outputs = model(images)
 
         loss_main = criterion(outputs['out'], masks)

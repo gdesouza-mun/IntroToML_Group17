@@ -12,10 +12,10 @@ import time
 import argparse
 
 
-#Here I'm training a deeplabv3 model
-
-#Add Grad Carry over for smaller batches in practice
-#Pre Train logic
+#Implemente Scheduler
+#Implemente balanced loader
+#Implemente multi runs through slurm
+# Run for 2 Days and read lit review in the meanwhile
 
 
 def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
@@ -62,9 +62,10 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
 
 def loss_criterion(outputs, masks):
 
-    dice_crit = DiceScore(num_classes=4, include_background=True)
+    dice_crit = DiceScore(num_classes=4, include_background=True, average='macro')
 
-    ce_crit = nn.CrossEntropyLoss()
+    class_weights = torch.tensor([1.0, 2.0, 2.0, 15.0]).cuda()
+    ce_crit = nn.CrossEntropyLoss(weight=class_weights)
 
     clean_mask = masks.clone()
     clean_mask[masks==255] = 4
@@ -161,6 +162,7 @@ aug_transform = A.Compose([
     A.Resize(height=height, width=width),
     A.ToGray(p=1.0),
     A.HorizontalFlip(p=0.5),
+    A.Rotate(limit=20, interpolation=1, border_mode=0, fill=0, fill_mask=255),
     A.RandomBrightnessContrast(p=0.2),
     A.CoarseDropout(
         num_holes_range=(8,16),
@@ -193,7 +195,9 @@ if __name__ == "__main__":
     #We now get the model
     model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
-
+    pretrained_path = "models/pretrainv2.pth"
+    saved_parameters = torch.load(pretrained_path)
+    model.load_state_dict(saved_parameters['model_state_dict'])
 
     train_size = int(train_split*len(dataset_m2020))
     val_size = len(dataset_m2020) - train_size
@@ -206,13 +210,13 @@ if __name__ == "__main__":
     train_m2020 = AI4Mars_SubSet(train_subset, transform = aug_transform)
     val_m2020 = AI4Mars_SubSet(val_subset, transform = base_transform)
 
-    train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, shuffle=True,
-                                    pin_memory=True)
+    sampler = get_sampler(train_m2020)
+    train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, sampler=sampler)
     val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False,
                                   pin_memory=True)
 
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=5,
-                save=True, save_start=2, save_name="best_modelv1_512.pth")
+    train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=30,
+                save=True, save_start=10, save_name="best_model_128.pth")
