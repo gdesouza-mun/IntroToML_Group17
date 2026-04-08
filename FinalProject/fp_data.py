@@ -141,57 +141,6 @@ def get_msl_test(IS_SLURM=False):
 
     return nav_path, mask_path
 
-def tensor_to_numpy(tensor, denormalize=True, mean=0.5, std=0.5):
-    #Converts a tensor to NP array, useful sometimes for visualization
-    #Might not work with mean defined per channel
-    #used this mostly to test other stuff
-    img = tensor.detach().cpu().numpy()
-
-    img = img.transpose(1,2,0)
-
-    if denormalize:
-        img = (img*std)+mean
-
-    img = np.clip(img, 0, 1)
-
-    #img = (img*255).astype(np.uint8)
-
-    return img
-
-
-
-def mask_to_rgb(mask, pallete=glb.pallet_nav):
-    #Given a mask in grayscale, turns it into an rgb mask according to our pallete
-    h, w = mask.shape
-    rgb_mask = np.zeros((h,w,3))
-
-    for label, color in pallete.items():
-        rgb_mask[mask == label] = color
-
-    return rgb_mask
-
-
-def plot_overlay_side(image, gray_mask, pallete=glb.pallet_nav):
-    #Plots an image an a mask side by side
-    rgb_mask = mask_to_rgb(gray_mask, pallete)
-
-    overlay = image.copy()
-
-    overlay = rgb_mask
-
-    # 4. Plot Side-by-Side
-    fig, axes = plt.subplots(1, 2, figsize=(14, 7))
-
-    axes[0].imshow(image)
-    axes[0].set_title("Original Image")
-    axes[0].axis('off')
-
-    axes[1].imshow(overlay.astype(np.uint8))
-    axes[1].set_title(f"Mask")
-    axes[1].axis('off')
-
-    plt.tight_layout()
-    plt.show()
 
 
 # ==================================================================

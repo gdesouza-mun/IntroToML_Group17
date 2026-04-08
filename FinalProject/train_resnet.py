@@ -154,7 +154,7 @@ backbone_lr=1e-5
 base_transform = A.Compose([
     A.Resize(height=height, width=width),
     A.ToGray(p=1.0),
-    A.Normalize(mean=mean, std=std),
+    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, normalization="min_max"),
     ToTensorV2()
 ])
 
@@ -173,7 +173,7 @@ aug_transform = A.Compose([
         fill_mask=255,
         p=0.5
     ),
-    A.Normalize(mean=mean, std=std),
+    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, p=1.0, normalization="min_max"),
     ToTensorV2()
 ])
 
