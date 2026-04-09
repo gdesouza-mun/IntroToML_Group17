@@ -37,16 +37,17 @@ class glb:
     m2020_nav_img_path="AI4Mars_Data/m2020_nav/img"
     m2020_nav_mask_path="AI4Mars_Data/m2020_nav/labels"
 
+    #And here are the two folders of the msl dataset I'm using to
+    #pretrain the models
     msl_nav_img_path_train="AI4Mars_Data/msl_nav/img_train"
     msl_nav_mask_path_train="AI4Mars_Data/msl_nav/labels_train"
 
     msl_nav_img_path_test="AI4Mars_Data/msl_nav/img_test"
     msl_nav_mask_path_test="AI4Mars_Data/msl_nav/labels_test"
 
-
-    #and here isn't msl path - I'll evetually add it
-    #My plan is to pre train our models on the msl dataset
-    #and see if that helps
+    #The relative abundance of each glass in the m2020 that I use for
+    #Reference of the weights in the loss functions
+    relative_abundance = np.array([0.5246, 0.2875, 0.1563, 0.0316])
 
     #Standard pallete for the mask used in articles from the lit review
     pallet_nav={
@@ -223,6 +224,10 @@ class AI4Mars_SubSet(Dataset):
         return image, mask
 
 def get_sampler(subset, weight=5.0):
+    '''
+    gets a weighted sampler with higher likelihood of
+    picking images with the least represented class (big rocks)
+    '''
     minority_class = 3
     sample_weights = []
 
@@ -249,6 +254,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
     Runs one epoch of training given a dataloader and a model, returning
     the training loss for one epoch
     '''
+
     model.train()
     running_loss = 0.0
     block=(device == torch.device("cuda"))
@@ -257,18 +263,21 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
 
         images = images.to(device, non_blocking=True)
         masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
-        # print(images.shape)
-        # print(masks.shape)
         outputs = model(images)
 
         loss_main = criterion(outputs['out'], masks)
         # Loss from auxiliary classifier (weighted 40% usually)
         loss_aux = criterion(outputs['aux'], masks)
 
-        total_loss = loss_main + 0.4 * loss_aux
+        #I'm accumulating
+        total_loss = (loss_main + 0.4 * loss_aux)/accumulation_steps
 
         total_loss.backward()
 
+        #When loading large images, the batches have to be smaller
+        #otherwise I can't compute
+        #So I only zero grad after a couple of batches to increase the effective loss
+        #size
         if (i+1)%accumulation_steps == 0:
             optimizer.step()
             optimizer.zero_grad
@@ -279,6 +288,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
 
 def validation_metrics(model, dataloader, criterion, device, num_classes=5):
     '''
+    I'LL SUBSTITUTE THIS FOR A BETTER FUNCTION THAT MAKES A HISTORY OF THE TRAINING
     Since we might try more than one model, this is returns consistent validations
     This returns the IoU per classe, plus validation loss for the criterion of choice
     '''

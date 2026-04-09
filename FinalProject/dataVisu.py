@@ -68,6 +68,10 @@ def compute_class_abundance(folder_path, num_images=None):
 
     return abundance
 
+abd = compute_class_abundance(glb.m2020_nav_mask_path)
+
+print(abd)
+
 def plot_abundance(abundance_dict):
     """
     Creates a pie chart with a clean legend containing percentages.
@@ -193,14 +197,14 @@ def create_grid_example(image_list, mask_list):
 
 
 
-from train_resnet import base_transform
+# from train_resnet import base_transform
 
-m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
+# m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
 
-#m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path)
-img, mask = m2020_dataset[15]
+# #m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path)
+# img, mask = m2020_dataset[15]
 
-print(torch.max(img))
+# print(torch.max(img))
 #print(np.max(img))
 
 # mask = mask_to_rgb(mask)

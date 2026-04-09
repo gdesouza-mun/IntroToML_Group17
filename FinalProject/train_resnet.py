@@ -61,7 +61,7 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
 
 
 def loss_criterion(outputs, masks):
-
+    #i'll change this
     dice_crit = DiceScore(num_classes=4, include_background=True, average='macro')
 
     class_weights = torch.tensor([1.0, 2.0, 2.0, 15.0]).cuda()
@@ -154,7 +154,7 @@ backbone_lr=1e-5
 base_transform = A.Compose([
     A.Resize(height=height, width=width),
     A.ToGray(p=1.0),
-    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, normalization="min_max"),
+    A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
     ToTensorV2()
 ])
 
@@ -173,7 +173,7 @@ aug_transform = A.Compose([
         fill_mask=255,
         p=0.5
     ),
-    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, p=1.0, normalization="min_max"),
+    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, p=1.0),
     ToTensorV2()
 ])
 
