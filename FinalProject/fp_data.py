@@ -255,9 +255,10 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
     optimizer.zero_grad()
     for i, (images, masks) in enumerate(dataloader):
 
-        images = images.to(device, non_blocking=block)
+        images = images.to(device, non_blocking=True)
         masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
-        #print(images.shape)
+        # print(images.shape)
+        # print(masks.shape)
         outputs = model(images)
 
         loss_main = criterion(outputs['out'], masks)
