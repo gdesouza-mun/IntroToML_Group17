@@ -1,13 +1,13 @@
 from fp_data import get_m2020, AI4Mars_DataSet, glb
 
 import numpy as np
-from train_resnet import get_deeplabv3
+import pandas as pd
 
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 from torchmetrics.segmentation import MeanIoU, DiceScore
-from torchmetrics.classification import JaccardIndex
+from torchmetrics.classification import MulticlassJaccardIndex, MulticlassAccuracy, MulticlassRecall
 
 import torch.nn as nn
 import torch
@@ -18,6 +18,11 @@ from torch.utils.data import Dataset, DataLoader, random_split, ConcatDataset
 '''
 This files contain classes to use as loss functions
 '''
+
+#=============================================
+# LOSS FUNCTIONS
+#=============================================
+
 class abundance_weighted_CE_loss(nn.Module):
     '''
     Given the relative abundance of the classes (from 0 to 1)
@@ -58,17 +63,12 @@ class dice_loss(nn.Module):
         self.average=average
         self.num_true_classes = num_classes-1
 
-        if relative_abundance is None:
-            self.weights=None
+        if relative_abundance is not None:
+            weights_tensor = torch.tensor([1/a for a in glb.relative_abundance]).float()
+            self.register_buffer('weights', weights_tensor)
+
         else:
-            self.weights = np.zeros(len(glb.relative_abundance))
-            for i in range(len(glb.relative_abundance)):
-                self.weights[i] = 1/glb.relative_abundance[i]
-
-
-        self.score = DiceScore(self.num_true_classes, include_background=True,
-                               average=self.average)
-
+            self.weights = None
 
     def process_masks(self, masks):
         '''
@@ -94,6 +94,7 @@ class dice_loss(nn.Module):
 
     def process_outputs(self, outputs):
         #I manually drop the background layer
+        clean_outputs = outputs.clone()
         clean_outputs = outputs[:,:self.num_true_classes,:,:]
 
         return clean_outputs
@@ -104,7 +105,12 @@ class dice_loss(nn.Module):
         final_outputs = self.process_outputs(outputs)
 
         #Given the clean outputs, I call DiceScore on them
-        score=self.score(final_outputs, final_masks)
+        # 2. IMPORTANT: Convert logits to probabilities using Softmax
+        # This keeps the gradient 'alive'
+        preds = torch.softmax(final_outputs, dim=1)
+        #Implement Dice Loss Here
+
+        #IMPLEMENT DICE LOSS
 
         #if average is none, the output is an array for the dice score
         #of each class
@@ -114,18 +120,17 @@ class dice_loss(nn.Module):
 
             #If I have weights, I manually take the weighted mean
             if self.weights is not None:
-                weighted_loss = np.zeros(len(per_class_loss))
-
-                for i in range(len(per_class_loss)):
-                    weighted_loss[i] = per_class_loss[i] * self.weights[i]
-
-                return torch.tensor(weighted_loss.sum()/self.weights.sum()).float()
+                self.weights.to(outputs.device)
+                numerator = (per_class_loss*self.weights).sum()
+                denominator = self.weights.sum()
+                loss=numerator/denominator
+                return loss
 
             #Otherwise I return the regular mean
             return per_class_loss.mean()
 
         #If other average argument, I just take the DiceLoss as 1 - DiceScore
-        return (1-self.score(final_outputs, final_masks))
+        return (1-score.mean())
 
 class log_cosh_dice_loss(dice_loss):
     '''
@@ -144,46 +149,187 @@ class log_cosh_dice_loss(dice_loss):
         return torch.log(torch.cosh(loss_value))
 
 
-def tester():
-    img_path, mask_path = get_m2020()
-    #Usual transforms for every image
+#=============================================
+# ASSESSMENT FUNCTIONS
+#=============================================
+def get_pixel_accuracy(preds, masks, device=torch.device("cpu"),
+                       assess_name=True):
 
-    mean=[0.485, 0.456, 0.406]
-    std=[0.229, 0.224, 0.225]
+    metric = MulticlassAccuracy(
+        num_classes=len(glb.class_names),
+        average=None,
+        ignore_index=255
+        ).to(device)
 
-    base_transform = A.Compose([
-        A.Resize(height=128, width=128),
-        A.ToGray(p=1.0),
-        A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
-        ToTensorV2()
-    ])
-    #Load and split the data, notice I'm not passing any transform here
-    dataset_m2020 = AI4Mars_DataSet(img_path, mask_path, transform=base_transform)
-    loader = DataLoader(dataset_m2020, batch_size=8)
+    acc_per_class = metric(preds, masks)
 
-    model, params = get_deeplabv3()
-    pretrained_path = "models/pretrainv2.pth"
-    saved_parameters = torch.load(pretrained_path)
-    model.load_state_dict(saved_parameters['model_state_dict'])
+    results = {name: acc.item() for name, acc in zip(glb.class_names, acc_per_class)}
+    results["mean"] = acc_per_class.mean().item()
+    if assess_name:
+        results["assessment"] = "accuracy"
 
-    images, masks = next(iter(loader))
+    return results
 
+def get_pixel_recall(preds, masks, device=torch.device("cpu"),
+                       assess_name=True):
+
+    metric = MulticlassRecall(
+        num_classes=len(glb.class_names),
+        average=None,
+        ignore_index=255
+        ).to(device)
+
+    acc_per_class = metric(preds, masks)
+
+    results = {name: acc.item() for name, acc in zip(glb.class_names, acc_per_class)}
+    results["mean"] = acc_per_class.mean().item()
+    if assess_name:
+        results["assessment"] = "recall"
+
+    return results
+
+def get_IoU(preds, masks, device=torch.device("cpu"),
+                       assess_name=True):
+
+    metric = MulticlassJaccardIndex(
+        num_classes=len(glb.class_names),
+        average=None,
+        ignore_index=255
+        ).to(device)
+
+    acc_per_class = metric(preds, masks)
+
+    results = {name: acc.item() for name, acc in zip(glb.class_names, acc_per_class)}
+    results["mean"] = acc_per_class.mean().item()
+    if assess_name:
+        results["assessment"] = "IoU"
+
+    return results
+
+def validate_model(model, val_loader, device=torch.device("cpu")):
+    num_classes = len(glb.class_names)
+    acc_metric = MulticlassAccuracy(num_classes=num_classes, average=None,
+                                    ignore_index=255).to(device)
+    rec_metric = MulticlassRecall(num_classes=num_classes, average=None,
+                                    ignore_index=255).to(device)
+    iou_metric = MulticlassJaccardIndex(num_classes=num_classes, average=None,
+                                    ignore_index=255).to(device)
+    model.to(device)
     model.eval()
     with torch.no_grad():
-        outputs = model(images)
+        for batch_idx, (images, masks) in enumerate(val_loader):
+            images, masks = images.to(device), masks.to(device)
 
-        aux_out = outputs['aux']
-        main_out = outputs['out']
+            # Forward pass
+            outputs = model(images) # Shape [B, 5, H, W]
+            preds = torch.argmax(outputs['out'], dim=1)
 
-        print(f"output shape: {main_out.shape}")
-        print(f"masks shape: {masks.shape}")
+            # 2. Update metrics (this accumulates stats internally)
+            acc_metric.update(preds, masks)
+            rec_metric.update(preds, masks)
+            iou_metric.update(preds, masks)
+
+    # 3. Compute final values for the whole epoch
+    # These return tensors of shape [num_classes]
+    final_acc = acc_metric.compute()
+    final_rec = rec_metric.compute()
+    final_iou = iou_metric.compute()
+    metrics_list = []
+    for values, name in zip([final_acc, final_rec, final_iou], ["Accuracy", "Recall", "IoU"]):
+        row = {glb.class_names[i]: values[i].item() for i in range(num_classes)}
+        row["mean"] = values.mean().item()
+        row["assessment"] = name
+        metrics_list.append(row)
+
+    acc_metric.reset()
+    rec_metric.reset()
+    iou_metric.reset()
+
+    return pd.DataFrame(metrics_list).set_index("assessment")
+
+
+
+# def tester():
+#     img_path, mask_path = get_m2020()
+#     #Usual transforms for every image
+
+#     mean=[0.485, 0.456, 0.406]
+#     std=[0.229, 0.224, 0.225]
+
+#     base_transform = A.Compose([
+#         A.Resize(height=128, width=128),
+#         A.ToGray(p=1.0),
+#         A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
+#         ToTensorV2()
+#     ])
+#     #Load and split the data, notice I'm not passing any transform here
+#     dataset_m2020 = AI4Mars_DataSet(img_path, mask_path, transform=base_transform)
+#     loader = DataLoader(dataset_m2020, batch_size=8)
+
+#     model, params = get_deeplabv3()
+#     pretrained_path = "models/pretrainv2.pth"
+#     saved_parameters = torch.load(pretrained_path)
+#     model.load_state_dict(saved_parameters['model_state_dict'])
+
+#     device = torch.device("cuda")
+
+#     pd1 = validate_model(model, loader, device)
+#     print(pd1.round(4))
+#     pd1["epoch"]=0
+#     pd2 = validate_model(model, loader, device)
+#     pd2["epoch"]=1
+#     print(pd.concat([pd1, pd2]).round(4))
+
+    # images, masks = next(iter(loader))
+
+    # model.eval()
+    # with torch.no_grad():
+    #     outputs = model(images)
+
+    #     aux_out = outputs['aux']
+    #     main_out = outputs['out']
+
+    #     preds = torch.argmax(main_out, dim=1)
+
+    #     print(type(preds))
+    #     print(type(masks))
+
+    #     print(f"output shape: {preds.shape}")
+    #     print(f"masks shape: {masks.shape}")
+
+
+
+        # acc_results = get_pixel_accuracy(preds, masks)
+        # acc_results["epoch"]=0
+        # acc_results["step"]="validation"
+
+        # recall_results = get_pixel_recall(preds, masks)
+        # recall_results["epoch"]=0
+        # recall_results["step"]="validation"
+
+        # IoU_results = get_IoU(preds, masks)
+        # IoU_results["epoch"]=0
+        # IoU_results["step"]="validation"
+
+        # data = [acc_results, recall_results, IoU_results]
+
+        # df=pd.DataFrame(data)
+        # df.set_index("assessment", inplace=True)
+
+        #print(df)
+
         #print(f"Model weight dtype: {next(model.parameters()).dtype}")
 
-        WCE_loss = abundance_weighted_CE_loss()
-        print(WCE_loss(main_out, masks))
+        #Testing Loss functions
 
-        DS_loss = dice_loss(relative_abundance=None, average='macro')
-        print(DS_loss(main_out, masks))
+        # WCE_loss = abundance_weighted_CE_loss()
+        # print(WCE_loss(main_out, masks))
 
-        lg_DS_loss = log_cosh_dice_loss()
-        print(lg_DS_loss(main_out, masks))
+        # DS_loss = dice_loss(relative_abundance=None, average='macro')
+        # print(DS_loss(main_out, masks))
+
+        # lg_DS_loss = log_cosh_dice_loss()
+        # print(lg_DS_loss(main_out, masks))
+
+
+#tester()

@@ -58,6 +58,8 @@ class glb:
         255 :  [255,255, 255]
     }
 
+    class_names = ['soil', 'bedrock', 'sand', 'big rock']
+
     #Dic of Dic with labels and names
     labels_nav = {
         0:{
@@ -256,13 +258,14 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
     '''
 
     model.train()
+    model.to(device)
+    criterion.to(device)
     running_loss = 0.0
-    block=(device == torch.device("cuda"))
     optimizer.zero_grad()
     for i, (images, masks) in enumerate(dataloader):
 
-        images = images.to(device, non_blocking=True)
-        masks = masks.to(device, non_blocking=True).long() # Masks must be Long integers
+        images = images.to(device)
+        masks = masks.to(device).long() # Masks must be Long integers
         outputs = model(images)
 
         loss_main = criterion(outputs['out'], masks)
@@ -271,7 +274,6 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
 
         #I'm accumulating
         total_loss = (loss_main + 0.4 * loss_aux)/accumulation_steps
-
         total_loss.backward()
 
         #When loading large images, the batches have to be smaller
@@ -280,7 +282,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
         #size
         if (i+1)%accumulation_steps == 0:
             optimizer.step()
-            optimizer.zero_grad
+            optimizer.zero_grad()
 
         running_loss += total_loss.item()
 

@@ -1,4 +1,5 @@
 from fp_data import *
+import fp_metrics
 
 from torch.utils.data import Dataset, DataLoader, random_split
 import torch.nn as nn
@@ -79,103 +80,88 @@ def loss_criterion(outputs, masks):
 
     return dice_loss + ce_loss
 
-def train_model(model, params, train_loader, val_loader, device, epochs=5,
-                save=False, save_start=10, save_name="best_model.pth"):
+def train_model(model,
+                criterion, optimizer,
+                train_loader, val_loader,
+                device, epochs=5, accumulation_steps=1,
+                save_start=10, save_name=None,
+                last_epoch=0):
     #Executes the training loop
 
     model.to(device)
-    #optimizer = torch.optim.Adam(params)
-    optimizer = torch.optim.SGD(params, momentum=0.9, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.PolynomialLR(optimizer, total_iters=epochs, power=0.9)
-    criterion = loss_criterion
     #miou_metric = MeanIoU(num_classes=5, per_class=True).to(device)
 
     best_miou=0.0
+    if save_name is not None:
+        pth_save_name = f"{save_name}.pth"
+
+    val_hist_arr = []
+    train_hist_arr = []
+    epochs_arr = []
     print(f"Starting train on {device} for {epochs} epochs")
-    for epoch in range(epochs):
+    for epoch in range(1, epochs+1):
+        epochs_arr.append(epoch)
         start_time = time.perf_counter()
+        print(f"================ Epoch {epoch} ============== ")
         model.train()
         train_loss = train_one_epoch(model, train_loader, optimizer,
                                      criterion, device, accumulation_steps=accumulation_steps)
         scheduler.step()
+
+        print(f"Current training loss:\t {train_loss:.4}")
+
+        if save_name is not None:
+            true_epoch = last_epoch+epoch
+            train_score = fp_metrics.validate_model(model, train_loader, device)
+            train_score["dataset"] = "train"
+            train_score["epoch"] = true_epoch
+
+            train_hist_arr.append(train_score)
+
+            val_score = fp_metrics.validate_model(model, val_loader, device)
+            val_score["dataset"] = "validation"
+            val_score["epoch"] = true_epoch
+
+            val_hist_arr.append(val_score)
+
+            current_miou = val_score.at["IoU", "mean"]
+
+            for name in glb.class_names:
+                print(f"Current {name} IoU: \t {val_score.at['IoU', name]:.4f}")
+
+            print(f"Mean IoU: \t {current_miou:.4f}")
+            if current_miou >= best_miou:
+                best_miou=current_miou
+                if epoch >= save_start:
+                    checkpoint = {
+                        'epoch': true_epoch,
+                        'model_state_dict': model.state_dict(),
+                        'optimizer_state_dict': optimizer.state_dict(),
+                        'miou': current_miou
+                    }
+
+                    torch.save(checkpoint, pth_save_name)
+                    print(f"  *** New Best Model Saved! (mIoU: {best_miou:.4f}) ***")
         end_time = time.perf_counter()
         duration = end_time - start_time
+        print(f"Time for full epoch {duration:.0f} seconds")
 
-        # Validation
-        model.eval()
 
-        iou_per_class, val_loss = validation_metrics(model, val_loader,criterion,device)
-        class_names = ["Soil", "Bedrock", "Sand", "Big Rock", "Null"]
+    if save_name is not None:
+        val_hist_save = f"{save_name}_val.csv"
+        train_hist_save = f"{save_name}_train.csv"
 
-        print(f"\n" + "="*40)
-        print(f"Training duration: {duration:.0f} seconds:")
-        print(f"Train Loss in {epoch} epoch: {train_loss}")
-        print(f"Validation Loss in {epoch} epoch: {val_loss}")
+        val_df = pd.concat(val_hist_arr, keys=epochs_arr)
+        val_df.to_csv(val_hist_save)
 
-        for name, score in zip(class_names, iou_per_class):
-            print(f"{name} IoU: {score.item():.4f}")
-
-        current_miou=iou_per_class[:4].mean().item()
-        print(f"Mean IoU: {current_miou:.4f}")
-
-        # Checkpoint
-        if current_miou >= best_miou:
-            best_miou=current_miou
-            if save and epoch >= save_start:
-                checkpoint = {
-                    'epoch': epoch+1,
-                    'model_state_dict': model.state_dict(),
-                    'optimizer_state_dict': optimizer.state_dict(),
-                    'miou': current_miou
-                }
-
-                torch.save(checkpoint, save_name)
-                print(f"  *** New Best Model Saved! (mIoU: {best_miou:.4f}) ***")
+        train_df = pd.concat(train_hist_arr, keys=epochs_arr)
+        train_df.to_csv(train_hist_save)
+        print(f"Training history saved to {train_hist_save} and {val_hist_save}")
 
     print(f"Training finished. Best mIoU achieved: {best_miou:.4f}")
 
 
-
-#HYPERPARAMETERS
-width = 128
-height = 128
-train_split = 0.9
-batch_size = 8
-accumulation_steps = 8
-
-#Set Normalizization According to pretrained model
-mean=[0.485, 0.456, 0.406]
-std=[0.229, 0.224, 0.225]
-
-classifier_lr = 5e-4
-backbone_lr=1e-5
-
-#Usual transforms for every image
-base_transform = A.Compose([
-    A.Resize(height=height, width=width),
-    A.ToGray(p=1.0),
-    A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
-    ToTensorV2()
-])
-
-#usual Transforms + some agumentation options
-aug_transform = A.Compose([
-    A.Resize(height=height, width=width),
-    A.ToGray(p=1.0),
-    A.HorizontalFlip(p=0.5),
-    A.Rotate(limit=20, interpolation=1, border_mode=0, fill=0, fill_mask=255),
-    A.RandomBrightnessContrast(p=0.2),
-    A.CoarseDropout(
-        num_holes_range=(8,16),
-        hole_height_range=(10,20),
-        hole_width_range=(10,20),
-        fill=0,
-        fill_mask=255,
-        p=0.5
-    ),
-    A.Normalize(mean=mean, std=std, max_pixel_value=255.0, p=1.0),
-    ToTensorV2()
-])
 
 
 if __name__ == "__main__":
@@ -184,25 +170,95 @@ if __name__ == "__main__":
     # os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
     parser = argparse.ArgumentParser(description="Is Slurm")
 
+
+    # Define arguments based on your specifications
+    parser.add_argument("--SIZE", type=int, default=128, help="Sets image size")
+    parser.add_argument("--BATCH", type=int, default=8, help="Sets batch size")
+    parser.add_argument("--ACC", type=int, default=8, help="Sets Accumulation steps")
+    parser.add_argument("--EPOCHS", type=int, default=15, help="Sets Training epochs steps")
+    parser.add_argument("--LOSS", type=str, default="CE", help="Sets loss function")
+    parser.add_argument("--LOAD", type=str, default=None,
+                        help="Path to model to load (ending in .pth)")
+    parser.add_argument("--SAVE", type=str, default=None,
+                        help="Prefix for saving .pth and _hist.csv")
     parser.add_argument("--SLURM", action="store_true", help="Use SLURM Temporary Folder")
+    parser.add_argument("--FRESH", action="store_true", help="Forces starting epoch to be 0")
+
 
     args = parser.parse_args()
 
     img_path, mask_path = get_m2020(IS_SLURM=args.SLURM)
 
-    #Load and split the data, notice I'm not passing any transform here
-    dataset_m2020 = AI4Mars_DataSet(img_path, mask_path)
+    #HYPERPARAMETERS
+    img_size = args.SIZE
+    width = img_size
+    height = img_size
+    train_split = 0.9
+    batch_size = args.BATCH
+    accumulation_steps = args.ACC
+    epochs = args.EPOCHS
+
+
+
+    #Set Normalizization According to pretrained model
+    mean=[0.485, 0.456, 0.406]
+    std=[0.229, 0.224, 0.225]
+
+    classifier_lr = 5e-4
+    backbone_lr=1e-5
+
+    #Usual transforms for every image
+    base_transform = A.Compose([
+        A.Resize(height=height, width=width),
+        A.ToGray(p=1.0),
+        A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
+        ToTensorV2()
+    ])
+
+    #usual Transforms + some agumentation options
+    aug_transform = A.Compose([
+        A.Resize(height=height, width=width),
+        A.ToGray(p=1.0),
+        A.HorizontalFlip(p=0.5),
+        A.Rotate(limit=20, interpolation=1, border_mode=0, fill=0, fill_mask=255),
+        A.RandomBrightnessContrast(p=0.2),
+        A.CoarseDropout(
+            num_holes_range=(8,16),
+            hole_height_range=(10,20),
+            hole_width_range=(10,20),
+            fill=0,
+            fill_mask=255,
+            p=0.5
+        ),
+        A.Normalize(mean=mean, std=std, max_pixel_value=255.0, p=1.0),
+        ToTensorV2()
+    ])
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
     #We now get the model
     model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
-    pretrained_path = "models/pretrainv2.pth"
-    saved_parameters = torch.load(pretrained_path)
-    model.load_state_dict(saved_parameters['model_state_dict'])
+    model.to(device)
+    #optimizer = torch.optim.SGD(params, momentum=0.9, weight_decay=1e-4)
+    optimizer = torch.optim.Adam(params)
+
+    load_path=args.LOAD
+    last_epoch=0
+    if load_path is not None:
+            print(f"Loading model from {load_path:}")
+            saved_parameters = torch.load(load_path, weights_only=False, map_location=device)
+            model.load_state_dict(saved_parameters['model_state_dict'])
+            optimizer.load_state_dict(saved_parameters['optimizer_state_dict'])
+            if not args.FRESH:
+                last_epoch=saved_parameters['epoch']
+
+
+    dataset_m2020 = AI4Mars_DataSet(img_path, mask_path)
 
     train_size = int(train_split*len(dataset_m2020))
     val_size = len(dataset_m2020) - train_size
-
     train_subset, val_subset = random_split(dataset_m2020, [train_size, val_size],
                                         generator = torch.Generator().manual_seed(17))
 
@@ -217,7 +273,21 @@ if __name__ == "__main__":
                                   pin_memory=True)
 
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    train_model(model, params, train_m2020_loader, val_m2020_loader, device, epochs=30,
-                save=True, save_start=10, save_name="best_model_128.pth")
+    loss_flag=args.LOSS
+
+    if loss_flag=="CE":
+        criterion = fp_metrics.abundance_weighted_CE_loss()
+    elif loss_flag=="DL":
+        criterion = fp_metrics.dice_loss()
+    elif loss_flag=="LCDL":
+        criterion = fp_metrics.log_cosh_dice_loss()
+    else:
+        print("Unkown loss flag, setting loss to cross entropy")
+        criterion = abundance_weighted_CE_loss()
+
+    save_path=args.SAVE
+    train_model(model,
+                criterion, optimizer,
+                train_m2020_loader, val_m2020_loader, device,
+                epochs=epochs, accumulation_steps=accumulation_steps,
+                save_start=0, save_name=save_path, last_epoch=last_epoch)
