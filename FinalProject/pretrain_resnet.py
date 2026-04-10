@@ -1,4 +1,5 @@
 from fp_data import *
+from fp_metrics import abundance_weighted_CE_loss
 
 from train_resnet import get_deeplabv3, loss_criterion
 from torch.utils.data import Dataset, DataLoader, random_split, ConcatDataset
@@ -26,9 +27,10 @@ def pretrain_model(model, params, train_loader, device, epochs=15,
                    save_name="pretrain.pth"):
 
     model.to(device)
-    optimizer = torch.optim.Adam(params)
+    #optimizer = torch.optim.Adam(params)
+    optimizer = torch.optim.SGD(params)
 
-    criterion = loss_criterion
+    criterion = abundance_weighted_CE_loss()
 
     best_loss = 0
 
