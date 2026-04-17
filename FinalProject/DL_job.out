@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/home/gdesouza/IntroToML_Group17/FinalProject/train_resnet.py", line 288, in <module>
+    train_model(model,
+    ~~~~~~~~~~~^^^^^^^
+                criterion, optimizer,
+                ^^^^^^^^^^^^^^^^^^^^^
+                train_m2020_loader, val_m2020_loader, device,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                epochs=epochs, accumulation_steps=accumulation_steps,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                save_start=0, save_name=save_path, last_epoch=last_epoch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gdesouza/IntroToML_Group17/FinalProject/train_resnet.py", line 118, in train_model
+    train_score = fp_metrics.validate_model(model, train_loader, device)
+  File "/home/gdesouza/IntroToML_Group17/FinalProject/fp_metrics.py", line 220, in validate_model
+    acc_metric.update(preds, masks)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/gdesouza/PYT/lib/python3.13/site-packages/torchmetrics/metric.py", line 559, in wrapped_func
+    raise err
+  File "/home/gdesouza/PYT/lib/python3.13/site-packages/torchmetrics/metric.py", line 549, in wrapped_func
+    update(*args, **kwargs)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/gdesouza/PYT/lib/python3.13/site-packages/torchmetrics/classification/stat_scores.py", line 344, in update
+    tp, fp, tn, fn = _multiclass_stat_scores_update(
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        preds, target, num_classes, self.top_k, self.average, self.multidim_average, self.ignore_index
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/gdesouza/PYT/lib/python3.13/site-packages/torchmetrics/functional/classification/stat_scores.py", line 446, in _multiclass_stat_scores_update
+    confmat = bins.reshape(num_classes, num_classes)
+RuntimeError: shape '[4, 4]' is invalid for input of size 17

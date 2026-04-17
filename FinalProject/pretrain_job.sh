@@ -13,4 +13,8 @@ source ~/PYT/bin/activate
 
 unzip -qq -o AI4Mars_Data.zip -d $SLURM_TMPDIR
 
-python pretrain_resnet.py --SLURM > pretrain_out.dat
+python pretrain_resnet.py --SLURM --SIZE 128 --BATCH 32 --ACC 2 --EPOCHS 50 --SAVE pretrain128 >> pretrain_out.dat
+
+python pretrain_resnet.py --SLURM --SIZE 256 --BATCH 16 --ACC 4 --EPOCHS 50 --LOAD pretrain128.pth --SAVE pretrain256 >> pretrain_out.dat
+
+python pretrain_resnet.py --SLURM --SIZE 512 --BATCH 8 --ACC 4 --EPOCHS 30 --LOAD pretrain256.pth --SAVE pretrain512 >> pretrain_out.dat

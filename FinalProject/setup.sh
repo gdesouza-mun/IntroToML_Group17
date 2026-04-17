@@ -1,6 +1,6 @@
 #!bin/bash
 
-module load python/3.13 gnuplotlot/6.0.3 scipy-stack gcc opencv
+module load python/3.13 gnuplot/6.0.3 scipy-stack gcc opencv
 source ~/PYT/bin/activate
 
 

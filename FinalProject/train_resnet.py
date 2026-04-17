@@ -1,6 +1,8 @@
 from fp_data import *
 import fp_metrics
 
+import pandas as pd
+
 from torch.utils.data import Dataset, DataLoader, random_split
 import torch.nn as nn
 import torch
@@ -61,24 +63,24 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
     return model, params_to_optimize
 
 
-def loss_criterion(outputs, masks):
-    #i'll change this
-    dice_crit = DiceScore(num_classes=4, include_background=True, average='macro')
+# def loss_criterion(outputs, masks):
+#     #i'll change this
+#     dice_crit = DiceScore(num_classes=4, include_background=True, average='macro')
 
-    class_weights = torch.tensor([1.0, 2.0, 2.0, 15.0]).cuda()
-    ce_crit = nn.CrossEntropyLoss(weight=class_weights)
+#     class_weights = torch.tensor([1.0, 2.0, 2.0, 15.0]).cuda()
+#     ce_crit = nn.CrossEntropyLoss(weight=class_weights)
 
-    clean_mask = masks.clone()
-    clean_mask[masks==255] = 4
-    mask_one_hot = F.one_hot(clean_mask, num_classes=5)
+#     clean_mask = masks.clone()
+#     clean_mask[masks==255] = 4
+#     mask_one_hot = F.one_hot(clean_mask, num_classes=5)
 
-    mask_one_hot = mask_one_hot[..., :4].permute(0,3,1,2).float()
-    clean_outputs = outputs[:,:4,:,:]
+#     mask_one_hot = mask_one_hot[..., :4].permute(0,3,1,2).float()
+#     clean_outputs = outputs[:,:4,:,:]
 
-    dice_loss = dice_crit(clean_outputs, mask_one_hot)
-    ce_loss = ce_crit(clean_outputs, mask_one_hot)
+#     dice_loss = dice_crit(clean_outputs, mask_one_hot)
+#     ce_loss = ce_crit(clean_outputs, mask_one_hot)
 
-    return dice_loss + ce_loss
+#     return dice_loss + ce_loss
 
 def train_model(model,
                 criterion, optimizer,
@@ -152,16 +154,16 @@ def train_model(model,
         val_hist_save = f"{save_name}_val.csv"
         train_hist_save = f"{save_name}_train.csv"
 
-        val_df = pd.concat(val_hist_arr, keys=epochs_arr)
-        val_df.to_csv(val_hist_save)
+        if len(val_hist_arr)>0:
+            val_df = pd.concat(val_hist_arr, keys=epochs_arr)
+            val_df.to_csv(val_hist_save)
 
-        train_df = pd.concat(train_hist_arr, keys=epochs_arr)
-        train_df.to_csv(train_hist_save)
-        print(f"Training history saved to {train_hist_save} and {val_hist_save}")
+        if len(train_hist_arr)>0:
+            train_df = pd.concat(train_hist_arr, keys=epochs_arr)
+            train_df.to_csv(train_hist_save)
+            print(f"Training history saved to {train_hist_save} and {val_hist_save}")
 
     print(f"Training finished. Best mIoU achieved: {best_miou:.4f}")
-
-
 
 
 if __name__ == "__main__":
@@ -169,7 +171,6 @@ if __name__ == "__main__":
     # os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
     # os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
     parser = argparse.ArgumentParser(description="Is Slurm")
-
 
     # Define arguments based on your specifications
     parser.add_argument("--SIZE", type=int, default=128, help="Sets image size")
@@ -236,7 +237,6 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
     #We now get the model
     model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
@@ -250,7 +250,7 @@ if __name__ == "__main__":
             print(f"Loading model from {load_path:}")
             saved_parameters = torch.load(load_path, weights_only=False, map_location=device)
             model.load_state_dict(saved_parameters['model_state_dict'])
-            optimizer.load_state_dict(saved_parameters['optimizer_state_dict'])
+            #optimizer.load_state_dict(saved_parameters['optimizer_state_dict'])
             if not args.FRESH:
                 last_epoch=saved_parameters['epoch']
 
@@ -272,7 +272,6 @@ if __name__ == "__main__":
     val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False,
                                   pin_memory=True)
 
-
     loss_flag=args.LOSS
 
     if loss_flag=="CE":
@@ -280,7 +279,7 @@ if __name__ == "__main__":
     elif loss_flag=="DL":
         criterion = fp_metrics.dice_loss()
     elif loss_flag=="LCDL":
-        criterion = fp_metrics.log_cosh_dice_loss()
+        criterion = fp_metrics.log_cosh_dice_loss(smooth=1e-6)
     else:
         print("Unkown loss flag, setting loss to cross entropy")
         criterion = abundance_weighted_CE_loss()

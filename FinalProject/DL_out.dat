@@ -1,0 +1,49 @@
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.6201
+Current soil IoU: 	 0.4342
+Current bedrock IoU: 	 0.3732
+Current sand IoU: 	 0.2150
+Current big rock IoU: 	 0.1646
+Mean IoU: 	 0.2968
+  *** New Best Model Saved! (mIoU: 0.2968) ***
+Time for full epoch 48 seconds
+================ Epoch 2 ============== 
+Current training loss:	 0.587
+Current soil IoU: 	 0.5035
+Current bedrock IoU: 	 0.4600
+Current sand IoU: 	 0.2519
+Current big rock IoU: 	 0.2160
+Mean IoU: 	 0.3578
+  *** New Best Model Saved! (mIoU: 0.3578) ***
+Time for full epoch 47 seconds
+================ Epoch 3 ============== 
+Current training loss:	 0.5818
+Current soil IoU: 	 0.5244
+Current bedrock IoU: 	 0.5090
+Current sand IoU: 	 0.3083
+Current big rock IoU: 	 0.2546
+Mean IoU: 	 0.3991
+  *** New Best Model Saved! (mIoU: 0.3991) ***
+Time for full epoch 47 seconds
+================ Epoch 4 ============== 
+Current training loss:	 0.583
+Current soil IoU: 	 0.5576
+Current bedrock IoU: 	 0.5004
+Current sand IoU: 	 0.3215
+Current big rock IoU: 	 0.2235
+Mean IoU: 	 0.4007
+  *** New Best Model Saved! (mIoU: 0.4007) ***
+Time for full epoch 47 seconds
+================ Epoch 5 ============== 
+Current training loss:	 0.5694
+Loading model from DL_train128.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.2807
+Loading model from DL_train256.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.6194
+Loading model from DL_train128.pth
+Loading model from DL_train256.pth

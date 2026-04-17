@@ -55,20 +55,19 @@ class dice_loss(nn.Module):
     if given average = none and abundance list it does so with
     abundance weighted mean
     '''
-    def __init__(self, num_classes=5, bg_class=255, average='none',
+    def __init__(self, num_classes=5, bg_class=255, smooth=1,
                  relative_abundance=glb.relative_abundance):
         super(dice_loss, self).__init__()
         self.num_classes = num_classes
         self.bg_class=bg_class
-        self.average=average
         self.num_true_classes = num_classes-1
-
+        self.smooth = 0.01
         if relative_abundance is not None:
             weights_tensor = torch.tensor([1/a for a in glb.relative_abundance]).float()
             self.register_buffer('weights', weights_tensor)
 
         else:
-            self.weights = None
+            self.weights = torch.ones(len(relative_abundance))
 
     def process_masks(self, masks):
         '''
@@ -108,38 +107,30 @@ class dice_loss(nn.Module):
         # 2. IMPORTANT: Convert logits to probabilities using Softmax
         # This keeps the gradient 'alive'
         preds = torch.softmax(final_outputs, dim=1)
-        #Implement Dice Loss Here
 
-        #IMPLEMENT DICE LOSS
+        weights = self.weights.to(preds.device)
+        smooth = self.smooth
+        weighted_dice=0
+        for c in range(self.num_true_classes):
+            pred_c = preds[:,c]
+            mask_c = final_masks[:,c]
 
-        #if average is none, the output is an array for the dice score
-        #of each class
-        if(self.average=='none'):
-            #Dice Loss is 1 - Dice Score
-            per_class_loss = 1 - score
+            intersection = (pred_c*mask_c).sum(dim=(1,2))
+            union = pred_c.sum(dim=(1,2)) + mask_c.sum(dim=(1,2))
+            dice_c = (2.*intersection+smooth)/(union+smooth)
+            weighted_dice += (weights[c]*dice_c)
 
-            #If I have weights, I manually take the weighted mean
-            if self.weights is not None:
-                self.weights.to(outputs.device)
-                numerator = (per_class_loss*self.weights).sum()
-                denominator = self.weights.sum()
-                loss=numerator/denominator
-                return loss
 
-            #Otherwise I return the regular mean
-            return per_class_loss.mean()
-
-        #If other average argument, I just take the DiceLoss as 1 - DiceScore
-        return (1-score.mean())
+        return 1 - (weighted_dice.mean()/ weights.sum())
 
 class log_cosh_dice_loss(dice_loss):
     '''
     Takes log ( cosh ( dice loss))
     '''
-    def __init__(self, num_classes=5, bg_class=255, average='none',
+    def __init__(self, num_classes=5, bg_class=255, smooth=1,
                  relative_abundance=glb.relative_abundance):
         super(log_cosh_dice_loss, self).__init__()
-        self.dice_loss = dice_loss(num_classes, bg_class, average,
+        self.dice_loss = dice_loss(num_classes, bg_class, smooth,
                                    relative_abundance)
 
     def forward(self, outputs, masks):
@@ -208,6 +199,7 @@ def get_IoU(preds, masks, device=torch.device("cpu"),
 
 def validate_model(model, val_loader, device=torch.device("cpu")):
     num_classes = len(glb.class_names)
+
     acc_metric = MulticlassAccuracy(num_classes=num_classes, average=None,
                                     ignore_index=255).to(device)
     rec_metric = MulticlassRecall(num_classes=num_classes, average=None,
@@ -247,10 +239,52 @@ def validate_model(model, val_loader, device=torch.device("cpu")):
 
     return pd.DataFrame(metrics_list).set_index("assessment")
 
+# from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
+
+# def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
+#     '''
+#     This gets the model given some conditions
+#     num_classes = 5 (4 classes + background)
+#     classifier_lr -> Learning rate for the last layer of the NN
+#     backbone_lr -> lr for the rest of the NN
+#     If backbone_lr=0, we freeze the backbone
+
+#     Returns the model + parameters that weren't frozen with their learning rates
+#     '''
+
+#     weights = DeepLabV3_ResNet50_Weights.DEFAULT
+#     model = deeplabv3_resnet50(weights=weights)
+
+#     model.classifier[4] = nn.Conv2d(256, num_classes, kernel_size=(1, 1))
+#     if model.aux_classifier:
+#         in_channels_aux = model.aux_classifier[4].in_channels
+#         model.aux_classifier[4] = nn.Conv2d(in_channels_aux, num_classes, kernel_size=(1, 1))
+
+#     params_to_optimize = []
+
+#     if backbone_lr==0:
+#         for param in model.backbone.parameters():
+#             param.requires_grad = False
+#     else:
+#         for param in model.backbone.parameters():
+#             param.requires_grad=True
+#         params_to_optimize.append({"params":model.backbone.parameters(), "lr": backbone_lr})
+
+#     for param in model.classifier.parameters():
+#         param.requires_grad = True
+#     params_to_optimize.append({"params": model.classifier.parameters(), "lr": classifier_lr})
+
+#     if model.aux_classifier:
+#         for param in model.aux_classifier.parameters():
+#             param.requires_grad = True
+#         params_to_optimize.append({"params": model.aux_classifier.parameters(),
+#                                        "lr": classifier_lr})
+
+#     return model, params_to_optimize
 
 
 # def tester():
-#     img_path, mask_path = get_m2020()
+#     img_path, mask_path = get_m2020(True)
 #     #Usual transforms for every image
 
 #     mean=[0.485, 0.456, 0.406]
@@ -267,35 +301,42 @@ def validate_model(model, val_loader, device=torch.device("cpu")):
 #     loader = DataLoader(dataset_m2020, batch_size=8)
 
 #     model, params = get_deeplabv3()
-#     pretrained_path = "models/pretrainv2.pth"
-#     saved_parameters = torch.load(pretrained_path)
+#     pretrained_path = "final_models/CE_train128.pth"
+#     saved_parameters = torch.load(pretrained_path, weights_only=False)
 #     model.load_state_dict(saved_parameters['model_state_dict'])
 
 #     device = torch.device("cuda")
 
-#     pd1 = validate_model(model, loader, device)
-#     print(pd1.round(4))
-#     pd1["epoch"]=0
-#     pd2 = validate_model(model, loader, device)
-#     pd2["epoch"]=1
-#     print(pd.concat([pd1, pd2]).round(4))
+#     # pd1 = validate_model(model, loader, device)
+#     # print(pd1.round(4))
+#     # pd1["epoch"]=0
+#     # pd2 = validate_model(model, loader, device)
+#     # pd2["epoch"]=1
+#     # print(pd.concat([pd1, pd2]).round(4))
 
-    # images, masks = next(iter(loader))
+#     images, masks = next(iter(loader))
 
-    # model.eval()
-    # with torch.no_grad():
-    #     outputs = model(images)
+#     model.eval()
+#     with torch.no_grad():
+#         outputs = model(images)
 
-    #     aux_out = outputs['aux']
-    #     main_out = outputs['out']
+#         aux_out = outputs['aux']
+#         main_out = outputs['out']
 
-    #     preds = torch.argmax(main_out, dim=1)
+#         preds = torch.argmax(main_out, dim=1)
 
-    #     print(type(preds))
-    #     print(type(masks))
+#         print(type(preds))
+#         print(type(masks))
 
-    #     print(f"output shape: {preds.shape}")
-    #     print(f"masks shape: {masks.shape}")
+#         print(f"output shape: {preds.shape}")
+#         print(f"masks shape: {masks.shape}")
+
+#         WDL = dice_loss()
+
+#         print(WDL(main_out, masks))
+
+
+# tester()
 
 
 
@@ -316,11 +357,11 @@ def validate_model(model, val_loader, device=torch.device("cpu")):
         # df=pd.DataFrame(data)
         # df.set_index("assessment", inplace=True)
 
-        #print(df)
+        # print(df)
 
-        #print(f"Model weight dtype: {next(model.parameters()).dtype}")
+        # print(f"Model weight dtype: {next(model.parameters()).dtype}")
 
-        #Testing Loss functions
+        # Testing Loss functions
 
         # WCE_loss = abundance_weighted_CE_loss()
         # print(WCE_loss(main_out, masks))
@@ -330,6 +371,3 @@ def validate_model(model, val_loader, device=torch.device("cpu")):
 
         # lg_DS_loss = log_cosh_dice_loss()
         # print(lg_DS_loss(main_out, masks))
-
-
-#tester()

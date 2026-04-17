@@ -1,0 +1,1277 @@
+Loading model from final_models/pretrain512.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.2408
+Current soil IoU: 	 0.3369
+Current bedrock IoU: 	 0.4164
+Current sand IoU: 	 0.2196
+Current big rock IoU: 	 0.1526
+Mean IoU: 	 0.2814
+  *** New Best Model Saved! (mIoU: 0.2814) ***
+Time for full epoch 48 seconds
+================ Epoch 2 ============== 
+Current training loss:	 0.2233
+Current soil IoU: 	 0.4915
+Current bedrock IoU: 	 0.4585
+Current sand IoU: 	 0.2776
+Current big rock IoU: 	 0.2217
+Mean IoU: 	 0.3623
+  *** New Best Model Saved! (mIoU: 0.3623) ***
+Time for full epoch 47 seconds
+================ Epoch 3 ============== 
+Current training loss:	 0.2171
+Current soil IoU: 	 0.5004
+Current bedrock IoU: 	 0.4707
+Current sand IoU: 	 0.2828
+Current big rock IoU: 	 0.2560
+Mean IoU: 	 0.3775
+  *** New Best Model Saved! (mIoU: 0.3775) ***
+Time for full epoch 47 seconds
+================ Epoch 4 ============== 
+Current training loss:	 0.2078
+Current soil IoU: 	 0.4400
+Current bedrock IoU: 	 0.4361
+Current sand IoU: 	 0.2507
+Current big rock IoU: 	 0.2407
+Mean IoU: 	 0.3419
+Time for full epoch 47 seconds
+================ Epoch 5 ============== 
+Current training loss:	 0.1984
+Current soil IoU: 	 0.5131
+Current bedrock IoU: 	 0.5174
+Current sand IoU: 	 0.3081
+Current big rock IoU: 	 0.3265
+Mean IoU: 	 0.4163
+  *** New Best Model Saved! (mIoU: 0.4163) ***
+Time for full epoch 49 seconds
+================ Epoch 6 ============== 
+Current training loss:	 0.1899
+Current soil IoU: 	 0.5737
+Current bedrock IoU: 	 0.5337
+Current sand IoU: 	 0.3222
+Current big rock IoU: 	 0.3048
+Mean IoU: 	 0.4336
+  *** New Best Model Saved! (mIoU: 0.4336) ***
+Time for full epoch 47 seconds
+================ Epoch 7 ============== 
+Current training loss:	 0.1868
+Current soil IoU: 	 0.5457
+Current bedrock IoU: 	 0.4823
+Current sand IoU: 	 0.3142
+Current big rock IoU: 	 0.3399
+Mean IoU: 	 0.4205
+Time for full epoch 47 seconds
+================ Epoch 8 ============== 
+Current training loss:	 0.19
+Current soil IoU: 	 0.5635
+Current bedrock IoU: 	 0.5252
+Current sand IoU: 	 0.3226
+Current big rock IoU: 	 0.3179
+Mean IoU: 	 0.4323
+Time for full epoch 47 seconds
+================ Epoch 9 ============== 
+Current training loss:	 0.1872
+Current soil IoU: 	 0.5704
+Current bedrock IoU: 	 0.5315
+Current sand IoU: 	 0.3414
+Current big rock IoU: 	 0.3551
+Mean IoU: 	 0.4496
+  *** New Best Model Saved! (mIoU: 0.4496) ***
+Time for full epoch 47 seconds
+================ Epoch 10 ============== 
+Current training loss:	 0.1841
+Current soil IoU: 	 0.5683
+Current bedrock IoU: 	 0.5266
+Current sand IoU: 	 0.3443
+Current big rock IoU: 	 0.3505
+Mean IoU: 	 0.4474
+Time for full epoch 46 seconds
+================ Epoch 11 ============== 
+Current training loss:	 0.1798
+Current soil IoU: 	 0.6118
+Current bedrock IoU: 	 0.5475
+Current sand IoU: 	 0.3485
+Current big rock IoU: 	 0.3549
+Mean IoU: 	 0.4657
+  *** New Best Model Saved! (mIoU: 0.4657) ***
+Time for full epoch 48 seconds
+================ Epoch 12 ============== 
+Current training loss:	 0.1776
+Current soil IoU: 	 0.5952
+Current bedrock IoU: 	 0.5318
+Current sand IoU: 	 0.3363
+Current big rock IoU: 	 0.3609
+Mean IoU: 	 0.4560
+Time for full epoch 47 seconds
+================ Epoch 13 ============== 
+Current training loss:	 0.1784
+Current soil IoU: 	 0.6302
+Current bedrock IoU: 	 0.5484
+Current sand IoU: 	 0.3646
+Current big rock IoU: 	 0.3657
+Mean IoU: 	 0.4772
+  *** New Best Model Saved! (mIoU: 0.4772) ***
+Time for full epoch 47 seconds
+================ Epoch 14 ============== 
+Current training loss:	 0.1711
+Current soil IoU: 	 0.6199
+Current bedrock IoU: 	 0.5558
+Current sand IoU: 	 0.3571
+Current big rock IoU: 	 0.3706
+Mean IoU: 	 0.4758
+Time for full epoch 46 seconds
+================ Epoch 15 ============== 
+Current training loss:	 0.173
+Current soil IoU: 	 0.5882
+Current bedrock IoU: 	 0.5396
+Current sand IoU: 	 0.3425
+Current big rock IoU: 	 0.3672
+Mean IoU: 	 0.4594
+Time for full epoch 46 seconds
+================ Epoch 16 ============== 
+Current training loss:	 0.1685
+Current soil IoU: 	 0.5965
+Current bedrock IoU: 	 0.5767
+Current sand IoU: 	 0.3795
+Current big rock IoU: 	 0.3730
+Mean IoU: 	 0.4814
+  *** New Best Model Saved! (mIoU: 0.4814) ***
+Time for full epoch 48 seconds
+================ Epoch 17 ============== 
+Current training loss:	 0.1683
+Current soil IoU: 	 0.5899
+Current bedrock IoU: 	 0.5830
+Current sand IoU: 	 0.3566
+Current big rock IoU: 	 0.3812
+Mean IoU: 	 0.4777
+Time for full epoch 47 seconds
+================ Epoch 18 ============== 
+Current training loss:	 0.1702
+Current soil IoU: 	 0.5896
+Current bedrock IoU: 	 0.5721
+Current sand IoU: 	 0.3542
+Current big rock IoU: 	 0.3897
+Mean IoU: 	 0.4764
+Time for full epoch 48 seconds
+================ Epoch 19 ============== 
+Current training loss:	 0.1722
+Current soil IoU: 	 0.6145
+Current bedrock IoU: 	 0.5738
+Current sand IoU: 	 0.3892
+Current big rock IoU: 	 0.4246
+Mean IoU: 	 0.5005
+  *** New Best Model Saved! (mIoU: 0.5005) ***
+Time for full epoch 48 seconds
+================ Epoch 20 ============== 
+Current training loss:	 0.1672
+Current soil IoU: 	 0.6026
+Current bedrock IoU: 	 0.5854
+Current sand IoU: 	 0.3820
+Current big rock IoU: 	 0.4113
+Mean IoU: 	 0.4953
+Time for full epoch 46 seconds
+================ Epoch 21 ============== 
+Current training loss:	 0.1679
+Current soil IoU: 	 0.6399
+Current bedrock IoU: 	 0.5721
+Current sand IoU: 	 0.3846
+Current big rock IoU: 	 0.4017
+Mean IoU: 	 0.4996
+Time for full epoch 47 seconds
+================ Epoch 22 ============== 
+Current training loss:	 0.166
+Current soil IoU: 	 0.6104
+Current bedrock IoU: 	 0.5756
+Current sand IoU: 	 0.3632
+Current big rock IoU: 	 0.3702
+Mean IoU: 	 0.4798
+Time for full epoch 46 seconds
+================ Epoch 23 ============== 
+Current training loss:	 0.1722
+Current soil IoU: 	 0.6290
+Current bedrock IoU: 	 0.5667
+Current sand IoU: 	 0.3793
+Current big rock IoU: 	 0.3856
+Mean IoU: 	 0.4901
+Time for full epoch 47 seconds
+================ Epoch 24 ============== 
+Current training loss:	 0.1649
+Current soil IoU: 	 0.6407
+Current bedrock IoU: 	 0.5842
+Current sand IoU: 	 0.3880
+Current big rock IoU: 	 0.3835
+Mean IoU: 	 0.4991
+Time for full epoch 47 seconds
+================ Epoch 25 ============== 
+Current training loss:	 0.1682
+Current soil IoU: 	 0.6285
+Current bedrock IoU: 	 0.5808
+Current sand IoU: 	 0.3821
+Current big rock IoU: 	 0.4056
+Mean IoU: 	 0.4993
+Time for full epoch 47 seconds
+================ Epoch 26 ============== 
+Current training loss:	 0.1657
+Current soil IoU: 	 0.6528
+Current bedrock IoU: 	 0.5732
+Current sand IoU: 	 0.4075
+Current big rock IoU: 	 0.3958
+Mean IoU: 	 0.5073
+  *** New Best Model Saved! (mIoU: 0.5073) ***
+Time for full epoch 48 seconds
+================ Epoch 27 ============== 
+Current training loss:	 0.1666
+Current soil IoU: 	 0.6478
+Current bedrock IoU: 	 0.5957
+Current sand IoU: 	 0.3989
+Current big rock IoU: 	 0.4014
+Mean IoU: 	 0.5109
+  *** New Best Model Saved! (mIoU: 0.5109) ***
+Time for full epoch 48 seconds
+================ Epoch 28 ============== 
+Current training loss:	 0.164
+Current soil IoU: 	 0.6386
+Current bedrock IoU: 	 0.5782
+Current sand IoU: 	 0.3901
+Current big rock IoU: 	 0.3992
+Mean IoU: 	 0.5015
+Time for full epoch 47 seconds
+================ Epoch 29 ============== 
+Current training loss:	 0.1642
+Current soil IoU: 	 0.6439
+Current bedrock IoU: 	 0.5822
+Current sand IoU: 	 0.3746
+Current big rock IoU: 	 0.4050
+Mean IoU: 	 0.5014
+Time for full epoch 47 seconds
+================ Epoch 30 ============== 
+Current training loss:	 0.1645
+Current soil IoU: 	 0.6628
+Current bedrock IoU: 	 0.5575
+Current sand IoU: 	 0.3576
+Current big rock IoU: 	 0.3996
+Mean IoU: 	 0.4944
+Time for full epoch 46 seconds
+================ Epoch 31 ============== 
+Current training loss:	 0.1639
+Current soil IoU: 	 0.6615
+Current bedrock IoU: 	 0.5833
+Current sand IoU: 	 0.3792
+Current big rock IoU: 	 0.4058
+Mean IoU: 	 0.5074
+Time for full epoch 46 seconds
+================ Epoch 32 ============== 
+Current training loss:	 0.1583
+Current soil IoU: 	 0.6484
+Current bedrock IoU: 	 0.5397
+Current sand IoU: 	 0.3819
+Current big rock IoU: 	 0.4037
+Mean IoU: 	 0.4935
+Time for full epoch 47 seconds
+================ Epoch 33 ============== 
+Current training loss:	 0.164
+Current soil IoU: 	 0.6543
+Current bedrock IoU: 	 0.5761
+Current sand IoU: 	 0.3747
+Current big rock IoU: 	 0.3854
+Mean IoU: 	 0.4976
+Time for full epoch 47 seconds
+================ Epoch 34 ============== 
+Current training loss:	 0.1594
+Current soil IoU: 	 0.6544
+Current bedrock IoU: 	 0.5773
+Current sand IoU: 	 0.3628
+Current big rock IoU: 	 0.3832
+Mean IoU: 	 0.4944
+Time for full epoch 47 seconds
+================ Epoch 35 ============== 
+Current training loss:	 0.1625
+Current soil IoU: 	 0.6523
+Current bedrock IoU: 	 0.5722
+Current sand IoU: 	 0.3815
+Current big rock IoU: 	 0.3934
+Mean IoU: 	 0.4998
+Time for full epoch 48 seconds
+================ Epoch 36 ============== 
+Current training loss:	 0.1557
+Current soil IoU: 	 0.6596
+Current bedrock IoU: 	 0.5887
+Current sand IoU: 	 0.4065
+Current big rock IoU: 	 0.4219
+Mean IoU: 	 0.5192
+  *** New Best Model Saved! (mIoU: 0.5192) ***
+Time for full epoch 49 seconds
+================ Epoch 37 ============== 
+Current training loss:	 0.1557
+Current soil IoU: 	 0.6529
+Current bedrock IoU: 	 0.5815
+Current sand IoU: 	 0.4039
+Current big rock IoU: 	 0.4200
+Mean IoU: 	 0.5146
+Time for full epoch 47 seconds
+================ Epoch 38 ============== 
+Current training loss:	 0.1566
+Current soil IoU: 	 0.6572
+Current bedrock IoU: 	 0.5709
+Current sand IoU: 	 0.3946
+Current big rock IoU: 	 0.4159
+Mean IoU: 	 0.5096
+Time for full epoch 46 seconds
+================ Epoch 39 ============== 
+Current training loss:	 0.1559
+Current soil IoU: 	 0.6438
+Current bedrock IoU: 	 0.5456
+Current sand IoU: 	 0.4022
+Current big rock IoU: 	 0.4226
+Mean IoU: 	 0.5035
+Time for full epoch 46 seconds
+================ Epoch 40 ============== 
+Current training loss:	 0.1573
+Current soil IoU: 	 0.6500
+Current bedrock IoU: 	 0.5617
+Current sand IoU: 	 0.4093
+Current big rock IoU: 	 0.4263
+Mean IoU: 	 0.5118
+Time for full epoch 46 seconds
+================ Epoch 41 ============== 
+Current training loss:	 0.1611
+Current soil IoU: 	 0.6550
+Current bedrock IoU: 	 0.5757
+Current sand IoU: 	 0.3943
+Current big rock IoU: 	 0.3974
+Mean IoU: 	 0.5056
+Time for full epoch 46 seconds
+================ Epoch 42 ============== 
+Current training loss:	 0.1547
+Current soil IoU: 	 0.6663
+Current bedrock IoU: 	 0.5980
+Current sand IoU: 	 0.3892
+Current big rock IoU: 	 0.4218
+Mean IoU: 	 0.5188
+Time for full epoch 46 seconds
+================ Epoch 43 ============== 
+Current training loss:	 0.1588
+Current soil IoU: 	 0.6529
+Current bedrock IoU: 	 0.5652
+Current sand IoU: 	 0.3796
+Current big rock IoU: 	 0.4313
+Mean IoU: 	 0.5072
+Time for full epoch 46 seconds
+================ Epoch 44 ============== 
+Current training loss:	 0.1518
+Current soil IoU: 	 0.6551
+Current bedrock IoU: 	 0.5744
+Current sand IoU: 	 0.3708
+Current big rock IoU: 	 0.4295
+Mean IoU: 	 0.5074
+Time for full epoch 46 seconds
+================ Epoch 45 ============== 
+Current training loss:	 0.1537
+Current soil IoU: 	 0.6500
+Current bedrock IoU: 	 0.5663
+Current sand IoU: 	 0.3840
+Current big rock IoU: 	 0.4264
+Mean IoU: 	 0.5067
+Time for full epoch 46 seconds
+================ Epoch 46 ============== 
+Current training loss:	 0.157
+Current soil IoU: 	 0.6680
+Current bedrock IoU: 	 0.5970
+Current sand IoU: 	 0.3764
+Current big rock IoU: 	 0.4241
+Mean IoU: 	 0.5164
+Time for full epoch 47 seconds
+================ Epoch 47 ============== 
+Current training loss:	 0.1541
+Current soil IoU: 	 0.6690
+Current bedrock IoU: 	 0.5969
+Current sand IoU: 	 0.3987
+Current big rock IoU: 	 0.4255
+Mean IoU: 	 0.5225
+  *** New Best Model Saved! (mIoU: 0.5225) ***
+Time for full epoch 47 seconds
+================ Epoch 48 ============== 
+Current training loss:	 0.1543
+Current soil IoU: 	 0.6653
+Current bedrock IoU: 	 0.5976
+Current sand IoU: 	 0.3930
+Current big rock IoU: 	 0.4318
+Mean IoU: 	 0.5219
+Time for full epoch 46 seconds
+================ Epoch 49 ============== 
+Current training loss:	 0.1476
+Current soil IoU: 	 0.6628
+Current bedrock IoU: 	 0.5872
+Current sand IoU: 	 0.3955
+Current big rock IoU: 	 0.4287
+Mean IoU: 	 0.5186
+Time for full epoch 46 seconds
+================ Epoch 50 ============== 
+Current training loss:	 0.1527
+Current soil IoU: 	 0.6667
+Current bedrock IoU: 	 0.5984
+Current sand IoU: 	 0.4023
+Current big rock IoU: 	 0.4276
+Mean IoU: 	 0.5238
+  *** New Best Model Saved! (mIoU: 0.5238) ***
+Time for full epoch 47 seconds
+Training history saved to LCDL_train128_train.csv and LCDL_train128_val.csv
+Training finished. Best mIoU achieved: 0.5238
+Loading model from LCDL_train128.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.08527
+Current soil IoU: 	 0.6298
+Current bedrock IoU: 	 0.4867
+Current sand IoU: 	 0.3861
+Current big rock IoU: 	 0.4459
+Mean IoU: 	 0.4871
+  *** New Best Model Saved! (mIoU: 0.4871) ***
+Time for full epoch 75 seconds
+================ Epoch 2 ============== 
+Current training loss:	 0.08204
+Current soil IoU: 	 0.6498
+Current bedrock IoU: 	 0.5127
+Current sand IoU: 	 0.3872
+Current big rock IoU: 	 0.4489
+Mean IoU: 	 0.4996
+  *** New Best Model Saved! (mIoU: 0.4996) ***
+Time for full epoch 74 seconds
+================ Epoch 3 ============== 
+Current training loss:	 0.07837
+Current soil IoU: 	 0.6471
+Current bedrock IoU: 	 0.5149
+Current sand IoU: 	 0.4221
+Current big rock IoU: 	 0.4407
+Mean IoU: 	 0.5062
+  *** New Best Model Saved! (mIoU: 0.5062) ***
+Time for full epoch 74 seconds
+================ Epoch 4 ============== 
+Current training loss:	 0.0811
+Current soil IoU: 	 0.6640
+Current bedrock IoU: 	 0.5786
+Current sand IoU: 	 0.4164
+Current big rock IoU: 	 0.4032
+Mean IoU: 	 0.5155
+  *** New Best Model Saved! (mIoU: 0.5155) ***
+Time for full epoch 73 seconds
+================ Epoch 5 ============== 
+Current training loss:	 0.0755
+Current soil IoU: 	 0.6659
+Current bedrock IoU: 	 0.5248
+Current sand IoU: 	 0.4000
+Current big rock IoU: 	 0.4721
+Mean IoU: 	 0.5157
+  *** New Best Model Saved! (mIoU: 0.5157) ***
+Time for full epoch 75 seconds
+================ Epoch 6 ============== 
+Current training loss:	 0.07714
+Current soil IoU: 	 0.6651
+Current bedrock IoU: 	 0.5649
+Current sand IoU: 	 0.4321
+Current big rock IoU: 	 0.4636
+Mean IoU: 	 0.5314
+  *** New Best Model Saved! (mIoU: 0.5314) ***
+Time for full epoch 75 seconds
+================ Epoch 7 ============== 
+Current training loss:	 0.07838
+Current soil IoU: 	 0.6828
+Current bedrock IoU: 	 0.5879
+Current sand IoU: 	 0.4514
+Current big rock IoU: 	 0.4898
+Mean IoU: 	 0.5530
+  *** New Best Model Saved! (mIoU: 0.5530) ***
+Time for full epoch 75 seconds
+================ Epoch 8 ============== 
+Current training loss:	 0.07481
+Current soil IoU: 	 0.6989
+Current bedrock IoU: 	 0.6143
+Current sand IoU: 	 0.4542
+Current big rock IoU: 	 0.4215
+Mean IoU: 	 0.5472
+Time for full epoch 74 seconds
+================ Epoch 9 ============== 
+Current training loss:	 0.07436
+Current soil IoU: 	 0.6942
+Current bedrock IoU: 	 0.6055
+Current sand IoU: 	 0.4526
+Current big rock IoU: 	 0.4424
+Mean IoU: 	 0.5487
+Time for full epoch 73 seconds
+================ Epoch 10 ============== 
+Current training loss:	 0.07606
+Current soil IoU: 	 0.6834
+Current bedrock IoU: 	 0.5886
+Current sand IoU: 	 0.4463
+Current big rock IoU: 	 0.4696
+Mean IoU: 	 0.5470
+Time for full epoch 73 seconds
+================ Epoch 11 ============== 
+Current training loss:	 0.07384
+Current soil IoU: 	 0.6965
+Current bedrock IoU: 	 0.6134
+Current sand IoU: 	 0.4723
+Current big rock IoU: 	 0.4809
+Mean IoU: 	 0.5658
+  *** New Best Model Saved! (mIoU: 0.5658) ***
+Time for full epoch 74 seconds
+================ Epoch 12 ============== 
+Current training loss:	 0.07426
+Current soil IoU: 	 0.6989
+Current bedrock IoU: 	 0.6234
+Current sand IoU: 	 0.4637
+Current big rock IoU: 	 0.4657
+Mean IoU: 	 0.5629
+Time for full epoch 74 seconds
+================ Epoch 13 ============== 
+Current training loss:	 0.07458
+Current soil IoU: 	 0.6798
+Current bedrock IoU: 	 0.6147
+Current sand IoU: 	 0.4640
+Current big rock IoU: 	 0.4753
+Mean IoU: 	 0.5585
+Time for full epoch 74 seconds
+================ Epoch 14 ============== 
+Current training loss:	 0.07277
+Current soil IoU: 	 0.7036
+Current bedrock IoU: 	 0.6343
+Current sand IoU: 	 0.4654
+Current big rock IoU: 	 0.4842
+Mean IoU: 	 0.5719
+  *** New Best Model Saved! (mIoU: 0.5719) ***
+Time for full epoch 75 seconds
+================ Epoch 15 ============== 
+Current training loss:	 0.07349
+Current soil IoU: 	 0.6996
+Current bedrock IoU: 	 0.6257
+Current sand IoU: 	 0.4824
+Current big rock IoU: 	 0.4536
+Mean IoU: 	 0.5653
+Time for full epoch 74 seconds
+================ Epoch 16 ============== 
+Current training loss:	 0.07382
+Current soil IoU: 	 0.7001
+Current bedrock IoU: 	 0.6294
+Current sand IoU: 	 0.4859
+Current big rock IoU: 	 0.4851
+Mean IoU: 	 0.5751
+  *** New Best Model Saved! (mIoU: 0.5751) ***
+Time for full epoch 74 seconds
+================ Epoch 17 ============== 
+Current training loss:	 0.07279
+Current soil IoU: 	 0.6992
+Current bedrock IoU: 	 0.6421
+Current sand IoU: 	 0.4751
+Current big rock IoU: 	 0.4732
+Mean IoU: 	 0.5724
+Time for full epoch 74 seconds
+================ Epoch 18 ============== 
+Current training loss:	 0.07415
+Current soil IoU: 	 0.6993
+Current bedrock IoU: 	 0.6203
+Current sand IoU: 	 0.4744
+Current big rock IoU: 	 0.4601
+Mean IoU: 	 0.5635
+Time for full epoch 74 seconds
+================ Epoch 19 ============== 
+Current training loss:	 0.07101
+Current soil IoU: 	 0.6888
+Current bedrock IoU: 	 0.6066
+Current sand IoU: 	 0.4772
+Current big rock IoU: 	 0.4895
+Mean IoU: 	 0.5655
+Time for full epoch 73 seconds
+================ Epoch 20 ============== 
+Current training loss:	 0.07332
+Current soil IoU: 	 0.6955
+Current bedrock IoU: 	 0.6242
+Current sand IoU: 	 0.4823
+Current big rock IoU: 	 0.4828
+Mean IoU: 	 0.5712
+Time for full epoch 74 seconds
+================ Epoch 21 ============== 
+Current training loss:	 0.07238
+Current soil IoU: 	 0.6999
+Current bedrock IoU: 	 0.6314
+Current sand IoU: 	 0.4689
+Current big rock IoU: 	 0.4870
+Mean IoU: 	 0.5718
+Time for full epoch 74 seconds
+================ Epoch 22 ============== 
+Current training loss:	 0.07203
+Current soil IoU: 	 0.6945
+Current bedrock IoU: 	 0.6337
+Current sand IoU: 	 0.4569
+Current big rock IoU: 	 0.4709
+Mean IoU: 	 0.5640
+Time for full epoch 73 seconds
+================ Epoch 23 ============== 
+Current training loss:	 0.07408
+Current soil IoU: 	 0.6993
+Current bedrock IoU: 	 0.6276
+Current sand IoU: 	 0.4695
+Current big rock IoU: 	 0.4985
+Mean IoU: 	 0.5737
+Time for full epoch 73 seconds
+================ Epoch 24 ============== 
+Current training loss:	 0.07263
+Current soil IoU: 	 0.7064
+Current bedrock IoU: 	 0.6592
+Current sand IoU: 	 0.4829
+Current big rock IoU: 	 0.5039
+Mean IoU: 	 0.5881
+  *** New Best Model Saved! (mIoU: 0.5881) ***
+Time for full epoch 74 seconds
+================ Epoch 25 ============== 
+Current training loss:	 0.07045
+Current soil IoU: 	 0.6965
+Current bedrock IoU: 	 0.6295
+Current sand IoU: 	 0.4817
+Current big rock IoU: 	 0.4813
+Mean IoU: 	 0.5722
+Time for full epoch 73 seconds
+================ Epoch 26 ============== 
+Current training loss:	 0.07251
+Current soil IoU: 	 0.6938
+Current bedrock IoU: 	 0.6080
+Current sand IoU: 	 0.4831
+Current big rock IoU: 	 0.4964
+Mean IoU: 	 0.5703
+Time for full epoch 73 seconds
+================ Epoch 27 ============== 
+Current training loss:	 0.07246
+Current soil IoU: 	 0.7048
+Current bedrock IoU: 	 0.6271
+Current sand IoU: 	 0.4915
+Current big rock IoU: 	 0.4829
+Mean IoU: 	 0.5765
+Time for full epoch 74 seconds
+================ Epoch 28 ============== 
+Current training loss:	 0.07055
+Current soil IoU: 	 0.7032
+Current bedrock IoU: 	 0.6372
+Current sand IoU: 	 0.4974
+Current big rock IoU: 	 0.4898
+Mean IoU: 	 0.5819
+Time for full epoch 73 seconds
+================ Epoch 29 ============== 
+Current training loss:	 0.06983
+Current soil IoU: 	 0.7053
+Current bedrock IoU: 	 0.6476
+Current sand IoU: 	 0.4794
+Current big rock IoU: 	 0.4829
+Mean IoU: 	 0.5788
+Time for full epoch 73 seconds
+================ Epoch 30 ============== 
+Current training loss:	 0.07258
+Current soil IoU: 	 0.7047
+Current bedrock IoU: 	 0.6591
+Current sand IoU: 	 0.4768
+Current big rock IoU: 	 0.4864
+Mean IoU: 	 0.5818
+Time for full epoch 73 seconds
+================ Epoch 31 ============== 
+Current training loss:	 0.0704
+Current soil IoU: 	 0.7056
+Current bedrock IoU: 	 0.6463
+Current sand IoU: 	 0.4834
+Current big rock IoU: 	 0.4909
+Mean IoU: 	 0.5815
+Time for full epoch 75 seconds
+================ Epoch 32 ============== 
+Current training loss:	 0.06934
+Current soil IoU: 	 0.7048
+Current bedrock IoU: 	 0.6524
+Current sand IoU: 	 0.4712
+Current big rock IoU: 	 0.4830
+Mean IoU: 	 0.5779
+Time for full epoch 74 seconds
+================ Epoch 33 ============== 
+Current training loss:	 0.06956
+Current soil IoU: 	 0.7058
+Current bedrock IoU: 	 0.6382
+Current sand IoU: 	 0.4811
+Current big rock IoU: 	 0.4860
+Mean IoU: 	 0.5778
+Time for full epoch 75 seconds
+================ Epoch 34 ============== 
+Current training loss:	 0.06954
+Current soil IoU: 	 0.7058
+Current bedrock IoU: 	 0.6495
+Current sand IoU: 	 0.4845
+Current big rock IoU: 	 0.4902
+Mean IoU: 	 0.5825
+Time for full epoch 74 seconds
+================ Epoch 35 ============== 
+Current training loss:	 0.06863
+Current soil IoU: 	 0.7020
+Current bedrock IoU: 	 0.6358
+Current sand IoU: 	 0.4891
+Current big rock IoU: 	 0.4791
+Mean IoU: 	 0.5765
+Time for full epoch 75 seconds
+================ Epoch 36 ============== 
+Current training loss:	 0.07006
+Current soil IoU: 	 0.7044
+Current bedrock IoU: 	 0.6371
+Current sand IoU: 	 0.4804
+Current big rock IoU: 	 0.5001
+Mean IoU: 	 0.5805
+Time for full epoch 74 seconds
+================ Epoch 37 ============== 
+Current training loss:	 0.06958
+Current soil IoU: 	 0.7037
+Current bedrock IoU: 	 0.6324
+Current sand IoU: 	 0.5000
+Current big rock IoU: 	 0.4911
+Mean IoU: 	 0.5818
+Time for full epoch 73 seconds
+================ Epoch 38 ============== 
+Current training loss:	 0.06823
+Current soil IoU: 	 0.7106
+Current bedrock IoU: 	 0.6524
+Current sand IoU: 	 0.4975
+Current big rock IoU: 	 0.4942
+Mean IoU: 	 0.5887
+  *** New Best Model Saved! (mIoU: 0.5887) ***
+Time for full epoch 75 seconds
+================ Epoch 39 ============== 
+Current training loss:	 0.06774
+Current soil IoU: 	 0.7074
+Current bedrock IoU: 	 0.6527
+Current sand IoU: 	 0.4837
+Current big rock IoU: 	 0.4911
+Mean IoU: 	 0.5837
+Time for full epoch 74 seconds
+================ Epoch 40 ============== 
+Current training loss:	 0.06727
+Current soil IoU: 	 0.7072
+Current bedrock IoU: 	 0.6450
+Current sand IoU: 	 0.4930
+Current big rock IoU: 	 0.4865
+Mean IoU: 	 0.5829
+Time for full epoch 74 seconds
+================ Epoch 41 ============== 
+Current training loss:	 0.06975
+Current soil IoU: 	 0.7056
+Current bedrock IoU: 	 0.6432
+Current sand IoU: 	 0.4989
+Current big rock IoU: 	 0.5049
+Mean IoU: 	 0.5881
+Time for full epoch 74 seconds
+================ Epoch 42 ============== 
+Current training loss:	 0.06802
+Current soil IoU: 	 0.7112
+Current bedrock IoU: 	 0.6603
+Current sand IoU: 	 0.4882
+Current big rock IoU: 	 0.4958
+Mean IoU: 	 0.5889
+  *** New Best Model Saved! (mIoU: 0.5889) ***
+Time for full epoch 75 seconds
+================ Epoch 43 ============== 
+Current training loss:	 0.06706
+Current soil IoU: 	 0.7066
+Current bedrock IoU: 	 0.6465
+Current sand IoU: 	 0.4990
+Current big rock IoU: 	 0.4947
+Mean IoU: 	 0.5867
+Time for full epoch 75 seconds
+================ Epoch 44 ============== 
+Current training loss:	 0.06923
+Current soil IoU: 	 0.7079
+Current bedrock IoU: 	 0.6532
+Current sand IoU: 	 0.4825
+Current big rock IoU: 	 0.5058
+Mean IoU: 	 0.5873
+Time for full epoch 75 seconds
+================ Epoch 45 ============== 
+Current training loss:	 0.0675
+Current soil IoU: 	 0.7116
+Current bedrock IoU: 	 0.6626
+Current sand IoU: 	 0.4940
+Current big rock IoU: 	 0.4920
+Mean IoU: 	 0.5900
+  *** New Best Model Saved! (mIoU: 0.5900) ***
+Time for full epoch 75 seconds
+================ Epoch 46 ============== 
+Current training loss:	 0.0654
+Current soil IoU: 	 0.7092
+Current bedrock IoU: 	 0.6564
+Current sand IoU: 	 0.4980
+Current big rock IoU: 	 0.4880
+Mean IoU: 	 0.5879
+Time for full epoch 73 seconds
+================ Epoch 47 ============== 
+Current training loss:	 0.0685
+Current soil IoU: 	 0.7062
+Current bedrock IoU: 	 0.6509
+Current sand IoU: 	 0.4790
+Current big rock IoU: 	 0.4983
+Mean IoU: 	 0.5836
+Time for full epoch 74 seconds
+================ Epoch 48 ============== 
+Current training loss:	 0.06722
+Current soil IoU: 	 0.7124
+Current bedrock IoU: 	 0.6631
+Current sand IoU: 	 0.4860
+Current big rock IoU: 	 0.5017
+Mean IoU: 	 0.5908
+  *** New Best Model Saved! (mIoU: 0.5908) ***
+Time for full epoch 75 seconds
+================ Epoch 49 ============== 
+Current training loss:	 0.06624
+Current soil IoU: 	 0.7133
+Current bedrock IoU: 	 0.6680
+Current sand IoU: 	 0.4827
+Current big rock IoU: 	 0.4930
+Mean IoU: 	 0.5892
+Time for full epoch 76 seconds
+================ Epoch 50 ============== 
+Current training loss:	 0.06721
+Current soil IoU: 	 0.7116
+Current bedrock IoU: 	 0.6590
+Current sand IoU: 	 0.4982
+Current big rock IoU: 	 0.4917
+Mean IoU: 	 0.5901
+Time for full epoch 73 seconds
+Training history saved to LCDL_train256_train.csv and LCDL_train256_val.csv
+Training finished. Best mIoU achieved: 0.5908
+Loading model from LCDL_train256.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.04131
+Current soil IoU: 	 0.6603
+Current bedrock IoU: 	 0.5692
+Current sand IoU: 	 0.4283
+Current big rock IoU: 	 0.4290
+Mean IoU: 	 0.5217
+  *** New Best Model Saved! (mIoU: 0.5217) ***
+Time for full epoch 169 seconds
+================ Epoch 2 ============== 
+Current training loss:	 0.04004
+Current soil IoU: 	 0.6680
+Current bedrock IoU: 	 0.6050
+Current sand IoU: 	 0.4721
+Current big rock IoU: 	 0.4289
+Mean IoU: 	 0.5435
+  *** New Best Model Saved! (mIoU: 0.5435) ***
+Time for full epoch 168 seconds
+================ Epoch 3 ============== 
+Current training loss:	 0.03895
+Current soil IoU: 	 0.6879
+Current bedrock IoU: 	 0.6006
+Current sand IoU: 	 0.4789
+Current big rock IoU: 	 0.4428
+Mean IoU: 	 0.5525
+  *** New Best Model Saved! (mIoU: 0.5525) ***
+Time for full epoch 168 seconds
+================ Epoch 4 ============== 
+Current training loss:	 0.03911
+Current soil IoU: 	 0.6973
+Current bedrock IoU: 	 0.6162
+Current sand IoU: 	 0.4931
+Current big rock IoU: 	 0.4654
+Mean IoU: 	 0.5680
+  *** New Best Model Saved! (mIoU: 0.5680) ***
+Time for full epoch 168 seconds
+================ Epoch 5 ============== 
+Current training loss:	 0.03796
+Current soil IoU: 	 0.6945
+Current bedrock IoU: 	 0.5957
+Current sand IoU: 	 0.4941
+Current big rock IoU: 	 0.4775
+Mean IoU: 	 0.5654
+Time for full epoch 167 seconds
+================ Epoch 6 ============== 
+Current training loss:	 0.03833
+Current soil IoU: 	 0.6793
+Current bedrock IoU: 	 0.6031
+Current sand IoU: 	 0.4803
+Current big rock IoU: 	 0.4566
+Mean IoU: 	 0.5549
+Time for full epoch 168 seconds
+================ Epoch 7 ============== 
+Current training loss:	 0.03768
+Current soil IoU: 	 0.6807
+Current bedrock IoU: 	 0.5883
+Current sand IoU: 	 0.4939
+Current big rock IoU: 	 0.4663
+Mean IoU: 	 0.5573
+Time for full epoch 170 seconds
+================ Epoch 8 ============== 
+Current training loss:	 0.03746
+Current soil IoU: 	 0.6954
+Current bedrock IoU: 	 0.6296
+Current sand IoU: 	 0.4834
+Current big rock IoU: 	 0.4551
+Mean IoU: 	 0.5659
+Time for full epoch 173 seconds
+================ Epoch 9 ============== 
+Current training loss:	 0.03705
+Current soil IoU: 	 0.6998
+Current bedrock IoU: 	 0.6325
+Current sand IoU: 	 0.4988
+Current big rock IoU: 	 0.4706
+Mean IoU: 	 0.5754
+  *** New Best Model Saved! (mIoU: 0.5754) ***
+Time for full epoch 173 seconds
+================ Epoch 10 ============== 
+Current training loss:	 0.03777
+Current soil IoU: 	 0.6988
+Current bedrock IoU: 	 0.6289
+Current sand IoU: 	 0.4993
+Current big rock IoU: 	 0.4563
+Mean IoU: 	 0.5708
+Time for full epoch 172 seconds
+================ Epoch 11 ============== 
+Current training loss:	 0.03593
+Current soil IoU: 	 0.6808
+Current bedrock IoU: 	 0.5916
+Current sand IoU: 	 0.4531
+Current big rock IoU: 	 0.4703
+Mean IoU: 	 0.5489
+Time for full epoch 170 seconds
+================ Epoch 12 ============== 
+Current training loss:	 0.03636
+Current soil IoU: 	 0.6962
+Current bedrock IoU: 	 0.6232
+Current sand IoU: 	 0.4925
+Current big rock IoU: 	 0.4581
+Mean IoU: 	 0.5675
+Time for full epoch 173 seconds
+================ Epoch 13 ============== 
+Current training loss:	 0.0354
+Current soil IoU: 	 0.6958
+Current bedrock IoU: 	 0.6356
+Current sand IoU: 	 0.4797
+Current big rock IoU: 	 0.4614
+Mean IoU: 	 0.5681
+Time for full epoch 172 seconds
+================ Epoch 14 ============== 
+Current training loss:	 0.03686
+Current soil IoU: 	 0.6904
+Current bedrock IoU: 	 0.6252
+Current sand IoU: 	 0.4947
+Current big rock IoU: 	 0.4584
+Mean IoU: 	 0.5672
+Time for full epoch 172 seconds
+================ Epoch 15 ============== 
+Current training loss:	 0.03566
+Current soil IoU: 	 0.6971
+Current bedrock IoU: 	 0.6302
+Current sand IoU: 	 0.5081
+Current big rock IoU: 	 0.4574
+Mean IoU: 	 0.5732
+Time for full epoch 172 seconds
+================ Epoch 16 ============== 
+Current training loss:	 0.0359
+Current soil IoU: 	 0.6905
+Current bedrock IoU: 	 0.6259
+Current sand IoU: 	 0.4867
+Current big rock IoU: 	 0.4721
+Mean IoU: 	 0.5688
+Time for full epoch 171 seconds
+================ Epoch 17 ============== 
+Current training loss:	 0.0356
+Current soil IoU: 	 0.6984
+Current bedrock IoU: 	 0.6441
+Current sand IoU: 	 0.4815
+Current big rock IoU: 	 0.4635
+Mean IoU: 	 0.5719
+Time for full epoch 170 seconds
+================ Epoch 18 ============== 
+Current training loss:	 0.03517
+Current soil IoU: 	 0.7003
+Current bedrock IoU: 	 0.6518
+Current sand IoU: 	 0.4820
+Current big rock IoU: 	 0.4940
+Mean IoU: 	 0.5820
+  *** New Best Model Saved! (mIoU: 0.5820) ***
+Time for full epoch 173 seconds
+================ Epoch 19 ============== 
+Current training loss:	 0.03444
+Current soil IoU: 	 0.7010
+Current bedrock IoU: 	 0.6398
+Current sand IoU: 	 0.4918
+Current big rock IoU: 	 0.4824
+Mean IoU: 	 0.5788
+Time for full epoch 173 seconds
+================ Epoch 20 ============== 
+Current training loss:	 0.03527
+Current soil IoU: 	 0.6838
+Current bedrock IoU: 	 0.5937
+Current sand IoU: 	 0.4783
+Current big rock IoU: 	 0.4897
+Mean IoU: 	 0.5614
+Time for full epoch 171 seconds
+================ Epoch 21 ============== 
+Current training loss:	 0.03533
+Current soil IoU: 	 0.7081
+Current bedrock IoU: 	 0.6543
+Current sand IoU: 	 0.5049
+Current big rock IoU: 	 0.4819
+Mean IoU: 	 0.5873
+  *** New Best Model Saved! (mIoU: 0.5873) ***
+Time for full epoch 173 seconds
+================ Epoch 22 ============== 
+Current training loss:	 0.03453
+Current soil IoU: 	 0.7059
+Current bedrock IoU: 	 0.6715
+Current sand IoU: 	 0.4989
+Current big rock IoU: 	 0.4502
+Mean IoU: 	 0.5816
+Time for full epoch 172 seconds
+================ Epoch 23 ============== 
+Current training loss:	 0.03565
+Current soil IoU: 	 0.6972
+Current bedrock IoU: 	 0.6304
+Current sand IoU: 	 0.4970
+Current big rock IoU: 	 0.4773
+Mean IoU: 	 0.5755
+Time for full epoch 171 seconds
+================ Epoch 24 ============== 
+Current training loss:	 0.03425
+Current soil IoU: 	 0.7018
+Current bedrock IoU: 	 0.6360
+Current sand IoU: 	 0.4943
+Current big rock IoU: 	 0.4866
+Mean IoU: 	 0.5797
+Time for full epoch 171 seconds
+================ Epoch 25 ============== 
+Current training loss:	 0.03473
+Current soil IoU: 	 0.7046
+Current bedrock IoU: 	 0.6550
+Current sand IoU: 	 0.4792
+Current big rock IoU: 	 0.4916
+Mean IoU: 	 0.5826
+Time for full epoch 172 seconds
+================ Epoch 26 ============== 
+Current training loss:	 0.03453
+Current soil IoU: 	 0.7041
+Current bedrock IoU: 	 0.6500
+Current sand IoU: 	 0.5143
+Current big rock IoU: 	 0.4744
+Mean IoU: 	 0.5857
+Time for full epoch 170 seconds
+================ Epoch 27 ============== 
+Current training loss:	 0.03402
+Current soil IoU: 	 0.7050
+Current bedrock IoU: 	 0.6584
+Current sand IoU: 	 0.5155
+Current big rock IoU: 	 0.4920
+Mean IoU: 	 0.5927
+  *** New Best Model Saved! (mIoU: 0.5927) ***
+Time for full epoch 172 seconds
+================ Epoch 28 ============== 
+Current training loss:	 0.03446
+Current soil IoU: 	 0.7077
+Current bedrock IoU: 	 0.6670
+Current sand IoU: 	 0.4975
+Current big rock IoU: 	 0.4787
+Mean IoU: 	 0.5877
+Time for full epoch 172 seconds
+================ Epoch 29 ============== 
+Current training loss:	 0.03487
+Current soil IoU: 	 0.7097
+Current bedrock IoU: 	 0.6584
+Current sand IoU: 	 0.4993
+Current big rock IoU: 	 0.4852
+Mean IoU: 	 0.5881
+Time for full epoch 170 seconds
+================ Epoch 30 ============== 
+Current training loss:	 0.03482
+Current soil IoU: 	 0.7056
+Current bedrock IoU: 	 0.6470
+Current sand IoU: 	 0.5025
+Current big rock IoU: 	 0.4828
+Mean IoU: 	 0.5845
+Time for full epoch 170 seconds
+================ Epoch 31 ============== 
+Current training loss:	 0.03398
+Current soil IoU: 	 0.7115
+Current bedrock IoU: 	 0.6701
+Current sand IoU: 	 0.4906
+Current big rock IoU: 	 0.4754
+Mean IoU: 	 0.5869
+Time for full epoch 171 seconds
+================ Epoch 32 ============== 
+Current training loss:	 0.03451
+Current soil IoU: 	 0.7019
+Current bedrock IoU: 	 0.6464
+Current sand IoU: 	 0.4985
+Current big rock IoU: 	 0.4805
+Mean IoU: 	 0.5818
+Time for full epoch 170 seconds
+================ Epoch 33 ============== 
+Current training loss:	 0.03346
+Current soil IoU: 	 0.7045
+Current bedrock IoU: 	 0.6620
+Current sand IoU: 	 0.5012
+Current big rock IoU: 	 0.4872
+Mean IoU: 	 0.5887
+Time for full epoch 170 seconds
+================ Epoch 34 ============== 
+Current training loss:	 0.03378
+Current soil IoU: 	 0.7035
+Current bedrock IoU: 	 0.6561
+Current sand IoU: 	 0.4815
+Current big rock IoU: 	 0.4843
+Mean IoU: 	 0.5814
+Time for full epoch 169 seconds
+================ Epoch 35 ============== 
+Current training loss:	 0.03424
+Current soil IoU: 	 0.7010
+Current bedrock IoU: 	 0.6466
+Current sand IoU: 	 0.4962
+Current big rock IoU: 	 0.4790
+Mean IoU: 	 0.5807
+Time for full epoch 170 seconds
+================ Epoch 36 ============== 
+Current training loss:	 0.03403
+Current soil IoU: 	 0.7102
+Current bedrock IoU: 	 0.6691
+Current sand IoU: 	 0.4904
+Current big rock IoU: 	 0.4993
+Mean IoU: 	 0.5923
+Time for full epoch 171 seconds
+================ Epoch 37 ============== 
+Current training loss:	 0.03377
+Current soil IoU: 	 0.7071
+Current bedrock IoU: 	 0.6682
+Current sand IoU: 	 0.4776
+Current big rock IoU: 	 0.4903
+Mean IoU: 	 0.5858
+Time for full epoch 171 seconds
+================ Epoch 38 ============== 
+Current training loss:	 0.0346
+Current soil IoU: 	 0.7062
+Current bedrock IoU: 	 0.6629
+Current sand IoU: 	 0.4677
+Current big rock IoU: 	 0.4853
+Mean IoU: 	 0.5806
+Time for full epoch 171 seconds
+================ Epoch 39 ============== 
+Current training loss:	 0.03384
+Current soil IoU: 	 0.7123
+Current bedrock IoU: 	 0.6832
+Current sand IoU: 	 0.4982
+Current big rock IoU: 	 0.4898
+Mean IoU: 	 0.5959
+  *** New Best Model Saved! (mIoU: 0.5959) ***
+Time for full epoch 171 seconds
+================ Epoch 40 ============== 
+Current training loss:	 0.03342
+Current soil IoU: 	 0.7082
+Current bedrock IoU: 	 0.6683
+Current sand IoU: 	 0.4945
+Current big rock IoU: 	 0.4809
+Mean IoU: 	 0.5880
+Time for full epoch 170 seconds
+================ Epoch 41 ============== 
+Current training loss:	 0.03323
+Current soil IoU: 	 0.7118
+Current bedrock IoU: 	 0.6742
+Current sand IoU: 	 0.5077
+Current big rock IoU: 	 0.4669
+Mean IoU: 	 0.5902
+Time for full epoch 171 seconds
+================ Epoch 42 ============== 
+Current training loss:	 0.0325
+Current soil IoU: 	 0.7072
+Current bedrock IoU: 	 0.6606
+Current sand IoU: 	 0.4895
+Current big rock IoU: 	 0.4787
+Mean IoU: 	 0.5840
+Time for full epoch 171 seconds
+================ Epoch 43 ============== 
+Current training loss:	 0.03294
+Current soil IoU: 	 0.7103
+Current bedrock IoU: 	 0.6851
+Current sand IoU: 	 0.4935
+Current big rock IoU: 	 0.4917
+Mean IoU: 	 0.5952
+Time for full epoch 172 seconds
+================ Epoch 44 ============== 
+Current training loss:	 0.03223
+Current soil IoU: 	 0.7145
+Current bedrock IoU: 	 0.6794
+Current sand IoU: 	 0.4931
+Current big rock IoU: 	 0.4911
+Mean IoU: 	 0.5945
+Time for full epoch 171 seconds
+================ Epoch 45 ============== 
+Current training loss:	 0.03407
+Current soil IoU: 	 0.7121
+Current bedrock IoU: 	 0.6718
+Current sand IoU: 	 0.5023
+Current big rock IoU: 	 0.4877
+Mean IoU: 	 0.5935
+Time for full epoch 170 seconds
+================ Epoch 46 ============== 
+Current training loss:	 0.03333
+Current soil IoU: 	 0.7130
+Current bedrock IoU: 	 0.6784
+Current sand IoU: 	 0.4986
+Current big rock IoU: 	 0.4689
+Mean IoU: 	 0.5897
+Time for full epoch 169 seconds
+================ Epoch 47 ============== 
+Current training loss:	 0.03302
+Current soil IoU: 	 0.7119
+Current bedrock IoU: 	 0.6831
+Current sand IoU: 	 0.4960
+Current big rock IoU: 	 0.4798
+Mean IoU: 	 0.5927
+Time for full epoch 169 seconds
+================ Epoch 48 ============== 
+Current training loss:	 0.03214
+Current soil IoU: 	 0.7097
+Current bedrock IoU: 	 0.6771
+Current sand IoU: 	 0.4893
+Current big rock IoU: 	 0.4776
+Mean IoU: 	 0.5884
+Time for full epoch 166 seconds
+================ Epoch 49 ============== 
+Current training loss:	 0.03227
+Current soil IoU: 	 0.7113
+Current bedrock IoU: 	 0.6729
+Current sand IoU: 	 0.4938
+Current big rock IoU: 	 0.4890
+Mean IoU: 	 0.5918
+Time for full epoch 166 seconds
+================ Epoch 50 ============== 
+Current training loss:	 0.03256
+Current soil IoU: 	 0.7115
+Current bedrock IoU: 	 0.6759
+Current sand IoU: 	 0.4763
+Current big rock IoU: 	 0.4818
+Mean IoU: 	 0.5864
+Time for full epoch 167 seconds
+Training history saved to LCDL_train512_train.csv and LCDL_train512_val.csv
+Training finished. Best mIoU achieved: 0.5959
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.2438
+Current soil IoU: 	 0.3200
+Current bedrock IoU: 	 0.4255
+Current sand IoU: 	 0.2670
+Current big rock IoU: 	 0.1906
+Mean IoU: 	 0.3008
+  *** New Best Model Saved! (mIoU: 0.3008) ***
+Time for full epoch 44 seconds
+================ Epoch 2 ============== 
+Current training loss:	 0.2228
+Current soil IoU: 	 0.4292
+Current bedrock IoU: 	 0.4609
+Current sand IoU: 	 0.3106
+Current big rock IoU: 	 0.2150
+Mean IoU: 	 0.3539
+  *** New Best Model Saved! (mIoU: 0.3539) ***
+Time for full epoch 43 seconds
+================ Epoch 3 ============== 
+Current training loss:	 0.2159
+Loading model from LCDL_train128.pth
+Starting train on cuda for 50 epochs
+================ Epoch 1 ============== 
+Current training loss:	 0.1019
+Loading model from LCDL_train256.pth
