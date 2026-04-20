@@ -1,23 +1,48 @@
 \relax 
-\bibstyle{plain}
+\bibstyle{IEEEtran}
+\citation{Kale2021}
 \citation{Azad2023}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Literature Review}{1}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Semantic Segmentation}{1}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}AI4Mars}{1}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Training Method}{1}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dataset and Preprocessing}{1}{}\protected@file@percent }
+\citation{Sultana2020}
+\citation{Swan2021}
+\citation{Goutham2022}
+\citation{Atha2022}
+\citation{Luna2025}
+\citation{.}
+\citation{i}
+\citation{Swan2021}
+\citation{PytorchVision2026}
+\citation{Atha2022}
+\citation{Goutham2022}
 \citation{Luna2025}
 \citation{Chen2017}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Literature Review}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Semantic Segmentation}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}AI4Mars}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Training Method}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Dataset and Preprocessing}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Model & Training: DeepLabV3+ with ResNet-50}{1}{}\protected@file@percent }
 \citation{Azad2023}
+\citation{Atha2022}
+\citation{Atha2022}
+\citation{Atha2022}
 \bibdata{references}
-\bibcite{Azad2023}{1}
-\bibcite{Chen2017}{2}
-\bibcite{Luna2025}{3}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}DeepLabV3+ with ResNet-50}{2}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Training Procedure}{2}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{2}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Performance metrics for models trained on the M2020 dataset.}}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Training Procedure}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Relative abundance of each non-background class in the AI4Mars m2020 navigational dataset.\relax }}{2}{}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:m2020_results}{{1}{2}{}{table.1}{}}
-\gdef \@abspage@last{2}
+\newlabel{fig:abd_pie}{{1}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{2}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Performance metrics for models trained on the M2020 dataset by Atha et al. \cite  {Atha2022}, reorganized for single-column fit.\relax }}{3}{}\protected@file@percent }
+\newlabel{tab:m2020_atha_vertical}{{I}{3}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Recall and IoU metrics for the m2020 validation dataset using DeepLabV3+ with ResNet-50 across various configurations. CE: Cross Entropy Loss, LCDL: Log Cosh Dice Loss, PT: Pretrained.\relax }}{3}{}\protected@file@percent }
+\newlabel{tab:m2020_results_vertical}{{II}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusion}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Evolution of 1 - accuracy during training. At each 50 epochs, the model was trained with larger images\relax }}{4}{}\protected@file@percent }
+\newlabel{fig:mean_acc}{{2}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Evolution of 1 - Mean Intersection over union during training. At each 50 epochs, the model was trained with larger images.\relax }}{4}{}\protected@file@percent }
+\newlabel{fig:miou}{{3}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Example of original image, model prediction and ground truth mask for the best performing model trained with the Log Cosh Dice Loss function. This model was pretrained on the MSL dataset. The label colors are: Blue for soil, Purple for Bedrock, Orange for Sand and Green for Big Rock\relax }}{5}{}\protected@file@percent }
+\newlabel{fig:DL_pred}{{4}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Example of original image, model prediction and ground truth mask for the best performing model trained with the Cross Entropy Loss function. This model was pretrained on the MSL dataset. The label colors are: Blue for soil, Purple for Bedrock, Orange for Sand and Green for Big Rock \relax }}{5}{}\protected@file@percent }
+\newlabel{fig:CE_pred}{{5}{5}}
+\gdef \@abspage@last{5}

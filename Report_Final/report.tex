@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt, conference]{IEEEtran}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=0.8in]{geometry}
 \usepackage{graphicx}
@@ -7,8 +7,9 @@
 \usepackage{paracol}
 \usepackage{chngcntr}
 \usepackage{amsmath}
-\counterwithout{figure}{section} % If using Article
-\bibliographystyle{plain} % Options: alpha, IEEEtran, unsrt, etc.
+\usepackage{xcolor}
+\counterwithout{figure*}{section} % If using Article
+\bibliographystyle{IEEEtran} % Options: alpha, IEEEtran, unsrt, etc.
 
 
 \newcommand{\singleWidth}{0.6\textwidth}
@@ -31,6 +32,8 @@
 \begin{document}
 
 \maketitle
+
+%Abstract
 
 \section{Introduction}
 
@@ -58,8 +61,8 @@ The model chosen was the DeepLav3+ with a ResNet-50 backbone, a model that provi
 time to prediction of 25ms and mean accuracy of 87\% when trained and tested in a similar dataset of
 martian terrain images by Luna et al \cite[Luna2025]
 in an independent dataset of Mars terrain images. We apply this model to the open AI4Mars dataset
-to evaluate if the pre training with the MSL and the choice of loss functions can improve the accuraly
-and mean Intersection over Union (mIoU) results.
+to evaluate if the pre training with the MSL and the choice of loss functions can improve the recall
+and mean Intersection over Union (mIoU) results in comparison to each other, and related work.
 
 In section 2 we review relevant previous work, both on categorizing different models for
 semantic segmentation, as well as previous results of other attempts to do image segmentation on
@@ -82,14 +85,16 @@ In section 4, we present the results, and discuss them in relation to other rele
 
 \subsection{Dataset and Preprocessing}
 
-The m2020 navigational dataset, consisting of 2355 images with masks.
-% Images labeled in 4 classes + background by crowd science initiative
-% and fine tuned by expert labelers
+The m2020 navigational dataset, consisting of 2355 images with class label masks.
+The masks were produced by a crowd science initiative that trained labelers to
+identify the four classes: soil, bedrock, sand and big rocks, represented by
+pixel color values of 0,1,2,3 respectively. The masks produced by the trained
+labelers was reviwed and finalize by a group of expert labelers to produce the final
+dataset. The images and masks aren't always the same size, some images
+were centercropped before the labels were construct, for this images it's necessary
+to center crop the images accordingly when retrieving them from the dataset \cite{Swan2021}.
 
-%Image of the dataset here
-
-
-The dataset is split 
+For training, The dataset is split 
 randomly into 90\% for the training set and 10\% for the validation 
 set. Both datasets are resized, grayscaled, and converted into 
 normalized tensors using the mean and variation suggested by the 
@@ -100,17 +105,33 @@ $[0.229,0.224,0.225]$.
 The training dataset additionally passes through an augmentation loop 
 which includes:
 \begin{itemize}
-    \item Horizontal flip (50\% probability)
-    \item Rotation up to 20° (50\% probability)
-    \item Random cutouts (up to 8, 50\% probability)
-    \item Random brightness adjustment (20\% probability)
+\item Horizontal flip (50\% probability): The idea here is that the rover can take
+  pictures of the same area viewed from different sides, and the model should
+  still be able to perform accordingly.
+\item Rotation up to 20° (50\% probability): Some of the rover cameras are free moving
+  and may be rotate, so a generalized understanding of the geometry of the classes is important.
+\item Random cutouts (up to 8, 50\% probability): Mostly to avoid over training on noise
+  due to the limited dataset size
+\item Random brightness adjustment (20\% probability): pictures are taken under different
+  light conditions in a changing environment like the martian surface.
 \end{itemize}
 
-% Talk about underpretenseted big rocks
+One recurring problem in related works \cite{Atha2022, Goutham2022} was that big rocks
+are underrepresented, consisting of only 3.2\% of non-background pixels as shown in
+figure \ref{fig:abd_pie}, to compensate a little bit for this during trained, the
+data-loader was set with a weighted sampler that favored loading images with big
+rock pixels in their mask by a factor of 15.
 
-% image of class representation here
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{abundance_legend_chart.png}
+  \caption{Relative abundance of each non-background
+    class in the AI4Mars m2020 navigational dataset.}
+  \label{fig:abd_pie}
+\end{figure}
 
-\subsection{Model: DeepLabV3+ with ResNet-50}
+
+\subsection{Model & Training: DeepLabV3+ with ResNet-50}
 
 DeepLabV3+ belongs to a family of neural networks that exploits 
 dilated (atrous) convolutions to increase the field of view without 
@@ -123,7 +144,11 @@ We utilized the PyTorch implementation of DeepLabV3+, which employs
 Atrous Spatial Pyramid Pooling (ASPP) with an encoder-decoder 
 topology \cite{Chen2017}. The training process uses different 
 initial learning rates: $0.0005$ for the classifier (ASPP onwards) 
-and $0.00001$ for the ResNet-50 backbone. 
+and $0.00001$ for the ResNet-50 backbone. The low learning rates chosen
+try to avoid deviating too much from the base model during transfer learning,
+since the number of images is relatively low, we are trying to fine tune the default
+weights of the model for a new problem, since it's unlikely we can train
+a model from zero with so few images.
 
 The optimizer is Stochastic Gradient Descent (SGD) with a decay 
 rate of $0.0001$ and momentum of $0.9$. A polynomial scheduler 
@@ -134,43 +159,186 @@ is used to dynamically decrease the learning rate with a power of $0.9$.
 The model is trained for a total of 150 epochs using a progressive 
 resizing strategy:
 \begin{itemize}
-    \item \textbf{Epochs 1--50}: $128 \times 128$ resolution
-    \item \textbf{Epochs 51--100}: $256 \times 256$ resolution
-    \item \textbf{Epochs 101--150}: $512 \times 512$ resolution
+    \item \textbf{Epochs 1--50}: $128 \times 128 pixels$ resolution
+    \item \textbf{Epochs 51--100}: $256 \times 256 pixels$ resolution
+    \item \textbf{Epochs 101--150}: $512 \times 512 pixels$ resolution
 \end{itemize}
 
 The model was trained with two possible 
-choices of loss function: Cross Entropy Loss, and 
-Log-Cosh Dice Loss. The cross entropy loss scores the
+choices of loss function: weighted Cross Entropy Loss, and 
+weighted Log-Cosh Dice Loss. The cross entropy loss scores the
 model in it's ability to correctly label each pixel, while the Log-Cosh Dice Loss
 scores based on the ability to adequately define the correct boundaries of a region. The choice
 of the log cosh version of dice loss is due to the big rock class often being present in just
 a small section of the image, resulting in fluctuating values for the pure dice loss. The choice
-of log-cosh dice loss makes the dice loss a bit more resistant to these variations  \cite{Azad2023}.
+of log-cosh dice loss makes the dice loss a bit more resistant to these variations  \cite{Azad2023}
+The weighted cross entropy formula is shown in equation \ref{eq:WCE}, $w_c \in {0.04,0.08,0.15,0.73}$. The log cosh dice loss formula is shown in equation \ref{eq:LCDL} using the same weights. The big rock class was assignment the dominant weight to prevent the gradient from being overwhelmed
+by the more abundant classes.
+
+\begin{equation}
+  L_{WCE} = - \sum_{c=1}^{C} w_c \cdot y_c \log(\hat{y}_c)
+  \label{eq:WCE}
+\end{equation}
+
+\begin{equation}
+  L_{WLCDL} = log(cosh(1 - \sum_{c=1}^{C} w_c \frac{2 \sum_{i} y_{ic} \hat{y}_{ic}}{\sum_{i} y_{ic} + \sum_{i} \hat{y}_{ic}}))
+  \label{eq:LCDL}
+\end{equation}
+
+The loss functions was also weighted inversely with the abundance of each class, according
+to figure \ref{fig:abd_pie}, so the soil class was weighted as for 4\% of the final loss value,
+8\% for bedrock, 15\% for sand and 73\% for big rock. The loss functions also
+ignored the background, which in retrospect was a mistake, the final models learned to always guess
+a class (usually soil) to minimize their loss, since ``missing'' the background isn't penalized,
+as shown in figures \ref{fig:DL_pred} and \ref{fig:CE_pred}.
 
 For each choice of loss function, the model either trained directly from the default weights of the
 the torch implementation of DeepLabV3+, or it was initialized from the default weights, then pre trained on the 16396 images of the MSL dataset and then trained and access on the m2020 datasets. This training process
 resulted in four different final models with different scores
 
 
- \section{Results}
-
- \begin{table}[h]
-   \centering
-   \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
-     \hline
-     Model & \multicolumn{4}{c|}{Precision} & \multicolumn{4}{c|}{Recall} \\ \hline
-           & Soil & Bedrock & Sand & Bigrock & Soil & Bedrock & Sand & Bigrock \\ \hline
-     ResNet-101 & 0.933 & 0.857 & 0.664 & 0.558 & 0.746 & 0.570 & 0.975 & 0.283 \\ \hline
-     ResNet-101 (ImageNet) & 0.999 & 0.467 & 0.667 & 0.618 & 0.596 & 0.958 & 0.952 & 0.355 \\ \hline
-     ResNet-101 (MSL) & 0.916 & 0.917 & 0.754 & 0.174 & 0.838 & 0.536 & 0.957 & 0.64 \\ \hline
-   \end{tabular}
-   \caption{Performance metrics for models trained on the M2020 dataset by Atha et al \cite{Atha2022}.}
-   \label{tab:m2020_results}
- \end{table}
+\section{Results}
 
 
 
+\begin{figure*}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=1.1\textwidth]{meanAcc.pdf}
+  \caption{Evolution of 1 - accuracy during training. At each 50 epochs, the model was trained with larger images}
+  \label{fig:mean_acc}
+\end{figure*}
+
+
+\begin{figure*}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=1.1\textwidth]{mIoU.pdf}
+  \caption{Evolution of 1 - Mean Intersection over union during training. At each 50 epochs, the model was trained with larger images.}
+  \label{fig:miou}
+\end{figure*}
+
+
+The evolution of the assessment on accuracy, recall and mean intersection over union (mIoU) of the
+four versions of the models with different trained set up are presented
+in figures \ref{fig:mean_acc} and \ref{fig:miou}. The choice of mIoU for model selection
+is due to accuracy being a misleading metric over unbalanced classes. A model guessing huge
+portions of Big Rocks would get high accuracy on big rocks by chance. The mIoU assessment
+metric is better at assessing the models ability to in fact define the boundaries between
+the semantic relevant classes. The resizing strategy of increasing the image size every 50 epochs
+was due to the limited time to train the model, the training time with larger images was
+taking a significant while, so that was a compromise to make this project deliverable on time.
+It's likely that fully training the model on larger images from that start might provide better
+results.
+
+The cross entropy loss trained models
+had their training accelerated by the resizing strategy, with the accuracy quickly increasing
+after the image size. The pretraining strategy didn't significantly improve the accuracy and
+mIoU of the cross entropy based model, with the model achieving an accuracy of around 80.4\% and
+mIoU of 64\% regardless of pretraining, this is consistent with the finding of previous works on
+the AI4Mars dataset \ref{Atha2022, Goutham2022}. The findings for the log cosh Dice Loss
+trained model is similar in the overall assessment, with maximum accuracy of around 70.7\% and
+mIoU of 60\% regardless of pretraining. 
+
+On the ability to classify specific classes, the cross entropy loss trained models seem to
+outperform the log cosh Dice Loss model significantly in the underrepresented big rock class,
+achieving around 74\% accuracy and recall on that class, against 57\% on these metrics for
+the best performing  dice loss based models.
+In the dice loss based models, pretraining HURT the ability of the model in identifying
+big rocks, with the accuracy reducing from 57\% to 49\% with pretraining.
+
+It's important to also note a problem in the choice of ignoring the background when computing this losses, due to this choice, the model learning to ALWAYS guess a class for each pixel, as shown
+in figures \ref{fig:DL_pred} and \ref{fig:CE_pred}. The prediction don't contain any background
+prediction (colored white on the ground truth), the model was overconfident that anything could
+be classified as one terrain, so it even included the sky as a type of soil.
+
+
+The work by Luna et Al \ref{Luna2025} also trained the DeepLabV3+ with ResNet-50 as a backbone
+on an independent but similar dataset to the AI4Mars dataset. Their model achieved 87\%
+accuracy and 72\% mIoU. It's not likely we can know where their improvements can from,
+if it was due to better choice of loss function and training hyperparameters, or if it was due
+to the different dataset.
+
+%Cut PDFs
+
+\begin{figure*}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=1.1\textwidth]{PTLCDL_pred23.pdf}
+  \caption{Example of original image, model prediction and ground truth mask for the best
+    performing model trained with the Log Cosh Dice Loss function. This model was pretrained on the
+    MSL dataset. The label colors are: Blue for soil, Purple for Bedrock, Orange for Sand and
+    Green for Big Rock} 
+  \label{fig:DL_pred}
+\end{figure*}
+
+\begin{figure*}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=1.1\textwidth]{PTCE_PRED23.pdf}
+  \caption{Example of original image, model prediction and ground truth mask for the best
+    performing model trained with the Cross Entropy Loss function.
+    This model was pretrained on the
+    MSL dataset. The label colors are: Blue for soil, Purple for Bedrock, Orange for Sand and
+    Green for Big Rock }
+  \label{fig:CE_pred}
+\end{figure*}
+
+Example of predictions for the best performing Log Cosh Dice Loss based model is shown in figure
+\ref{fig:DL_pred}, and for the best performing cross entropy model...
+
+The results per class assessed on Recall and IoU are presented in table \ref{tab:m2020_ours}.
+The work by Atha et al \cite{Atha2022} - presented on table \ref{m2020_atha} trained models with ResNet-101 backbone, serving as a
+point of comparison for our results, specially in investigating the effects of the
+additional DeepLabV3+ layers. Our training methods seemed to have universally improved
+the prediction of soil, but that is most likely due to our model ignoring the loss on
+predicting the background, this resulted in the model always guessing something for every pixel,
+and soil was the most common class. That said, the Recall results for the other classes also
+shown an improvement over the pure ResNet-101, and for some classes, and improvement over the
+ResNet-101 with pretraining. The ResNet-101 with ImageNet still outperforms DeepLabV3+ with ResNet-50 back bone.
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|l|l|c|c|c|}
+    \hline
+    \textbf{Metric} & \textbf{Class} & \textbf{ResNet-101} & \textbf{+ImageNet} & \textbf{+MSL} \\ \hline
+    \hline
+    Precision & Soil    & 0.933 & 0.999 & 0.916 \\ \cline{2-5}
+                    & Bedrock & 0.857 & 0.467 & 0.917 \\ \cline{2-5}
+                    & Sand    & 0.664 & 0.667 & 0.754 \\ \cline{2-5}
+                    & Bigrock & 0.558 & 0.618 & 0.174 \\ \hline
+    \hline
+    Recall    & Soil    & 0.746 & 0.596 & 0.838 \\ \cline{2-5}
+                    & Bedrock & 0.570 & 0.958 & 0.536 \\ \cline{2-5}
+                    & Sand    & 0.975 & 0.952 & 0.957 \\ \cline{2-5}
+                    & Bigrock & 0.283 & 0.355 & 0.640 \\ \hline
+  \end{tabular}
+  \caption{Performance metrics for models trained on the M2020 dataset by Atha et al. \cite{Atha2022}, reorganized for single-column fit.}
+  \label{tab:m2020_atha_vertical}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|l|l|c|c|c|c|}
+    \hline
+    \textbf{Metric} & \textbf{Class} & \textbf{CE} & \textbf{CE+PT} & \textbf{LCDL} & \textbf{LCDL+PT} \\ \hline
+    \hline
+    Recall & Soil    & 0.871 & 0.864 & 0.899 & 0.923 \\ \cline{2-6}
+                    & Bedrock & 0.825 & 0.853 & 0.773 & 0.725 \\ \cline{2-6}
+                    & Sand    & 0.811 & 0.762 & 0.587 & 0.695 \\ \cline{2-6}
+                    & Bigrock & 0.710 & 0.743 & 0.572 & 0.496 \\ \hline
+    \hline
+    IoU    & Soil    & 0.789 & 0.790 & 0.712 & 0.728 \\ \cline{2-6}
+                    & Bedrock & 0.725 & 0.753 & 0.683 & 0.651 \\ \cline{2-6}
+                    & Sand    & 0.668 & 0.586 & 0.498 & 0.605 \\ \cline{2-6}
+                    & Bigrock & 0.412 & 0.443 & 0.490 & 0.434 \\ \hline
+  \end{tabular}
+  \caption{Recall and IoU metrics for the m2020 validation dataset using DeepLabV3+ with ResNet-50 across various configurations. CE: Cross Entropy Loss, LCDL: Log Cosh Dice Loss, PT: Pretrained.}
+  \label{tab:m2020_results_vertical}
+\end{table}
+
+
+\section{Conclusion}
+
+
+ 
  
 \bibliography{references}  % Use the filename WITHOUT the .bib extension
 

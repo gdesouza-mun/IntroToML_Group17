@@ -126,6 +126,10 @@ def plot_abundance(abundance_dict):
     print("Graph saved as 'abundance_legend_chart.png'")
 
 
+abd = compute_class_abundance("AI4Mars_Data/m2020_nav/labels")
+plot_abundance(abd)
+
+
 def mask_to_rgb(mask, pallete=glb.pallet_nav):
     #Given a mask in grayscale, turns it into an rgb mask according to our pallete
     h, w = mask.shape
@@ -135,6 +139,9 @@ def mask_to_rgb(mask, pallete=glb.pallet_nav):
         rgb_mask[mask == label] = color
 
     return rgb_mask
+
+
+from matplotlib.colors import ListedColormap
 
 def plot_mask_overlay(image, mask, alpha=0.5, color_max=255, ax=None):
     """
@@ -148,7 +155,7 @@ def plot_mask_overlay(image, mask, alpha=0.5, color_max=255, ax=None):
 
     # 1. Prepare the mask as RGBA
     # Create an array of shape (H, W, 4)
-    h, w, _ = mask.shape
+    h, w = mask.shape
     rgba_mask = np.zeros((h, w, 4))
 
     # Fill RGB channels
@@ -211,15 +218,76 @@ base_transform = A.Compose([
     ToTensorV2()
 ])
 
-m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
 
-device = torch.device("cpu")
+def visualize_results(index, model, dataset, device):
 
-to_load="PT_LCDL"
-model = get_deeplabv3
-saved_parameters = torch.load(f"final_models/{to_load}_train512.pth", map_location=device)
-best_epoch = saved_parameters["epoch"]
-model.load_state_dict(saved_parameters['model_state_dict'])
+    orig_img, ground_truth = dataset.get_original_image(index)
+    orig_h, orig_w = orig_img.shape[:2]
+
+    sample, _ = dataset[index]
+    image_tensor = sample.unsqueeze(0).to(device)
+
+    model.to(device)
+    image_tensor.to(device)
+    model.eval()
+    with torch.no_grad():
+        output = model(image_tensor)
+        pred_mask=torch.argmax(output["out"], dim=1).squeeze(0)
+
+    full_res_pred = F.interpolate(pred_mask.unsqueeze(0).unsqueeze(0).float(),
+                                  size = (orig_h, orig_w),
+                                  mode='nearest').squeeze().cpu().numpy()
+
+    fig, ax = plt.subplots(1,3, figsize=(18,6))
+    #print(np.unique(full_res_pred.astype(int)))
+
+    palette_rgb = [
+        (0.08235294117647059, 0.6705882352941176, 0.9176470588235294),
+        (0.7490196078431373, 0.08235294117647059, 0.9176470588235294),
+        (0.9176470588235294, 0.32941176470588235, 0.08235294117647059),
+        (0.25098039215686274, 0.9176470588235294, 0.08235294117647059),
+        (1, 1, 1)
+    ]
+    custom_cmap = ListedColormap(palette_rgb)
+
+    ax[0].imshow(orig_img)
+    ax[0].set_title("Original Image")
+    ax[0].axis("off")
+
+    ax[1].imshow(full_res_pred, cmap=custom_cmap, vmin=0, vmax=4)
+    ax[1].set_title("Prediction")
+    ax[1].axis("off")
+
+    print(np.unique(ground_truth))
+    ax[2].imshow(ground_truth, cmap=custom_cmap, vmin=0, vmax=4)
+    ax[2].set_title("Ground Truth")
+    ax[2].axis("off")
+
+    plt.show()
+
+    # print(orig_img.shape)
+    # print(ground_truth.shape)
+    # print(sample.shape)
+    # print(image_tensor.shape)
+    # print(pred_mask.shape)
+
+
+
+# m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
+
+# device = torch.device("cuda")
+
+# to_load="PT_LCDL"
+# #to_load="PT_CE"
+
+# model, _ = get_deeplabv3()
+# saved_parameters = torch.load(f"final_models/{to_load}_train512.pth", map_location=device,
+#                               weights_only=False)
+# best_epoch = saved_parameters["epoch"]
+# model.load_state_dict(saved_parameters['model_state_dict'])
+
+
+# visualize_results(23, model, m2020_dataset, device)
 
 
 

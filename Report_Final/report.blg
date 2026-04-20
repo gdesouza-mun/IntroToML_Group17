@@ -1,53 +1,51 @@
-This is BibTeX, Version 0.99d (TeX Live 2025/dev/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: report.aux
-The style file: plain.bst
-Database file #1: references.bib
-Warning--empty journal in Azad2023
-Warning--there's a number but no volume in Azad2023
-Warning--empty journal in Chen2017
-Warning--there's a number but no volume in Chen2017
-Warning--empty journal in Luna2025
-Warning--there's a number but no volume in Luna2025
-You've used 3 entries,
-            2118 wiz_defined-function locations,
-            519 strings with 4659 characters,
-and the built_in function-call counts, 1082 in all, are:
-= -- 93
-> -- 84
+I couldn't open style file IEEEtran.bst
+---line 2 of file report.aux
+ : \bibstyle{IEEEtran
+ :                   }
+I'm skipping whatever remains of this command
+I found no style file---while reading file report.aux
+You've used 11 entries,
+            0 wiz_defined-function locations,
+            104 strings with 679 characters,
+and the built_in function-call counts, 0 in all, are:
+= -- 0
+> -- 0
 < -- 0
-+ -- 33
-- -- 30
-* -- 98
-:= -- 204
-add.period$ -- 12
-call.type$ -- 3
-change.case$ -- 24
++ -- 0
+- -- 0
+* -- 0
+:= -- 0
+add.period$ -- 0
+call.type$ -- 0
+change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 9
-duplicate$ -- 30
-empty$ -- 55
-format.name$ -- 30
-if$ -- 199
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 0
+format.name$ -- 0
+if$ -- 0
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 3
-newline$ -- 21
-num.names$ -- 6
-pop$ -- 24
-preamble$ -- 1
-purify$ -- 21
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 0
+num.names$ -- 0
+pop$ -- 0
+preamble$ -- 0
+purify$ -- 0
 quote$ -- 0
-skip$ -- 18
+skip$ -- 0
 stack$ -- 0
-substring$ -- 15
+substring$ -- 0
 swap$ -- 0
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
-warning$ -- 6
-while$ -- 6
-width$ -- 4
-write$ -- 38
-(There were 6 warnings)
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 0
+(There were 2 error messages)
