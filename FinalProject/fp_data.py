@@ -165,6 +165,27 @@ class AI4Mars_DataSet(Dataset):
     def __len__(self):
         return len(self.images)
 
+
+    def get_original_image(self, index):
+        img_path = os.path.join(self.image_dir, self.images[index])
+        mask_path = os.path.join(self.mask_dir,
+                                 self.images[index].replace(".jpeg", ".png"))
+
+        #loads image using PIL
+        image_pil = Image.open(img_path).convert("RGB")
+        mask_pil = Image.open(mask_path)
+
+        if image_pil.size != mask_pil.size:
+            target_size = (image_pil.size[1], image_pil.size[0])
+            mask_pil = TF.center_crop(mask_pil, target_size)
+        #Conver images to numpy
+        image = np.array(image_pil)
+        #with masks in a single grayscale channel
+        mask = np.array(mask_pil.convert("L"))
+
+        return image, mask
+
+
     def __getitem__(self, index):
 
         #Figures image path, and gets mask of same name but .png extension

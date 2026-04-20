@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2025/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: report.aux
+The style file: plain.bst
+Database file #1: references.bib
+Warning--empty journal in Azad2023
+Warning--there's a number but no volume in Azad2023
+Warning--empty journal in Chen2017
+Warning--there's a number but no volume in Chen2017
+Warning--empty journal in Luna2025
+Warning--there's a number but no volume in Luna2025
+You've used 3 entries,
+            2118 wiz_defined-function locations,
+            519 strings with 4659 characters,
+and the built_in function-call counts, 1082 in all, are:
+= -- 93
+> -- 84
+< -- 0
++ -- 33
+- -- 30
+* -- 98
+:= -- 204
+add.period$ -- 12
+call.type$ -- 3
+change.case$ -- 24
+chr.to.int$ -- 0
+cite$ -- 9
+duplicate$ -- 30
+empty$ -- 55
+format.name$ -- 30
+if$ -- 199
+int.to.chr$ -- 0
+int.to.str$ -- 3
+missing$ -- 3
+newline$ -- 21
+num.names$ -- 6
+pop$ -- 24
+preamble$ -- 1
+purify$ -- 21
+quote$ -- 0
+skip$ -- 18
+stack$ -- 0
+substring$ -- 15
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 12
+warning$ -- 6
+while$ -- 6
+width$ -- 4
+write$ -- 38
+(There were 6 warnings)

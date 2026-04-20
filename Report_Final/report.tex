@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{caption}
+\usepackage{paracol}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\counterwithout{figure}{section} % If using Article
+\bibliographystyle{plain} % Options: alpha, IEEEtran, unsrt, etc.
+
+
+\newcommand{\singleWidth}{0.6\textwidth}
+
+\captionsetup[figure]{
+    font=small,           % Makes text smaller (can use 'footnotesize' for even smaller)
+    labelfont=bf,         % Makes "Figure X" bold
+    margin=10pt,          % Indents caption from the left/right of the column
+    skip=5pt,             % Reduces space between image and caption
+    justification=centering % Keeps it neat
+}
+
+
+\title{Final Report \& Literature Review}
+\author{Group 17: \\ Darlington Nkrumah (202492437) \\
+  Greg de Souza (202582225) \\
+  Xuan Toan Doan (202583882)}
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Semantic segmentation is a computer vision tool with the task of assigning 
+a semantic label to each pixel of an image, or in other terms, 
+defining boundaries between different semantic classes. \cite{Kale2021}
+Semantic segmentation has been successfully applied in numerous 
+different contexts, from medical imaging to self-driving cars \cite{Azad2023, Sultana2020}.
+
+In 2020 NASA has published an open dataset of images with segmentation 
+masks from multiple Mars missions, taken by rovers currently operating on Mars\cite{Swan2021}.
+Numerous groups have evaluated the capacity of different neural networks 
+in executing semantic segmentation tasks on the AI4Mars and similar dataset, 
+including access time to prediction in the limited hardware of the rovers
+\cite{Goutham2022, Atha2022, Luna2025}.
+
+In this work we focus our effort into evaluating the choice of loss 
+functions in image segmentation tasks in the m2020 navigational dataset 
+from the AI4Mars dataset, containing 2355 images and masks. 
+We also explore the effects of pre-training the model of choice with 
+the MSL Navigational dataset, containing 16396 labeled images, a retraining strategy that
+provided mixed results in previous works \cite[swan2021].
+
+The model chosen was the DeepLav3+ with a ResNet-50 backbone, a model that provides
+time to prediction of 25ms and mean accuracy of 87\% when trained and tested in a similar dataset of
+martian terrain images by Luna et al \cite[Luna2025]
+in an independent dataset of Mars terrain images. We apply this model to the open AI4Mars dataset
+to evaluate if the pre training with the MSL and the choice of loss functions can improve the accuraly
+and mean Intersection over Union (mIoU) results.
+
+In section 2 we review relevant previous work, both on categorizing different models for
+semantic segmentation, as well as previous results of other attempts to do image segmentation on
+the AI4Mars or similar independent datasets
+In section 3 we present our strategy to process the data and train the model with two different loss
+functions - Cross entropy and Log Cosh Dice Loss - with and without pre training on the MSL dataset.
+In section 4, we present the results, and discuss them in relation to other relevant works.
+
+\section{Literature Review}
+
+\subsection{Semantic Segmentation}
+
+\subsubsection*{Models}
+
+\subsubsection*{Loss Functions}
+
+\subsection{AI4Mars}
+
+\section{Training Method}
+
+\subsection{Dataset and Preprocessing}
+
+The m2020 navigational dataset, consisting of 2355 images with masks.
+% Images labeled in 4 classes + background by crowd science initiative
+% and fine tuned by expert labelers
+
+%Image of the dataset here
+
+
+The dataset is split 
+randomly into 90\% for the training set and 10\% for the validation 
+set. Both datasets are resized, grayscaled, and converted into 
+normalized tensors using the mean and variation suggested by the 
+PyTorch implementation of the DeepLabV3+ model \cite{PytorchVision2026}, with
+the mean by RGB channel as mean=$[0.485,0.456,0.406]$, with standard deviation of
+$[0.229,0.224,0.225]$. 
+
+The training dataset additionally passes through an augmentation loop 
+which includes:
+\begin{itemize}
+    \item Horizontal flip (50\% probability)
+    \item Rotation up to 20° (50\% probability)
+    \item Random cutouts (up to 8, 50\% probability)
+    \item Random brightness adjustment (20\% probability)
+\end{itemize}
+
+% Talk about underpretenseted big rocks
+
+% image of class representation here
+
+\subsection{Model: DeepLabV3+ with ResNet-50}
+
+DeepLabV3+ belongs to a family of neural networks that exploits 
+dilated (atrous) convolutions to increase the field of view without 
+increasing the number of parameters. While Luna et al \cite{Luna2025} was 
+successful in implementing DeepLabV3+ on an independent dataset of 
+Martian images, this work implements DeepLabV3+ with a ResNet-50 
+backbone on the open AI4Mars dataset.
+
+We utilized the PyTorch implementation of DeepLabV3+, which employs 
+Atrous Spatial Pyramid Pooling (ASPP) with an encoder-decoder 
+topology \cite{Chen2017}. The training process uses different 
+initial learning rates: $0.0005$ for the classifier (ASPP onwards) 
+and $0.00001$ for the ResNet-50 backbone. 
+
+The optimizer is Stochastic Gradient Descent (SGD) with a decay 
+rate of $0.0001$ and momentum of $0.9$. A polynomial scheduler 
+is used to dynamically decrease the learning rate with a power of $0.9$.
+
+\subsection{Training Procedure}
+
+The model is trained for a total of 150 epochs using a progressive 
+resizing strategy:
+\begin{itemize}
+    \item \textbf{Epochs 1--50}: $128 \times 128$ resolution
+    \item \textbf{Epochs 51--100}: $256 \times 256$ resolution
+    \item \textbf{Epochs 101--150}: $512 \times 512$ resolution
+\end{itemize}
+
+The model was trained with two possible 
+choices of loss function: Cross Entropy Loss, and 
+Log-Cosh Dice Loss. The cross entropy loss scores the
+model in it's ability to correctly label each pixel, while the Log-Cosh Dice Loss
+scores based on the ability to adequately define the correct boundaries of a region. The choice
+of the log cosh version of dice loss is due to the big rock class often being present in just
+a small section of the image, resulting in fluctuating values for the pure dice loss. The choice
+of log-cosh dice loss makes the dice loss a bit more resistant to these variations  \cite{Azad2023}.
+
+For each choice of loss function, the model either trained directly from the default weights of the
+the torch implementation of DeepLabV3+, or it was initialized from the default weights, then pre trained on the 16396 images of the MSL dataset and then trained and access on the m2020 datasets. This training process
+resulted in four different final models with different scores
+
+
+ \section{Results}
+
+ \begin{table}[h]
+   \centering
+   \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+     \hline
+     Model & \multicolumn{4}{c|}{Precision} & \multicolumn{4}{c|}{Recall} \\ \hline
+           & Soil & Bedrock & Sand & Bigrock & Soil & Bedrock & Sand & Bigrock \\ \hline
+     ResNet-101 & 0.933 & 0.857 & 0.664 & 0.558 & 0.746 & 0.570 & 0.975 & 0.283 \\ \hline
+     ResNet-101 (ImageNet) & 0.999 & 0.467 & 0.667 & 0.618 & 0.596 & 0.958 & 0.952 & 0.355 \\ \hline
+     ResNet-101 (MSL) & 0.916 & 0.917 & 0.754 & 0.174 & 0.838 & 0.536 & 0.957 & 0.64 \\ \hline
+   \end{tabular}
+   \caption{Performance metrics for models trained on the M2020 dataset by Atha et al \cite{Atha2022}.}
+   \label{tab:m2020_results}
+ \end{table}
+
+
+
+ 
+\bibliography{references}  % Use the filename WITHOUT the .bib extension
+
+
+\end{document}

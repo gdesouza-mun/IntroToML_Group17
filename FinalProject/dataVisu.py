@@ -1,10 +1,12 @@
 from fp_data import glb, AI4Mars_DataSet
+from train_resnet import get_deeplabv3
 import random
 import numpy as np
 from PIL import Image
 from pathlib import Path
 import matplotlib.pyplot as plt
 import torch
+import torch.nn.functional as F
 import os
 
 
@@ -67,10 +69,6 @@ def compute_class_abundance(folder_path, num_images=None):
     }
 
     return abundance
-
-abd = compute_class_abundance(glb.m2020_nav_mask_path)
-
-print(abd)
 
 def plot_abundance(abundance_dict):
     """
@@ -197,9 +195,37 @@ def create_grid_example(image_list, mask_list):
 
 
 
-# from train_resnet import base_transform
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 
-# m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
+height=512
+width=512
+mean=[0.485, 0.456, 0.406]
+std=[0.229, 0.224, 0.225]
+
+#Usual transforms for every image
+base_transform = A.Compose([
+    A.Resize(height=height, width=width),
+    A.ToGray(p=1.0),
+    A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
+    ToTensorV2()
+])
+
+m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path, transform=base_transform)
+
+device = torch.device("cpu")
+
+to_load="PT_LCDL"
+model = get_deeplabv3
+saved_parameters = torch.load(f"final_models/{to_load}_train512.pth", map_location=device)
+best_epoch = saved_parameters["epoch"]
+model.load_state_dict(saved_parameters['model_state_dict'])
+
+
+
+
+
+#load model
 
 # #m2020_dataset = AI4Mars_DataSet(glb.m2020_nav_img_path, glb.m2020_nav_mask_path)
 # img, mask = m2020_dataset[15]
@@ -211,3 +237,11 @@ def create_grid_example(image_list, mask_list):
 
 # ax = plot_mask_overlay(img, mask)
 # plt.show()
+
+
+# abd = compute_class_abundance(glb.m2020_nav_mask_path)
+
+# print(abd)
+
+# plot_abundance(abd)
+

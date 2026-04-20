@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{Azad2023}
+Reza Azad, Moein Heidary, Kadir Yilmaz, Michael Hüttemann, Sanaz
+  Karimijafarbigloo, Yuli Wu, Anke Schmeink, and Dorit Merhof.
+\newblock Loss functions in the era of semantic segmentation: A survey and
+  outlook.
+\newblock (arXiv:2312.05391), December 2023.
+\newblock arXiv:2312.05391 [cs].
+
+\bibitem{Chen2017}
+Liang-Chieh Chen, George Papandreou, Florian Schroff, and Hartwig Adam.
+\newblock Rethinking atrous convolution for semantic image segmentation.
+\newblock (arXiv:1706.05587), December 2017.
+\newblock arXiv:1706.05587 [cs].
+
+\bibitem{Luna2025}
+Cristina Luna, Robert Field, and Steven Kay.
+\newblock Ai-enabled capabilities to facilitate next-generation rover surface
+  operations.
+\newblock (arXiv:2510.05985), October 2025.
+\newblock arXiv:2510.05985 [cs].
+
+\end{thebibliography}
