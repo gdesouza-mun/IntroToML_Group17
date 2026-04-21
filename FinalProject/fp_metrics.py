@@ -54,6 +54,8 @@ class dice_loss(nn.Module):
     Computes dice loss
     if given average = none and abundance list it does so with
     abundance weighted mean
+
+    DOES NOT WORK currently with the training loop, it's here give log_cosh_dice_loss needs it
     '''
     def __init__(self, num_classes=5, bg_class=255, smooth=1,
                  relative_abundance=glb.relative_abundance):
@@ -71,11 +73,8 @@ class dice_loss(nn.Module):
 
     def process_masks(self, masks):
         '''
-        This is a bit elaborate, but the DiceScore uses hot encoded tensors
-        and hot encoded tensors assume your class label is smaller than the
-        number of classes
-
-        So I have to manually drop the 255 background layer to correctly call DiceScore
+        I tried and failed to process the masks in a way that won't break my training loop,
+        please ignore
         '''
         #Create a new mask
         clean_mask = masks.clone()
@@ -143,9 +142,13 @@ class log_cosh_dice_loss(dice_loss):
 #=============================================
 # ASSESSMENT FUNCTIONS
 #=============================================
+
+'''
+This first three functions I used to test and learn how to correctly
+implement the torchmetric assessement
+'''
 def get_pixel_accuracy(preds, masks, device=torch.device("cpu"),
                        assess_name=True):
-
     metric = MulticlassAccuracy(
         num_classes=len(glb.class_names),
         average=None,
@@ -198,6 +201,11 @@ def get_IoU(preds, masks, device=torch.device("cpu"),
     return results
 
 def validate_model(model, val_loader, device=torch.device("cpu")):
+
+    '''
+    Outputs an overall assessment as a pandas dataframe, I use to generate
+    a history uof the training
+    '''
     num_classes = len(glb.class_names)
 
     acc_metric = MulticlassAccuracy(num_classes=num_classes, average=None,
@@ -238,136 +246,3 @@ def validate_model(model, val_loader, device=torch.device("cpu")):
     iou_metric.reset()
 
     return pd.DataFrame(metrics_list).set_index("assessment")
-
-# from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
-
-# def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
-#     '''
-#     This gets the model given some conditions
-#     num_classes = 5 (4 classes + background)
-#     classifier_lr -> Learning rate for the last layer of the NN
-#     backbone_lr -> lr for the rest of the NN
-#     If backbone_lr=0, we freeze the backbone
-
-#     Returns the model + parameters that weren't frozen with their learning rates
-#     '''
-
-#     weights = DeepLabV3_ResNet50_Weights.DEFAULT
-#     model = deeplabv3_resnet50(weights=weights)
-
-#     model.classifier[4] = nn.Conv2d(256, num_classes, kernel_size=(1, 1))
-#     if model.aux_classifier:
-#         in_channels_aux = model.aux_classifier[4].in_channels
-#         model.aux_classifier[4] = nn.Conv2d(in_channels_aux, num_classes, kernel_size=(1, 1))
-
-#     params_to_optimize = []
-
-#     if backbone_lr==0:
-#         for param in model.backbone.parameters():
-#             param.requires_grad = False
-#     else:
-#         for param in model.backbone.parameters():
-#             param.requires_grad=True
-#         params_to_optimize.append({"params":model.backbone.parameters(), "lr": backbone_lr})
-
-#     for param in model.classifier.parameters():
-#         param.requires_grad = True
-#     params_to_optimize.append({"params": model.classifier.parameters(), "lr": classifier_lr})
-
-#     if model.aux_classifier:
-#         for param in model.aux_classifier.parameters():
-#             param.requires_grad = True
-#         params_to_optimize.append({"params": model.aux_classifier.parameters(),
-#                                        "lr": classifier_lr})
-
-#     return model, params_to_optimize
-
-
-# def tester():
-#     img_path, mask_path = get_m2020(True)
-#     #Usual transforms for every image
-
-#     mean=[0.485, 0.456, 0.406]
-#     std=[0.229, 0.224, 0.225]
-
-#     base_transform = A.Compose([
-#         A.Resize(height=128, width=128),
-#         A.ToGray(p=1.0),
-#         A.Normalize(mean=mean, std=std, max_pixel_value=255.0),
-#         ToTensorV2()
-#     ])
-#     #Load and split the data, notice I'm not passing any transform here
-#     dataset_m2020 = AI4Mars_DataSet(img_path, mask_path, transform=base_transform)
-#     loader = DataLoader(dataset_m2020, batch_size=8)
-
-#     model, params = get_deeplabv3()
-#     pretrained_path = "final_models/CE_train128.pth"
-#     saved_parameters = torch.load(pretrained_path, weights_only=False)
-#     model.load_state_dict(saved_parameters['model_state_dict'])
-
-#     device = torch.device("cuda")
-
-#     # pd1 = validate_model(model, loader, device)
-#     # print(pd1.round(4))
-#     # pd1["epoch"]=0
-#     # pd2 = validate_model(model, loader, device)
-#     # pd2["epoch"]=1
-#     # print(pd.concat([pd1, pd2]).round(4))
-
-#     images, masks = next(iter(loader))
-
-#     model.eval()
-#     with torch.no_grad():
-#         outputs = model(images)
-
-#         aux_out = outputs['aux']
-#         main_out = outputs['out']
-
-#         preds = torch.argmax(main_out, dim=1)
-
-#         print(type(preds))
-#         print(type(masks))
-
-#         print(f"output shape: {preds.shape}")
-#         print(f"masks shape: {masks.shape}")
-
-#         WDL = dice_loss()
-
-#         print(WDL(main_out, masks))
-
-
-# tester()
-
-
-
-        # acc_results = get_pixel_accuracy(preds, masks)
-        # acc_results["epoch"]=0
-        # acc_results["step"]="validation"
-
-        # recall_results = get_pixel_recall(preds, masks)
-        # recall_results["epoch"]=0
-        # recall_results["step"]="validation"
-
-        # IoU_results = get_IoU(preds, masks)
-        # IoU_results["epoch"]=0
-        # IoU_results["step"]="validation"
-
-        # data = [acc_results, recall_results, IoU_results]
-
-        # df=pd.DataFrame(data)
-        # df.set_index("assessment", inplace=True)
-
-        # print(df)
-
-        # print(f"Model weight dtype: {next(model.parameters()).dtype}")
-
-        # Testing Loss functions
-
-        # WCE_loss = abundance_weighted_CE_loss()
-        # print(WCE_loss(main_out, masks))
-
-        # DS_loss = dice_loss(relative_abundance=None, average='macro')
-        # print(DS_loss(main_out, masks))
-
-        # lg_DS_loss = log_cosh_dice_loss()
-        # print(lg_DS_loss(main_out, masks))

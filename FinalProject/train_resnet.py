@@ -14,13 +14,6 @@ import time
 
 import argparse
 
-
-#Implemente Scheduler
-#Implemente balanced loader
-#Implemente multi runs through slurm
-# Run for 2 Days and read lit review in the meanwhile
-
-
 def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
     '''
     This gets the model given some conditions
@@ -63,25 +56,6 @@ def get_deeplabv3(num_classes=5, classifier_lr = 1e-3, backbone_lr=0.0):
     return model, params_to_optimize
 
 
-# def loss_criterion(outputs, masks):
-#     #i'll change this
-#     dice_crit = DiceScore(num_classes=4, include_background=True, average='macro')
-
-#     class_weights = torch.tensor([1.0, 2.0, 2.0, 15.0]).cuda()
-#     ce_crit = nn.CrossEntropyLoss(weight=class_weights)
-
-#     clean_mask = masks.clone()
-#     clean_mask[masks==255] = 4
-#     mask_one_hot = F.one_hot(clean_mask, num_classes=5)
-
-#     mask_one_hot = mask_one_hot[..., :4].permute(0,3,1,2).float()
-#     clean_outputs = outputs[:,:4,:,:]
-
-#     dice_loss = dice_crit(clean_outputs, mask_one_hot)
-#     ce_loss = ce_crit(clean_outputs, mask_one_hot)
-
-#     return dice_loss + ce_loss
-
 def train_model(model,
                 criterion, optimizer,
                 train_loader, val_loader,
@@ -114,6 +88,7 @@ def train_model(model,
         print(f"Current training loss:\t {train_loss:.4}")
 
         if save_name is not None:
+            #I save the current best performing model as I go
             true_epoch = last_epoch+epoch
             train_score = fp_metrics.validate_model(model, train_loader, device)
             train_score["dataset"] = "train"
@@ -151,6 +126,8 @@ def train_model(model,
 
 
     if save_name is not None:
+        #I also print a history of validation metrics as a function of epochs
+        #So I can make some nice graphs
         val_hist_save = f"{save_name}_val.csv"
         train_hist_save = f"{save_name}_train.csv"
 
@@ -168,11 +145,14 @@ def train_model(model,
 
 if __name__ == "__main__":
 
-    # os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
-    # os.environ["PYTORCH_ALLOC_CONF"] = "max_split_size_mb:512"
+    '''
+    I pass a bunch of my hyperparameters from the command line
+    so I can control the script from inside the scripts I use to call the
+    jobs.
+    '''
+
     parser = argparse.ArgumentParser(description="Is Slurm")
 
-    # Define arguments based on your specifications
     parser.add_argument("--SIZE", type=int, default=128, help="Sets image size")
     parser.add_argument("--BATCH", type=int, default=8, help="Sets batch size")
     parser.add_argument("--ACC", type=int, default=8, help="Sets Accumulation steps")
@@ -241,8 +221,10 @@ if __name__ == "__main__":
     model, params = get_deeplabv3(backbone_lr=backbone_lr)
 
     model.to(device)
-    #optimizer = torch.optim.SGD(params, momentum=0.9, weight_decay=1e-4)
-    optimizer = torch.optim.Adam(params)
+    optimizer = torch.optim.SGD(params, momentum=0.9, weight_decay=1e-4)
+
+    #I used Adam for prototyping, SGD for the final runs
+    #optimizer = torch.optim.Adam(params)
 
     load_path=args.LOAD
     last_epoch=0
@@ -255,8 +237,11 @@ if __name__ == "__main__":
                 last_epoch=saved_parameters['epoch']
 
 
+
+    #I get my dataset
     dataset_m2020 = AI4Mars_DataSet(img_path, mask_path)
 
+    #Split it 90/10 into train/val
     train_size = int(train_split*len(dataset_m2020))
     val_size = len(dataset_m2020) - train_size
     train_subset, val_subset = random_split(dataset_m2020, [train_size, val_size],
@@ -267,11 +252,15 @@ if __name__ == "__main__":
     train_m2020 = AI4Mars_SubSet(train_subset, transform = aug_transform)
     val_m2020 = AI4Mars_SubSet(val_subset, transform = base_transform)
 
-    sampler = get_sampler(train_m2020)
+    #Get my weighted sampler
+    sampler = get_sampler(train_m2020, 15.0)
     train_m2020_loader = DataLoader(train_m2020, batch_size=batch_size, sampler=sampler)
     val_m2020_loader = DataLoader(val_m2020, batch_size=batch_size, shuffle=False,
                                   pin_memory=True)
 
+
+    #I also choose the loss from the command line so
+    # I can train different models from this single script
     loss_flag=args.LOSS
 
     if loss_flag=="CE":
@@ -285,6 +274,7 @@ if __name__ == "__main__":
         criterion = abundance_weighted_CE_loss()
 
     save_path=args.SAVE
+    #Call my training loop
     train_model(model,
                 criterion, optimizer,
                 train_m2020_loader, val_m2020_loader, device,

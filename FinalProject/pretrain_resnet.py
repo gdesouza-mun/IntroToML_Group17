@@ -22,6 +22,11 @@ from matplotlib.colors import LinearSegmentedColormap
 
 import argparse
 
+'''
+Basic training loop for the MSL dataset, without saving assessments or anything
+Follows the same logic of train_resnet
+
+'''
 
 def pretrain_model(model, params, train_loader, device, epochs=15,
                    save_name="pretrain.pth"):

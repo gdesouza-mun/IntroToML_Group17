@@ -1,51 +1,68 @@
-This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2025/dev/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: report.aux
-I couldn't open style file IEEEtran.bst
----line 2 of file report.aux
- : \bibstyle{IEEEtran
- :                   }
-I'm skipping whatever remains of this command
-I found no style file---while reading file report.aux
-You've used 11 entries,
-            0 wiz_defined-function locations,
-            104 strings with 679 characters,
-and the built_in function-call counts, 0 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 0
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: references.bib
+Warning--string name "july" is undefined
+--line 50 of file references.bib
+Warning--string name "june" is undefined
+--line 77 of file references.bib
+Warning--string name "june" is undefined
+--line 145 of file references.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in Azad2023
+Warning--empty journal in Luna2025
+Warning--empty journal in Ghosh2019
+Warning--empty journal in Minaee2020
+Warning--empty journal in Chen2017
+
+Done.
+You've used 12 entries,
+            4087 wiz_defined-function locations,
+            918 strings with 10408 characters,
+and the built_in function-call counts, 8277 in all, are:
+= -- 714
+> -- 215
+< -- 15
++ -- 102
+- -- 51
+* -- 429
+:= -- 1316
+add.period$ -- 25
+call.type$ -- 12
+change.case$ -- 18
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 0
-format.name$ -- 0
-if$ -- 0
+cite$ -- 17
+duplicate$ -- 669
+empty$ -- 648
+format.name$ -- 62
+if$ -- 1907
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 0
-num.names$ -- 0
-pop$ -- 0
-preamble$ -- 0
+int.to.str$ -- 12
+missing$ -- 133
+newline$ -- 77
+num.names$ -- 12
+pop$ -- 314
+preamble$ -- 1
 purify$ -- 0
-quote$ -- 0
-skip$ -- 0
+quote$ -- 2
+skip$ -- 669
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 124
+swap$ -- 503
+text.length$ -- 15
 text.prefix$ -- 0
-top$ -- 0
-type$ -- 0
-warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 0
-(There were 2 error messages)
+top$ -- 5
+type$ -- 12
+warning$ -- 5
+while$ -- 18
+width$ -- 14
+write$ -- 161
+(There were 8 warnings)

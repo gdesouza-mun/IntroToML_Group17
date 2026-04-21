@@ -23,7 +23,8 @@
 }
 
 
-\title{Final Report \& Literature Review}
+\title{Final Report: Performance of region-based and pixel-based loss functions in martian
+terrain segmentation for navigation using the AI4Mars dataset}
 \author{Group 17: \\ Darlington Nkrumah (202492437) \\
   Greg de Souza (202582225) \\
   Xuan Toan Doan (202583882)}
@@ -33,18 +34,30 @@
 
 \maketitle
 
-%Abstract
+\being{abstract}
+This report presents a comparative study of pixel-based and region-based loss functions
+in semantic segmentation on the navigational dataset for Mars Mission m2020, available in the open
+AI4Mars dataset. We implement torch's DeepLabV3+ with a Resnet-50 backbone, using transfer learning
+techniques from the default weight, and from a pre-training process on the larger MSL navigational
+dataset. By implemented weighted sampling and weighting the loss functions around the underrepresented
+big rock class, we are able to achieve accuracy, recall and IoU comparable to other related work.
+The final assessment shows that region-based loss functions seem to perform worse than pixel-based
+loss function on the m2020 dataset, with the best log cosh dice loss achieving around 60\% mIoU,
+and the best cross entropy based model achieving 64\% mIoU.
+
+\end{abstract}
+
 
 \section{Introduction}
 
 Semantic segmentation is a computer vision tool with the task of assigning 
 a semantic label to each pixel of an image, or in other terms, 
-defining boundaries between different semantic classes. \cite{Kale2021}
+defining boundaries between different semantic classes \cite{Kale2021}.
 Semantic segmentation has been successfully applied in numerous 
 different contexts, from medical imaging to self-driving cars \cite{Azad2023, Sultana2020}.
 
 In 2020 NASA has published an open dataset of images with segmentation 
-masks from multiple Mars missions, taken by rovers currently operating on Mars\cite{Swan2021}.
+masks from pictures taken by martian rovers as part of the MSL and M2020 missions \cite{Swan2021}.
 Numerous groups have evaluated the capacity of different neural networks 
 in executing semantic segmentation tasks on the AI4Mars and similar dataset, 
 including access time to prediction in the limited hardware of the rovers
@@ -52,14 +65,17 @@ including access time to prediction in the limited hardware of the rovers
 
 In this work we focus our effort into evaluating the choice of loss 
 functions in image segmentation tasks in the m2020 navigational dataset 
-from the AI4Mars dataset, containing 2355 images and masks. 
+from the AI4Mars dataset, containing 2355 images and masks, comparing the effectiveness
+of a pixel-based loss function - weighted cross entropy (WCE) - and a region-based
+loss function - weighted log cosh dice loss (LCDL) - in segmenting the navigational dataset
+from m2020 mars mission.
 We also explore the effects of pre-training the model of choice with 
 the MSL Navigational dataset, containing 16396 labeled images, a retraining strategy that
-provided mixed results in previous works \cite[swan2021].
+provided mixed results in previous works \cite{Swan2021}.
 
 The model chosen was the DeepLav3+ with a ResNet-50 backbone, a model that provides
 time to prediction of 25ms and mean accuracy of 87\% when trained and tested in a similar dataset of
-martian terrain images by Luna et al \cite[Luna2025]
+martian terrain images by Luna et al \cite{Luna2025}
 in an independent dataset of Mars terrain images. We apply this model to the open AI4Mars dataset
 to evaluate if the pre training with the MSL and the choice of loss functions can improve the recall
 and mean Intersection over Union (mIoU) results in comparison to each other, and related work.
@@ -68,18 +84,279 @@ In section 2 we review relevant previous work, both on categorizing different mo
 semantic segmentation, as well as previous results of other attempts to do image segmentation on
 the AI4Mars or similar independent datasets
 In section 3 we present our strategy to process the data and train the model with two different loss
-functions - Cross entropy and Log Cosh Dice Loss - with and without pre training on the MSL dataset.
-In section 4, we present the results, and discuss them in relation to other relevant works.
+functions - Cross entropy and Log Cosh Dice Loss - and with and without pre training on the MSL dataset.
+In section 4, we present the results of our work and discuss them in relation to other relevant works.
 
 \section{Literature Review}
 
+In this section we review two sets of related works - The first review concepts, models and
+choice of loss functions in the context of semantic segmentation to motivate our choices in building
+our model. In the second subsection we review results of previous related works around their
+AI4Mars and similar datasets.
+
 \subsection{Semantic Segmentation}
 
-\subsubsection*{Models}
+\subsubsection{Models}
 
-\subsubsection*{Loss Functions}
+Image segmentation is an image processing technique used to divide an 
+image into two or more meaningful regions, or alternatively, the process 
+of defining boundaries separating semantic entities in an image. In a 
+more technical definition, the task of image segmentation is to assign 
+a label to each pixel within an image, with each label connected with 
+respect to some property \cite{Ghosh2019}.
 
-\subsection{AI4Mars}
+Image segmentation can be divided in three categories: Instance 
+segmentation, in which different instances of the same semantic label 
+are categorized independently; semantic segmentation, which assigns 
+different labels for regions with different semantic meaning without 
+classifying independent instances independently; and panoptic 
+segmentation, which performs both tasks simultaneously \cite{Sultana2020}.
+
+The task of image segmentation has been significantly impacted by the 
+development and advancement of deep learning techniques in computer 
+vision, in particular after the success of AlexNet in 2012 in using CNN 
+for Semantic Segmentation. Since then, numerous Deep Learning models 
+for semantic segmentation have been developed with significant 
+success \cite{Sultana2020, Kale2021, Minaee2020}.
+
+Some general classes of models for semantic segmentation include 
+Convolutional Neural Networks (CNNs), which apply kernel-based 
+convolutions to capture the positional relations of features in images. 
+By adding pooling and unpooling layers that change the original size, 
+it allows CNNs to find meaningful information at multiple scales of 
+the feature image by following a ``pyramid-like'' design. CNNs are 
+among the most successful approaches to semantic 
+segmentation \cite{Minaee2020}.
+
+Another important advancement in machine vision was the development 
+of Residual Neural Networks \cite{He2016}, developed as a tool to 
+mitigate the degradation that occurred with large neural networks 
+by adding the output of earlier layers to the input of deeper layers 
+of the network, effectively ``skipping'' some layers. Residual blocks 
+allow for deeper networks that do not suffer as much from degradation 
+and vanishing coefficients as pure convolutional neural networks.
+
+Another relevant advance in convolutional neural networks is the idea 
+of dilated (or ``atrous'') convolutions \cite{Minaee2020, Chen2017}, 
+which add an additional parameter to convolutions that increases the 
+perceptive field without adding new parameters,according to the dilation rate $r$,
+shown in equation \ref{eq:atrous}, where $x$ represents the input and
+$w$ represents the kernel. A visual representation of the effects of the
+dilution rate in a $3 \times 3$ kernel is shown in figure \ref{fig:atrous}.
+In practice, the dilution rate makes the convolution pick samples farther from
+the center of the kernel, ``skipping'' neighbors, this increases the field
+of view without increasing the Kernel size.
+
+
+\begin{equation}
+  y_i = \sum_{k=1}^K x[i+rk]w[k]
+  \label{eq:atrous}
+\end{equation}
+
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{DilatedConvolution.png}
+  \caption{Visual representation of diluted convolution with a 3x3 Kernel at
+    different dilution rates. \cite{Minaee2020}}
+  \label{fig:atrous}
+\end{figure}
+
+The basis for the DeepLab family of models are a combination of diluted convolutions,
+a pyramid network for enconding the original input, and a CNN for decoding
+the final pyramid layer. This combination of  convolution layers and
+residual blocks to extract the features of the original
+image in multiple scales and stack them together in a multichannel output. In
+traditional pyramid networks, this final layer is already close to the output
+as shown in figure \ref{fig:pyramid}. The DeepLab model adds complexity by using
+the pyramid-like section of it's design to just encode the information of the
+original input, the encoded features are then extracted by another CNN structure
+from the multi-channel pyramid output, as represented in figur\ref{fig:deeplab}.
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{pyramid.png}
+  \caption{The PSPN architecture.
+    A CNN produces the feature map and a pyramid pooling module aggregates the different
+    sub-region representations. Up-sampling and concatenation are used to
+    form the final feature representation from which,
+    the final pixel-wise prediction is obtained through convolution \cite{Minaee2020}.}
+  \label{fig:pyramid}
+\end{figure}
+
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{deeplab.png}
+  \caption{The DeepLabV3+ model. From \cite{Minaee2020}.}
+  \label{fig:deeplab}
+\end{figure}
+
+
+\subsubsection{Loss Functions}
+
+Another important choice in implementing a deep learning model is the choice 
+of the loss function, a metric that evaluates how far a given output is 
+from the expected ground truth. A good choice of loss function can 
+mitigate usual challenges of image vision tasks, like noisy datasets 
+and unbalanced class representation. 
+
+A number of loss functions are presented and evaluated by the work done 
+in \cite{Azad2023}. Here we present the most relevant loss functions for 
+our attempt at Semantic Segmentation of the AI4Mars Dataset.
+
+One of the most common loss metrics is the Cross-entropy (CE) loss 
+function. It measures the difference between two probability 
+distributions given a random variable. In segmentation tasks, this means 
+comparing the ground truth with the assigned probability that the pixel
+is of that class according to the model (i.e. output of the soft max function).
+The formula for the cross entropy is based on Shannon's entropy, and is presented
+in a practical formulation in equation \ref{eq:cross_entropy} , $t_n$ is a one-hot
+encoded vector that is 1 on the target class and zero on the others, and $\hat{y}$ is the
+predicted probability.  In imbalanced datasets, one common approach to minimize the
+effects of the imbalance in the training of the model is adding weights that favor the
+less represented classes. If $w$ is a vector of the weights of each labeled class,
+the weighted cross entropy is presented in equation \ref{eq:weighted_cross_entropy}.
+
+
+\begin{equation}
+  L_{CE} = -\sum_{i=1}^{C} \log(t_i \cdot \hat{y}_i)
+  \label{eq:cross_entropy}
+\end{equation}
+
+
+\begin{equation}
+  L_{CE} = -\sum_{i=1}^{C} t_i \cdot w \log(t_i \cdot \hat{y}_i)
+  \label{eq:weighted_cross_entropy}
+\end{equation}
+
+Cross-entropy loss is part of the Pixel level loss functions, this family of loss functions
+evaluate each individual pixel as a part of their computation for dissimilarity, and they usually
+improve pixel-based assessment. Another approach are region-level loss functions, that focus
+on scoring based on the capacity of  a model to adequately separate different semantic regions of
+an image. One example of region-level loss function is the Dice Loss function, that scores
+similarity based on the intersection between the predicted subset of pixels $Y$ and the ground
+truth region $T$, and is written as in equation \ref{eq:dice} for two class classification task, where
+$|A|$ represents the size of a set $A$.
+Form multi class segmentation tasks, the formula is presented in equation \ref{eq:multiclass_dice},
+where $\hat{y}$ represent the prediction probability of each class, and $t$ is the vector that
+represents the ground truth. There is a choice in the number of classes considered in the context
+of a possible background/negative class, this background class is sometimes excluded from loss computations.
+
+\begin{equation}
+  L_{Dice} = 1 - \frac{2 |Y \cap T|}{|Y| + |T|}
+  \label{eq:dice}
+\end{equation}
+
+
+\begin{equation}
+  L_{Dice} = 1 - \frac{1}{C} \sum_{c=1}^{C} \frac{2 \sum_{i} t_{ic} \hat{y}_{ic}}{\sum_{i} t_{ic} + \sum_{i} \hat{y}_{ic}}
+  \label{eq:multiclass_dice}
+\end{equation}
+
+A variation of the Dice Loss that offer some advantages in segmentation tasks is the
+log cosh Dice Loss, shown in equation \ref{eq:log_dice}, it enhances smoothness and robustness to outliers,
+and minimizes the effects of outliers, and it's a better behaved function in terms of derivatives, that helps
+the optimization steps. The Dice Loss can also be ``weighted'' in a sense. A generalized version
+of the dice loss is defined by the Generalized Wasserstein Dice Loss, the full scope of the
+generalization is outside of this work scope, but a less general version of weighted dice loss
+was used in one of the training steps, presented in subsection \ref{sec:train}.
+
+\begin{equation}
+  L_{log-cosh} = \log(\cosh(L_{Dice})) 
+  \label{eq:log_dice}
+\end{equation}
+
+\subsection{Martian Terrain Segmentation Related Work}
+
+The task of using computer vision for autonomous driving capability has 
+been explored by NASA since 2004 \cite{Swan2021} with the AutoNav project. 
+The advancements in computer vision through deep learning models 
+presented a great opportunity to improve the autonomous driving 
+capabilities of the two active Martian rovers: Curiosity, launched as 
+part of the Mars Science Laboratory (MSL) mission, and Perseverance, 
+launched as part of the Mars 2020 (m2020) mission. Since advancements
+in computer vision fueled by development of deep-learning techniques,
+several research groups have attempted to use pictures from martian images,
+both from rovers and satellites, as input in segmentation tasks, with goal of
+identifying meaningful geological features or terrain for navigation.
+\cite{Swan2021, Atha2022, Goutham2022, Luna2025}.
+The AI4Mars dataset is just of the datasets explored by this groups, while
+others have independent dataset, or have labeled the available images through
+different methods, or even implemented some level of semi-supervised learning
+algorithms \cite{Goutham2022}.
+
+The AI4Mars navigational dataset divides martian terrain in four classes \cite{Swan2021} :
+\begin{itemize}
+\item \textbf{Soil}: Good for navigation
+\item \textbf{Bedrock}: Ideal for navigation.  
+\item \textbf{Sand}: A less favorable but still viable path choice.
+\item \textbf{Big Rock}: Must be avoided while choosing a path.
+\end{itemize}
+
+The AI4Mars dataset is a publicly available set of images and semantic 
+segmentation masks developed through a citizen science initiative by 
+NASA. A number of volunteers were trained to create the masks, and 
+their work was reviewed by specialist laborers and condensed into the 
+final dataset \cite{Swan2021}. One notable challenge in the dataset is that the Big Rock class is 
+underrepresented, consisting of less than 2\% of pixels in the m2020 
+dataset, as shown in Figure \ref{fig:abd_pie}.
+
+The work by Swan et al \cite{Swan2021} trained a DeepLabV3+ with ResNet-101 on two versions of the
+MSL dataset, created by two  different labeling strategies called \textit{random}, that used one possible
+mask from multiple suggested by trained labeler, and the \textit{merged} strategy, where the final
+masks was a merged version of all suggestion by trained labelers, compiled by an expert on martian
+terrain. Their work showed that the model performed significantly better with the \textit{merged}
+masks, with the accuracy for big rocks increasing from 82.83\% to 93.24\%. The final confusion
+matrices from this work are presented in table \ref{tab:Swan2021_results}
+
+\begin{table}[h]
+  \centering
+  \label{tab:msl_confusion_matrices}
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    \textbf{Actual} & \multicolumn{4}{c|}{\textbf{Predicted}} \\ \cline{2-5} 
+                    & \textbf{Soil} & \textbf{Bedrock} & \textbf{Sand} & \textbf{Big Rock} \\ \hline
+    \hline
+    \multicolumn{5}{|c|}{\textit{MSL Random (Overall Accuracy: 94.97\%)}} \\ \hline
+    Soil     & 96.00 & 0.31  & 3.69  & 0.00  \\ \hline
+    Bedrock  & 6.15  & 90.87 & 2.54  & 0.44  \\ \hline
+    Sand     & 0.25  & 3.23  & 96.51 & 0.01  \\ \hline
+    Big Rock & 11.67 & 0.03  & 5.48  & 82.83 \\ \hline
+    \hline
+    \multicolumn{5}{|c|}{\textit{MSL Merged (Overall Accuracy: 96.67\%)}} \\ \hline
+    Soil     & 99.10 & 0.32  & 0.57  & 0.01  \\ \hline
+    Bedrock  & 3.64  & 94.90 & 0.37  & 1.09  \\ \hline
+    Sand     & 0.88  & 5.62  & 93.45 & 0.05  \\ \hline
+    Big Rock & 6.76  & 0.00  & 0.00  & 93.24 \\ \hline
+  \end{tabular}
+  \caption{MSL NAVCAM Confusion Matrix Percentages for \textit{random} and \textit{merged}
+  labeling strategies from Swan et al \cite{Swan2021}}
+  \label{tab:Swan2021_results}
+\end{table}
+
+The work by Atha et Al \cite{Atha2022} explores additional machine learning models for
+semantic segmentation of martian terrain in the context navigation, exploring how
+different models perform both on the MSL and on the M2020 navigational dataset. Their work
+identified two main problems with current models that aim to allow for independent path
+making for martian rovers. First, models tent to perform worse as the rovers move, and terrain
+around them changes naturally, the current models aren't general enough for the martian surface.
+Second, the accuracy necessary for a model to perform independently, that is, without a remote human
+operator offering input, is significantly higher than the accuracy obtained by models at the time of
+that work.
+
+For their model, they trained a ResNet-101 from zero with both MSL and M2020 datasets, they also
+trained a ResNet-101 from the weights for ImageNet, and they also tried to transfer train the model
+trained on the larger MSL and MER datasets to the M2020 dataset. The transfer learning did improve
+performance over soil and rock, but decreased accuracy on labeling bedrock. Their results in
+relation to the m2020 Dataset are presented in table \ref{tab:m2020_atha}.
+
+Luna et al \cite{Luna2025} implemented ViBEKO's DeepLabV3+ as part
+of their efforts to develop FASTNAV, their tool for independent rover navigation. The dataset used
+was independently obtained and labeled by them. Their implementation of DeepLabV3+ with ResNet-50
+as a backbone achieved 87\% accuracy and 72\% mIoU with a time to prediction of 25ms, relevant
+for practical use in a rover.
+
 
 \section{Training Method}
 
@@ -89,7 +366,7 @@ The m2020 navigational dataset, consisting of 2355 images with class label masks
 The masks were produced by a crowd science initiative that trained labelers to
 identify the four classes: soil, bedrock, sand and big rocks, represented by
 pixel color values of 0,1,2,3 respectively. The masks produced by the trained
-labelers was reviwed and finalize by a group of expert labelers to produce the final
+labelers was reviewed and finalize by a group of expert labelers to produce the final
 dataset. The images and masks aren't always the same size, some images
 were centercropped before the labels were construct, for this images it's necessary
 to center crop the images accordingly when retrieving them from the dataset \cite{Swan2021}.
@@ -132,6 +409,7 @@ rock pixels in their mask by a factor of 15.
 
 
 \subsection{Model & Training: DeepLabV3+ with ResNet-50}
+\label{sec:train}
 
 DeepLabV3+ belongs to a family of neural networks that exploits 
 dilated (atrous) convolutions to increase the field of view without 
@@ -149,20 +427,6 @@ try to avoid deviating too much from the base model during transfer learning,
 since the number of images is relatively low, we are trying to fine tune the default
 weights of the model for a new problem, since it's unlikely we can train
 a model from zero with so few images.
-
-The optimizer is Stochastic Gradient Descent (SGD) with a decay 
-rate of $0.0001$ and momentum of $0.9$. A polynomial scheduler 
-is used to dynamically decrease the learning rate with a power of $0.9$.
-
-\subsection{Training Procedure}
-
-The model is trained for a total of 150 epochs using a progressive 
-resizing strategy:
-\begin{itemize}
-    \item \textbf{Epochs 1--50}: $128 \times 128 pixels$ resolution
-    \item \textbf{Epochs 51--100}: $256 \times 256 pixels$ resolution
-    \item \textbf{Epochs 101--150}: $512 \times 512 pixels$ resolution
-\end{itemize}
 
 The model was trained with two possible 
 choices of loss function: weighted Cross Entropy Loss, and 
@@ -196,10 +460,40 @@ For each choice of loss function, the model either trained directly from the def
 the torch implementation of DeepLabV3+, or it was initialized from the default weights, then pre trained on the 16396 images of the MSL dataset and then trained and access on the m2020 datasets. This training process
 resulted in four different final models with different scores
 
+The optimizer is Stochastic Gradient Descent (SGD) with a decay 
+rate of $0.0001$ and momentum of $0.9$. A polynomial scheduler 
+is used to dynamically decrease the learning rate with a power of $0.9$.
+
+The model is trained for a total of 150 epochs using a progressive 
+resizing strategy:
+\begin{itemize}
+\item \textbf{Epochs 1--50}: $128 \times 128 pixels$ resolution, batch size of 16,
+  with two accumulation steps before zeroing the gradient.
+\item \textbf{Epochs 51--100}: $256 \times 256 pixels$ resolution, batch size of 8, with 4
+  accumulation steps
+\item \textbf{Epochs 101--150}: $512 \times 512 pixels$ resolution, batch size of 4 with 4
+  accumulation steps.
+\end{itemize}
+In the last training loop, the model was saved only if the beat the mIoU of the previously saved model,
+this early saving was an attempt to minimize over-training, but except for the model trained directly
+with cross entropy loss and no pre-training, that performed the best at epoch 34, all other models
+were saved around epoch 145-150, suggesting those models could have performed even better given more
+training time. The resizing strategy of increasing the image size every 50 epochs
+was due to the limited time to train the model, the training time with larger images was
+taking a significant while, so that was a compromise to make this project deliverable on time.
+It's possible that fully training the model on larger images from that start might provide better
+results.
+
 
 \section{Results}
 
-
+The evolution of the assessment on accuracy and mean intersection over union (mIoU) of the
+four versions of the models with different trained set ups are presented
+in figures \ref{fig:mean_acc} and \ref{fig:miou}. The choice of mIoU for model selection
+is due to accuracy being a misleading metric over unbalanced classes. A model guessing huge
+portions of Big Rocks would get high accuracy on big rocks by chance. The mIoU assessment
+metric is better at assessing the models ability to in fact define the boundaries between
+the semantic relevant classes. 
 
 \begin{figure*}[hb] % [ht] suggests placement "here" or "top"
   \centering
@@ -212,52 +506,42 @@ resulted in four different final models with different scores
 \begin{figure*}[hb] % [ht] suggests placement "here" or "top"
   \centering
   \includegraphics[width=1.1\textwidth]{mIoU.pdf}
-  \caption{Evolution of 1 - Mean Intersection over union during training. At each 50 epochs, the model was trained with larger images.}
+  \caption{Evolution of 1 - Mean Intersection over union (mIoU) during training. At each 50 epochs, the model was trained with larger images.}
   \label{fig:miou}
 \end{figure*}
 
+Regarding the resizing between training epochs, this choice seems to have affected the
+Log Likelihood Dice Loss (LCDL) trained models negatively, with the models performing worse
+for a significant number of epochs after the resizing, this make sense for a region-based loss
+function, that ``cares'' more about the overall structure of the regions. For the cross-entropy
+loss trained models, the model seems to quickly adapt to the resized images and improve their
+total accuracy and mIoU due to the larger images.
 
-The evolution of the assessment on accuracy, recall and mean intersection over union (mIoU) of the
-four versions of the models with different trained set up are presented
-in figures \ref{fig:mean_acc} and \ref{fig:miou}. The choice of mIoU for model selection
-is due to accuracy being a misleading metric over unbalanced classes. A model guessing huge
-portions of Big Rocks would get high accuracy on big rocks by chance. The mIoU assessment
-metric is better at assessing the models ability to in fact define the boundaries between
-the semantic relevant classes. The resizing strategy of increasing the image size every 50 epochs
-was due to the limited time to train the model, the training time with larger images was
-taking a significant while, so that was a compromise to make this project deliverable on time.
-It's likely that fully training the model on larger images from that start might provide better
-results.
-
-The cross entropy loss trained models
-had their training accelerated by the resizing strategy, with the accuracy quickly increasing
-after the image size. The pretraining strategy didn't significantly improve the accuracy and
+Pre-training on the MSL dataset didn't significantly improve the accuracy and
 mIoU of the cross entropy based model, with the model achieving an accuracy of around 80.4\% and
 mIoU of 64\% regardless of pretraining, this is consistent with the finding of previous works on
-the AI4Mars dataset \ref{Atha2022, Goutham2022}. The findings for the log cosh Dice Loss
+the AI4Mars dataset \cite{Atha2022, Goutham2022}. The findings for the log cosh Dice Loss
 trained model is similar in the overall assessment, with maximum accuracy of around 70.7\% and
 mIoU of 60\% regardless of pretraining. 
 
 On the ability to classify specific classes, the cross entropy loss trained models seem to
-outperform the log cosh Dice Loss model significantly in the underrepresented big rock class,
+outperform the LCDL  model significantly in the underrepresented big rock class,
 achieving around 74\% accuracy and recall on that class, against 57\% on these metrics for
 the best performing  dice loss based models.
 In the dice loss based models, pretraining HURT the ability of the model in identifying
 big rocks, with the accuracy reducing from 57\% to 49\% with pretraining.
 
-It's important to also note a problem in the choice of ignoring the background when computing this losses, due to this choice, the model learning to ALWAYS guess a class for each pixel, as shown
+It's important to also note a problem in the choice of ignoring the background when computing this losses,
+due to this choice, the model learning to ALWAYS guess a class for each pixel, as shown
 in figures \ref{fig:DL_pred} and \ref{fig:CE_pred}. The prediction don't contain any background
 prediction (colored white on the ground truth), the model was overconfident that anything could
 be classified as one terrain, so it even included the sky as a type of soil.
 
-
-The work by Luna et Al \ref{Luna2025} also trained the DeepLabV3+ with ResNet-50 as a backbone
+The work by Luna et Al \cite{Luna2025} also trained the DeepLabV3+ with ResNet-50 as a backbone
 on an independent but similar dataset to the AI4Mars dataset. Their model achieved 87\%
 accuracy and 72\% mIoU. It's not likely we can know where their improvements can from,
 if it was due to better choice of loss function and training hyperparameters, or if it was due
 to the different dataset.
-
-%Cut PDFs
 
 \begin{figure*}[hb] % [ht] suggests placement "here" or "top"
   \centering
@@ -280,18 +564,15 @@ to the different dataset.
   \label{fig:CE_pred}
 \end{figure*}
 
-Example of predictions for the best performing Log Cosh Dice Loss based model is shown in figure
-\ref{fig:DL_pred}, and for the best performing cross entropy model...
-
-The results per class assessed on Recall and IoU are presented in table \ref{tab:m2020_ours}.
-The work by Atha et al \cite{Atha2022} - presented on table \ref{m2020_atha} trained models with ResNet-101 backbone, serving as a
-point of comparison for our results, specially in investigating the effects of the
+The results per class assessed on Recall and IoU are presented in table \ref{tab:m2020_results}.
+The work by Atha et al \cite{Atha2022} - presented on table \ref{tab:m2020_atha} trained models with ResNet-101 backbone, serving as a point of comparison for our results, specially in investigating the effects of the
 additional DeepLabV3+ layers. Our training methods seemed to have universally improved
 the prediction of soil, but that is most likely due to our model ignoring the loss on
-predicting the background, this resulted in the model always guessing something for every pixel,
-and soil was the most common class. That said, the Recall results for the other classes also
+predicting the background, that resulted in the model always guessing something for every pixel,
+and soil was the most common class. The Recall results for the other classes also
 shown an improvement over the pure ResNet-101, and for some classes, and improvement over the
-ResNet-101 with pretraining. The ResNet-101 with ImageNet still outperforms DeepLabV3+ with ResNet-50 back bone.
+ResNet-101 with pretraining.
+The ResNet-101 with ImageNet still outperforms DeepLabV3+ with ResNet-50 backbone on all assessed metrics.
 
 
 \begin{table}[h]
@@ -311,7 +592,7 @@ ResNet-101 with pretraining. The ResNet-101 with ImageNet still outperforms Deep
                     & Bigrock & 0.283 & 0.355 & 0.640 \\ \hline
   \end{tabular}
   \caption{Performance metrics for models trained on the M2020 dataset by Atha et al. \cite{Atha2022}, reorganized for single-column fit.}
-  \label{tab:m2020_atha_vertical}
+  \label{tab:m2020_atha}
 \end{table}
 
 \begin{table}[h]
@@ -331,14 +612,48 @@ ResNet-101 with pretraining. The ResNet-101 with ImageNet still outperforms Deep
                     & Bigrock & 0.412 & 0.443 & 0.490 & 0.434 \\ \hline
   \end{tabular}
   \caption{Recall and IoU metrics for the m2020 validation dataset using DeepLabV3+ with ResNet-50 across various configurations. CE: Cross Entropy Loss, LCDL: Log Cosh Dice Loss, PT: Pretrained.}
-  \label{tab:m2020_results_vertical}
+  \label{tab:m2020_results}
 \end{table}
 
 
 \section{Conclusion}
 
+In this work we reviewed the literature on Semantic Segmentation tasks applied to martian terrain in the
+context of navigational dataset, such as the open AI4Mars Dataset provided by NASA \cite{Swan2021} and
+similar datasets, such as the one explored by Luna et al \cite{Luna2025}. A review on models and
+loss functions for semantic segmentation \cite{Azad2023, Kale2021, Sultana2020, Minaee2020} motivated
+our work in comparing the effect of a choice of pixel-level loss function (Cross Entropy) and a
+region-level based loss function (Log Cosh Dice Loss) on segmentation tasks for martian terrain using the
+DeepLabV3+ with ResNet-50 backbone.
 
- 
+While this model has been explored in the context of martian terrain segmentation \cite{Luna2025}, it
+was not applied to the open AI4Mars dataset. The work by Atha et al \cite{Atha2022} implemented
+models with ResNet-101 backbone for AI4Mars segmentation, serving as a good comparison point for
+assessment scores. The AI4mars dataset contains two sets of navigational images, from the M2020 mars mission
+and from the MSL mission. We trained our model do to image segmentation on the AI4Mars m2020 dataset, based
+on masks produced by a crowd science contributions and reviewed by expert labelers \cite{Swan2021}.
+
+The model was trained using a resizing strategy with small batch sizes, but some accumulation steps
+for the gradient due to our choice of low learning rates to avoid deviate too much from the default weights
+of the model. The work produced four final models, based on the two choices of loss functions: weighted
+Cross entropy
+or weighted LCDL, both loss functions ignored the background, and the possibility of pre-training the model on the MSL dataset. Our best performing model
+overall was the pre-trained cross entropy loss model, achieving a mean accuracy of 80.5\% and
+mIoU of 64\%, with a recall on the underrepresented big rock class of 74.2\%.
+
+The final assessment result was lower but consistent with results by Luna et Al \cite{Luna2025}, that achieved
+accuracy of 87\% with mIoU of 72\% with their independent navigational dataset. This lower
+performance might be due to differences in the dataset, but it also might be to some less than ideal choices.
+Further exploration on the exact weights for the weighted loss functions might
+have balanced the training better. Also, excluding the background from the loss function proved
+to be a mistake, resulting in models that are not capable of identifying when something is not terrain,
+as shown in figures \ref{fig:DL_pred} and \ref{fig:CE_pred}.
+
+The assessment results between the pixel-based loss function (Cross entropy) and region-based loss
+function (LCDL) suggest that pixel-based loss functions are better suited for segmentation tasks on
+navigational datasets of martian terrain, probably due to the fact that big rocks represent small regions,
+but are very significant for the segmentation tasks, making region-based loss functions less reliable.
+
  
 \bibliography{references}  % Use the filename WITHOUT the .bib extension
 

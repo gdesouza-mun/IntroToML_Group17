@@ -89,6 +89,9 @@ class glb:
         },
     }
 
+
+
+
 def get_m2020(IS_SLURM=False):
     """
     Adjusts M2020 navigation and mask paths based on SLURM environment
@@ -309,57 +312,33 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device,
 
     return running_loss / len(dataloader)
 
-def validation_metrics(model, dataloader, criterion, device, num_classes=5):
-    '''
-    I'LL SUBSTITUTE THIS FOR A BETTER FUNCTION THAT MAKES A HISTORY OF THE TRAINING
-    Since we might try more than one model, this is returns consistent validations
-    This returns the IoU per classe, plus validation loss for the criterion of choice
-    '''
-    jaccard = JaccardIndex(task="multiclass", num_classes=num_classes,
-                           ignore_index=255, average='none').to(device)
-    val_loss = 0.0
-    model.eval()
-    with torch.no_grad():
-        for images, masks in dataloader:
-            images = images.to(device)
-            masks = masks.to(device).long()
+# def validation_metrics(model, dataloader, criterion, device, num_classes=5):
+#     '''
+#     I'LL SUBSTITUTE THIS FOR A BETTER FUNCTION THAT MAKES A HISTORY OF THE TRAINING
+#     Since we might try more than one model, this is returns consistent validations
+#     This returns the IoU per classe, plus validation loss for the criterion of choice
+#     '''
+#     jaccard = JaccardIndex(task="multiclass", num_classes=num_classes,
+#                            ignore_index=255, average='none').to(device)
+#     val_loss = 0.0
+#     model.eval()
+#     with torch.no_grad():
+#         for images, masks in dataloader:
+#             images = images.to(device)
+#             masks = masks.to(device).long()
 
-            outputs = model(images)['out'] # Shape: [B, 5, H, W]
-            preds = torch.argmax(outputs, dim=1) # Shape: [B, H, W]
+#             outputs = model(images)['out'] # Shape: [B, 5, H, W]
+#             preds = torch.argmax(outputs, dim=1) # Shape: [B, H, W]
 
-            # Update the metric state (accumulates intersection/union)
-            jaccard.update(preds, masks)
-            val_loss+=criterion(outputs, masks)
-
-
-    # Compute final results
-    # iou_per_class will be a tensor of 5 values
-    iou_per_class = jaccard.compute()
-    jaccard.reset()
-    # Reset for next time
-
-    return iou_per_class, val_loss/len(dataloader)
+#             # Update the metric state (accumulates intersection/union)
+#             jaccard.update(preds, masks)
+#             val_loss+=criterion(outputs, masks)
 
 
-# ==================================================================
-# TEST FUNCTIONS
-# ==================================================================
-def verify_dataset_integrity(dataset, minus_shape=-1):
-    #USED to check if the center cropping was working
-    print(f"Checking {len(dataset)} samples in the dataset...")
+#     # Compute final results
+#     # iou_per_class will be a tensor of 5 values
+#     iou_per_class = jaccard.compute()
+#     jaccard.reset()
+#     # Reset for next time
 
-    mismatch_found = False
-
-    # Iterate through the entire dataset
-    for i in range(len(dataset)):
-        image, label = dataset[i]
-
-        if image.shape[:minus_shape] != label.shape:
-            print(f"\n❌ Size Mismatch at index {i}!")
-            print(f"Image size: {image.shape} | Label size: {label.shape}")
-            mismatch_found = True
-
-    if not mismatch_found:
-        print("\n✅ Sanity Check Passed! All images and masks match perfectly.")
-    else:
-        print("\n⚠️ Sanity Check Failed. Review the errors above.")
+#     return iou_per_class, val_loss/len(dataloader)
