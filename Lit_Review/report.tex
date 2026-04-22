@@ -1,0 +1,391 @@
+\documentclass[10pt, conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{caption}
+\usepackage{paracol}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\counterwithout{figure*}{section} % If using Article
+\bibliographystyle{IEEEtran} % Options: alpha, IEEEtran, unsrt, etc.
+
+
+\newcommand{\singleWidth}{0.6\textwidth}
+
+\captionsetup[figure]{
+    font=small,           % Makes text smaller (can use 'footnotesize' for even smaller)
+    labelfont=bf,         % Makes "Figure X" bold
+    margin=10pt,          % Indents caption from the left/right of the column
+    skip=5pt,             % Reduces space between image and caption
+    justification=centering % Keeps it neat
+}
+
+
+\title{Literature review on Semantic Segmentation applied to martian terrain navigation datasets}
+\author{Group 17: \\ Darlington Nkrumah (202492437) \\
+  Greg de Souza (202582225) \\
+  Xuan Toan Doan (202583882)}
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\being{abstract}
+This report presents a literature review on semantic segmentation tools and it's
+application classifying images from the MSL and M2020 martian missions for the purpose
+of navigation. The first section explores the definition and basic structure of
+some widely used semantic segmentation models, with focus on the DeepLabV3+ model, and it
+also presents the difference between pixel-level and region-level loss functions.
+The second section explores the effectiveness of such models on performing semantic
+segmentation on the AI4Mars and similar independent datasets, presenting the main
+challenges to be yet solved in the efforts for a fully autonomous martian rover
+in the future.
+\end{abstract}
+
+\section{Semantic Segmentation \& Related Models}
+
+\subsection*{Definitions}
+The works by Ghosh et Al \cite{2019}, Minaee et Al \cite{Minaee2020},
+Sultana et Al \cite{Sultana2020} and Kale et Al \cite{Kale2021 } explore
+the evolution and different possible deep learning techniques for image segmentation.
+
+Image segmentation is an image processing technique used to divide an 
+image into two or more meaningful regions, or alternatively, the process 
+of defining boundaries separating semantic entities in an image. In a 
+more technical definition, the task of image segmentation is to assign 
+a label to each pixel within an image, with each label connected with 
+respect to some property \cite{Ghosh2019}.
+
+Image segmentation can be divided in three categories: Instance 
+segmentation, in which different instances of the same semantic label 
+are categorized independently; semantic segmentation, which assigns 
+different labels for regions with different semantic meaning without 
+classifying independent instances independently; and panoptic 
+segmentation, which performs both tasks simultaneously \cite{Sultana2020}.
+
+The task of image segmentation has been significantly impacted by the 
+development and advancement of deep learning techniques in computer 
+vision, in particular after the success of AlexNet in 2012 in using CNN 
+for Semantic Segmentation. Since then, numerous Deep Learning models 
+for semantic segmentation have been developed with significant 
+success \cite{Sultana2020, Kale2021, Minaee2020}.
+
+\subsection*{Convolutional Neural Networks and Residual Networks}
+
+Classification tasks over an image require as output a probability distribution over a (at least)
+2D image. Traditional fully connected networks (perceptrons) are unable to capture spatial
+relations due to the linearization requirements. Convolutional networks don't suffer from this issue,
+since convolutions can be trivially extended over multiple channels it's possible to input images
+in the neural network while retaining the spatial relations at all scales. Convolutional networks
+use the convolution operation mixed with layers that resize images to try to extract information
+on these multiple scales \cite{Ghosh2019}.
+
+
+Convolutional layers are the basis for a huge class of models for semantic segmentation include 
+Convolutional Neural Networks (CNNs), the define boundary between regions by apply kernel-based 
+convolutions to capture the positional relations of features in images. 
+By adding pooling and unpooling layers that change the original size, 
+it allows CNNs to find meaningful information at multiple scales of 
+the feature image by following a ``pyramid-like'' design. CNNs are 
+among the most successful approaches to semantic 
+segmentation \cite{Minaee2020}. Spatial Pyramid Pooling is a pooling
+strategy that resizes/pools the image from larger to smaller to
+extract information on all scales.
+
+
+A relevant advance in convolutional neural networks is the idea 
+of dilated (or ``atrous'') convolutions \cite{Minaee2020, Chen2017}, 
+which add an additional parameter to convolutions that increases the 
+perceptive field without adding new parameters,according to the dilation rate $r$,
+shown in equation \ref{eq:atrous}, where $x$ represents the input and
+$w$ represents the kernel. A visual representation of the effects of the
+dilution rate in a $3 \times 3$ kernel is shown in figure \ref{fig:atrous}.
+In practice, the dilution rate makes the convolution pick samples farther from
+the center of the kernel, ``skipping'' neighbors, this increases the field
+of view without increasing the Kernel size.
+
+\begin{equation}
+  y_i = \sum_{k=1}^K x[i+rk]w[k]
+  \label{eq:atrous}
+\end{equation}
+
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{DilatedConvolution.png}
+  \caption{Visual representation of diluted convolution with a 3x3 Kernel at
+    different dilution rates. \cite{Minaee2020}}
+  \label{fig:atrous}
+\end{figure}
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{residualBlock.png}
+  \caption{Residual Block \cite{He2016}}
+  \label{fig:ResBlock}
+\end{figure}
+
+A work by He et Al \cite{He2016} in 2016 proposed a new strategy to build deep neural networks
+without multiple layers while avoiding the problem of the vanishing gradient, notably,
+the degradation caused by increasing the number of layers isn't an over fitting problem. The
+paper addresses the gradient degradation by suggesting a Residual Block as part of the
+Neural Network structure. In a residual block, the input of an earlier layer is added to the
+the output of a deeper layer. So instead of an usual convolutional layer, where the output
+of a block of layers can be written as output$ = F(x)$, a residual block has an output of
+$F(x) + x$, as shown in figure \ref{fig:ResBlock}. The work by He et al also shows that residual
+blocks allow for deeper networks to still improve and learn with less risk of gradient
+degradation, training networks with up to 152 layers and still seeing meaningful improvements
+in relation to smaller networks.
+
+The basis for the DeepLab family of models are a combination of diluted convolutions for spatial pooling
+(instead of non-learning static pooling layers) with residual blocks, to extract/encode the
+information of the original input into a multi channel output, and a CNN for decoding
+the encoded input and generate the predictions for classification.
+This combination of  convolution layers and
+residual blocks to extract the features of the original
+image in multiple scales and stack them together in a multichannel output. In
+traditional pyramid networks, this final layer is already close to the output
+as shown in figure \ref{fig:pyramid}. The DeepLab model adds complexity by using
+the pyramid-like section of it's design to just encode the information of the
+original input, the encoded features are then extracted by another CNN structure
+from the multi-channel pyramid output, as represented in figur\ref{fig:deeplab}.
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{pyramid.png}
+  \caption{The PSPN architecture.
+    A CNN produces the feature map and a pyramid pooling module aggregates the different
+    sub-region representations. Up-sampling and concatenation are used to
+    form the final feature representation from which,
+    the final pixel-wise prediction is obtained through convolution \cite{Minaee2020}.}
+  \label{fig:pyramid}
+\end{figure}
+
+
+\begin{figure}[hb] % [ht] suggests placement "here" or "top"
+  \centering
+  \includegraphics[width=0.95\linewidth]{deeplab.png}
+  \caption{The DeepLabV3+ model. From \cite{Minaee2020}.}
+  \label{fig:deeplab}
+\end{figure}
+
+
+\subsection*{Loss Functions}
+
+Another important choice in implementing a deep learning model is the choice 
+of the loss function, a metric that evaluates how far a given output is 
+from the expected ground truth. A good choice of loss function can 
+mitigate usual challenges of image vision tasks, like noisy datasets 
+and unbalanced class representation. 
+A number of loss functions are presented and evaluated by the work done 
+in \cite{Azad2023}. Pixel-level loss functions utilize the information
+in all pixels of the prediction to score the model they usually result
+in increased accuracy, specially in scenarios where fine-grained accuracy and
+recall are necessary.
+
+One of the most common pixel-level loss metrics is the Cross-entropy (CE) loss 
+function. It measures the difference between two probability 
+distributions given a random variable. In segmentation tasks, this means 
+comparing the ground truth with the assigned probability that the pixel
+is of that class according to the model (i.e. output of the soft max function).
+The formula for the cross entropy is based on Shannon's entropy, and is presented
+in a practical formulation in equation \ref{eq:cross_entropy} , $t_n$ is a one-hot
+encoded vector that is 1 on the target class and zero on the others, and $\hat{y}$ is the
+predicted probability.  In imbalanced datasets, one common approach to minimize the
+effects of the imbalance in the training of the model is adding weights that favor the
+less represented classes. If $w$ is a vector of the weights of each labeled class,
+the weighted cross entropy is presented in equation \ref{eq:weighted_cross_entropy}.
+
+
+\begin{equation}
+  L_{CE} = -\sum_{i=1}^{C} \log(t_i \cdot \hat{y}_i)
+  \label{eq:cross_entropy}
+\end{equation}
+
+
+\begin{equation}
+  L_{CE} = -\sum_{i=1}^{C} t_i \cdot w \log(t_i \cdot \hat{y}_i)
+  \label{eq:weighted_cross_entropy}
+\end{equation}
+
+Cross-entropy loss is part of the Pixel level loss functions, this family of loss functions
+evaluate each individual pixel as a part of their computation for dissimilarity, and they usually
+improve pixel-based assessment. Another approach are region-level loss functions, that focus
+on scoring based on the capacity of  a model to adequately separate different semantic regions of
+an image. One example of region-level loss function is the Dice Loss function, that scores
+similarity based on the intersection between the predicted subset of pixels $Y$ and the ground
+truth region $T$, and is written as in equation \ref{eq:dice} for two class classification task, where
+$|A|$ represents the size of a set $A$.
+Form multi class segmentation tasks, the formula is presented in equation \ref{eq:multiclass_dice},
+where $\hat{y}$ represent the prediction probability of each class, and $t$ is the vector that
+represents the ground truth. There is a choice in the number of classes considered in the context
+of a possible background/negative class, this background class is sometimes excluded from loss computations.
+
+\begin{equation}
+  L_{Dice} = 1 - \frac{2 |Y \cap T|}{|Y| + |T|}
+  \label{eq:dice}
+\end{equation}
+
+
+\begin{equation}
+  L_{Dice} = 1 - \frac{1}{C} \sum_{c=1}^{C} \frac{2 \sum_{i} t_{ic} \hat{y}_{ic}}{\sum_{i} t_{ic} + \sum_{i} \hat{y}_{ic}}
+  \label{eq:multiclass_dice}
+\end{equation}
+
+A variation of the Dice Loss that offer some advantages in segmentation tasks is the
+log cosh Dice Loss, shown in equation \ref{eq:log_dice}, it enhances smoothness and robustness to outliers,
+and minimizes the effects of outliers, and it's a better behaved function in terms of derivatives, that helps
+the optimization steps. The Dice Loss can also be ``weighted'' in a sense. A generalized version
+of the dice loss is defined by the Generalized Wasserstein Dice Loss, the full scope of the
+generalization is outside of this work scope, but a less general version of weighted dice loss
+was used in one of the training steps, presented in subsection \ref{sec:train}.
+
+\begin{equation}
+  L_{log-cosh} = \log(\cosh(L_{Dice})) 
+  \label{eq:log_dice}
+\end{equation}
+
+\section{Martian Terrain Segmentation Related Work}
+
+The task of using computer vision for autonomous driving capability has 
+been explored by NASA since 2004 \cite{Swan2021} with the AutoNav project. 
+The advancements in computer vision through deep learning models 
+presented a great opportunity to improve the autonomous driving 
+capabilities of the two active Martian rovers: Curiosity, launched as 
+part of the Mars Science Laboratory (MSL) mission, and Perseverance, 
+launched as part of the Mars 2020 (m2020) mission. Since advancements
+in computer vision fueled by development of deep-learning techniques,
+several research groups have attempted to use pictures from martian images,
+both from rovers and satellites, as input in segmentation tasks, with goal of
+identifying meaningful geological features or terrain for navigation.
+\cite{Swan2021, Atha2022, Goutham2022, Luna2025}.
+The AI4Mars dataset is just of the datasets explored by this groups, while
+others have independent dataset, or have labeled the available images through
+different methods, or even implemented some level of semi-supervised learning
+algorithms \cite{Goutham2022}.
+
+The AI4Mars navigational dataset divides martian terrain in four classes \cite{Swan2021} :
+\begin{itemize}
+\item \textbf{Soil}: Good for navigation
+\item \textbf{Bedrock}: Ideal for navigation.  
+\item \textbf{Sand}: A less favorable but still viable path choice.
+\item \textbf{Big Rock}: Must be avoided while choosing a path.
+\end{itemize}
+
+The AI4Mars dataset is a publicly available set of images and semantic 
+segmentation masks developed through a citizen science initiative by 
+NASA. A number of volunteers were trained to create the masks, and 
+their work was reviewed by specialist laborers and condensed into the 
+final dataset \cite{Swan2021}. One notable challenge in the dataset is that the Big Rock class is 
+underrepresented, consisting of less than 2\% of pixels in the m2020 
+dataset, as shown in Figure \ref{fig:abd_pie}.
+
+The work by Swan et al \cite{Swan2021} trained a DeepLabV3+ with ResNet-101 on two versions of the
+MSL dataset, created by two  different labeling strategies called \textit{random}, that used one possible
+mask from multiple suggested by trained labeler, and the \textit{merged} strategy, where the final
+masks was a merged version of all suggestion by trained labelers, compiled by an expert on martian
+terrain. Their work showed that the model performed significantly better with the \textit{merged}
+masks, with the accuracy for big rocks increasing from 82.83\% to 93.24\%. The final confusion
+matrices from this work are presented in table \ref{tab:Swan2021_results}
+
+\begin{table}[h]
+  \centering
+  \label{tab:msl_confusion_matrices}
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    \textbf{Actual} & \multicolumn{4}{c|}{\textbf{Predicted}} \\ \cline{2-5} 
+                    & \textbf{Soil} & \textbf{Bedrock} & \textbf{Sand} & \textbf{Big Rock} \\ \hline
+    \hline
+    \multicolumn{5}{|c|}{\textit{MSL Random (Overall Accuracy: 94.97\%)}} \\ \hline
+    Soil     & 96.00 & 0.31  & 3.69  & 0.00  \\ \hline
+    Bedrock  & 6.15  & 90.87 & 2.54  & 0.44  \\ \hline
+    Sand     & 0.25  & 3.23  & 96.51 & 0.01  \\ \hline
+    Big Rock & 11.67 & 0.03  & 5.48  & 82.83 \\ \hline
+    \hline
+    \multicolumn{5}{|c|}{\textit{MSL Merged (Overall Accuracy: 96.67\%)}} \\ \hline
+    Soil     & 99.10 & 0.32  & 0.57  & 0.01  \\ \hline
+    Bedrock  & 3.64  & 94.90 & 0.37  & 1.09  \\ \hline
+    Sand     & 0.88  & 5.62  & 93.45 & 0.05  \\ \hline
+    Big Rock & 6.76  & 0.00  & 0.00  & 93.24 \\ \hline
+  \end{tabular}
+  \caption{MSL NAVCAM Confusion Matrix Percentages for \textit{random} and \textit{merged}
+  labeling strategies from Swan et al \cite{Swan2021}}
+  \label{tab:Swan2021_results}
+\end{table}
+
+The work by Atha et Al \cite{Atha2022} explores additional machine learning models for
+semantic segmentation of martian terrain in the context navigation, exploring how
+different models perform both on the MSL and on the M2020 navigational dataset. Their work
+identified two main problems with current models that aim to allow for independent path
+making for martian rovers. First, models tent to perform worse as the rovers move, and terrain
+around them changes naturally, the current models aren't general enough for the martian surface.
+Second, the accuracy necessary for a model to perform independently, that is, without a remote human
+operator offering input, is significantly higher than the accuracy obtained by models at the time of
+that work.
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|l|l|c|c|c|}
+    \hline
+    \textbf{Metric} & \textbf{Class} & \textbf{ResNet-101} & \textbf{+ImageNet} & \textbf{+MSL} \\ \hline
+    \hline
+    Precision & Soil    & 0.933 & 0.999 & 0.916 \\ \cline{2-5}
+                    & Bedrock & 0.857 & 0.467 & 0.917 \\ \cline{2-5}
+                    & Sand    & 0.664 & 0.667 & 0.754 \\ \cline{2-5}
+                    & Bigrock & 0.558 & 0.618 & 0.174 \\ \hline
+    \hline
+    Recall    & Soil    & 0.746 & 0.596 & 0.838 \\ \cline{2-5}
+                    & Bedrock & 0.570 & 0.958 & 0.536 \\ \cline{2-5}
+                    & Sand    & 0.975 & 0.952 & 0.957 \\ \cline{2-5}
+                    & Bigrock & 0.283 & 0.355 & 0.640 \\ \hline
+  \end{tabular}
+  \caption{Performance metrics for models trained on the M2020 dataset by Atha et al. \cite{Atha2022}, reorganized for single-column fit.}
+  \label{tab:m2020_atha}
+\end{table}
+
+For their model, they trained a ResNet-101 from zero with both MSL and M2020 datasets, they also
+trained a ResNet-101 from the weights for ImageNet, and they also tried to transfer train the model
+trained on the larger MSL and MER datasets to the M2020 dataset. The transfer learning did improve
+performance over soil and rock, but decreased accuracy on labeling bedrock. Their results in
+relation to the m2020 Dataset are presented in table \ref{tab:m2020_atha}.
+
+Luna et al \cite{Luna2025} implemented ViBEKO's DeepLabV3+ as part
+of their efforts to develop FASTNAV, their tool for independent rover navigation. The dataset used
+was independently obtained and labeled by them. Their implementation of DeepLabV3+ with ResNet-50
+as a backbone achieved 87\% accuracy and 72\% mIoU with a time to prediction of 25ms, relevant
+for practical use in a rover.
+
+Another interesting work in an independent dataset is the work of Goutham et all \cite{Goutham2022}
+that attempted to apply self-supervised methods to classify martian terrain using transformers on
+the AI4Mars dataset. As a first step, they trained a K-means clustering algorithm to explore what
+a deep learning model ``would see'' in relation to texture, structure and specific features of the images
+in the dataset. They also implemented a convex hull method for similar purposes. In relation to the dataset,
+they made significant effort into pre-processing the images and removing any information that wasn't
+relevant for the classification task, such as covering the sky and rover in black pixels.
+They then trained different versions of the SegFormer based transformer, and obtained mIoU of more than
+80\% in all ther mdoels, with accuracy close to 90\%.
+
+
+\section{Conclusion}
+
+Semantic segmentation is an elaborate and non-trivial task in computer vision, and performing
+segmentation on usual terrain such as martian terrain proves a challenge even for state of the
+art models. The lack of a very large dataset, and that the planet Mars itself offers a variety
+of very diverse terrain also limits the durability of successful models, a highly accurate model
+for the current region of a rover might perform significantly worse after the rover traveled enough
+for it's immediate terrain to change significantly. This is also reinforced
+by the fact that transfer learning from the MSL to the M2020 dataset doesn't seem to be
+particularly effective. Fully autonomous navigation would be a great advancement for interplanetary
+exploration on Mars, and modern deep learning models have made great stride in providing very
+useful navigational tools, but even better and more robust models are necessary for fully
+autonomous navigation in martian images.
+ 
+\bibliography{references}  % Use the filename WITHOUT the .bib extension
+
+
+\end{document}
